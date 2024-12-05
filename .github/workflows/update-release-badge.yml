@@ -1,0 +1,37 @@
+name: Update Release Badge
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-badge:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Get latest release information
+        - name: Get release version
+        id: release
+        run: echo "version=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
+      # Step 3: Update JSON badge
+      - name: Update badge JSON
+        run: |
+          echo '{
+            "schemaVersion": 1,
+            "label": "Release",
+            "message": "'${{ env.version }}'",
+            "color": "blue",
+            "style": "for-the-badge"
+          }' > badges/release-badge.json
+
+      # Step 4: Commit and push changes
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update release badge to ${{ env.version }}"
+          branch: main

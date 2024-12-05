@@ -1,8 +1,11 @@
-# Edvisor Berbasis Website
+<div align="center">
+<h1><b>Edvisor Berbasis Website<b></h1>
 
 ![Edvisor Logo](assets/img/logo.png)
 
-**Release 1.0.0 (Stable)**
+![Release](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/mohammadfirmansyah/Edvisor/main/badges/release-badge.json)
+
+</div>
 
 ## 📋 Daftar Isi
 
