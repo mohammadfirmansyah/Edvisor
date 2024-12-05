@@ -1,12 +1,14 @@
 <div align="center">
-<h1><b>Edvisor Berbasis Website<b></h1>
+  <h1><b>Edvisor Berbasis Website</b></h1>
 
-![Edvisor Logo](assets/img/logo.png)
+  ![Edvisor Logo](assets/img/logo.png)
 
-[![Release](https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?style=for-the-badge)](https://github.com/mohammadfirmansyah/Edvisor/releases/latest)
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest" target="_blank">
+    <img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?style=for-the-badge" alt="Release">
+  </a>
 </div>
 
-## 📋 Daftar Isi
+<h2 id="daftar-isi">📋 Daftar Isi</h2>
 
 - [Deskripsi](#deskripsi)
 - [Fitur](#fitur)
@@ -20,13 +22,13 @@
 - [Kredit](#kredit)
 - [Lisensi](#lisensi)
 
-## 📖 Deskripsi
+<h2 id="deskripsi">📖 Deskripsi</h2>
 
 Edvisor adalah aplikasi berbasis web yang dirancang untuk memfasilitasi pelaksanaan *lesson study* bagi mahasiswa dan supervisor. Aplikasi ini memungkinkan pengguna untuk membuat kelas guru model, mengundang anggota lain sebagai *observer*, serta bergabung ke kelas guru model menggunakan kode kelas. Fitur utama Edvisor meliputi pengisian formulir penilaian kegiatan mengajar, lembar pengamatan siswa, serta catatan aktivitas siswa yang dapat disimpan dan diunduh oleh guru model.
 
-## 🚀 Fitur
+<h2 id="fitur">🚀 Fitur</h2>
 
-### ✅ Fitur yang Telah Diimplementasikan
+<h3 id="fitur-yang-telah-diimplementasikan">✅ Fitur yang Telah Diimplementasikan</h3>
 
 1. **Pembuatan Kelas Lesson Study**  
    Memungkinkan pengguna untuk membuat kelas khusus untuk *lesson study*.
@@ -76,7 +78,7 @@ Edvisor adalah aplikasi berbasis web yang dirancang untuk memfasilitasi pelaksan
 16. **Profil Pengguna**  
     Melihat dan mengubah profil pengguna.
 
-### 🕒 Fitur yang Belum Diimplementasikan
+<h3 id="fitur-yang-belum-diimplementasikan">🕒 Fitur yang Belum Diimplementasikan</h3>
 
 1. **Desain Antarmuka Responsif**  
    Meningkatkan tampilan agar responsif di berbagai perangkat.
@@ -105,12 +107,12 @@ Edvisor adalah aplikasi berbasis web yang dirancang untuk memfasilitasi pelaksan
 9. **Dukungan Mode Private Browser**  
    Menambahkan dukungan stabil untuk mode Private Browser, mengatasi kendala pada update heartbeat saat browser ditutup.
 
-## 🛠 Instalasi
+<h2 id="instalasi">🛠 Instalasi</h2>
 
 Berikut adalah langkah-langkah untuk menginstalasi Edvisor di localhost:
 
 1. **Install XAMPP**  
-   Unduh dan instal XAMPP versi PHP 8.2.12 dari [situs resmi XAMPP](https://www.apachefriends.org/index.html).
+   Unduh dan instal XAMPP versi PHP 8.2.12 dari <a href="https://www.apachefriends.org/index.html" target="_blank">situs resmi XAMPP</a>.
 
 2. **Ekstrak File Edvisor**  
    Ekstrak file `Edvisor.7z` dan tempatkan dalam direktori `xampp/htdocs/`.
@@ -123,7 +125,7 @@ Berikut adalah langkah-langkah untuk menginstalasi Edvisor di localhost:
 4. **Jalankan Aplikasi**  
    Buka browser dan akses `http://localhost/edvisor/` untuk menguji aplikasi.
 
-## 🤝 Kontribusi
+<h2 id="kontribusi">🤝 Kontribusi</h2>
 
 Kontribusi untuk pengembangan Edvisor sangat kami hargai. Berikut adalah panduan untuk berkontribusi:
 
@@ -139,9 +141,9 @@ Kontribusi untuk pengembangan Edvisor sangat kami hargai. Berikut adalah panduan
 4. **Akses Assets**  
    Buka direktori `Edvisor/assets/` untuk mengakses dan mengelola aset seperti gambar, CSS, dan JavaScript.
 
-## 📚 Dokumentasi
+<h2 id="dokumentasi">📚 Dokumentasi</h2>
 
-### 📈 User Flow dan Class Diagram
+### User Flow dan Class Diagram
 
 Kami telah menyediakan dokumentasi visual untuk memudahkan pemahaman alur pengguna dan struktur kelas dalam aplikasi:
 
@@ -161,12 +163,12 @@ User Flow pada Edvisor mengilustrasikan alur interaksi pengguna dalam produk ini
 
 3. **Pemilihan Peran:**
    Setelah mendapatkan bantuan, pengguna memiliki opsi untuk memilih peran sebagai **Observer** atau **Guru Model**.
-
+   
    - **Sebagai Observer:**
      - Pengguna memilih untuk menjadi Observer dan melanjutkan dengan **bergabung ke dalam kelas** dengan memasukkan **kode kelas** yang diberikan oleh Guru Model.
      - Setelah bergabung, Observer akan **mengisi formulir observasi** yang berkaitan dengan kegiatan mengajar.
      - Proses ini selesai setelah formulir diisi dan disimpan.
-
+   
    - **Sebagai Guru Model:**
      - Pengguna memilih untuk menjadi Guru Model dan melanjutkan dengan **membuat kelas baru** dengan mengisi detail kelas dan **mengunggah berkas** yang diperlukan.
      - Guru Model dapat **menentukan observer** yang akan berpartisipasi serta **memilih nomor siswa** yang akan diamati dalam kelas tersebut.
@@ -265,7 +267,7 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
 
 Dengan pemahaman struktur dan hubungan antar kelas ini, pengembang dapat lebih mudah dalam melakukan pengembangan dan pemeliharaan aplikasi Edvisor.
 
-### 📸 Screenshot Aplikasi
+<h3 id="screenshot-aplikasi">📸 Screenshot Aplikasi</h2>
 
 Berikut adalah beberapa screenshot yang menggambarkan antarmuka dan fitur Edvisor:
 
@@ -290,7 +292,7 @@ Berikut adalah beberapa screenshot yang menggambarkan antarmuka dan fitur Edviso
 7. **Private Browsing**  
    ![Private Browsing](screenshot/Private%20Browsing.jpeg)
 
-## 🎓 Kredit
+<h2 id="kredit">🎓 Kredit</h2>
 
 ### Pembina Proyek
 
@@ -310,10 +312,10 @@ Berikut adalah beberapa screenshot yang menggambarkan antarmuka dan fitur Edviso
 - **NIM:** 156150601111003  
 - **Dirilis:** 2023
 
-## 📄 Lisensi
+<h2 id="lisensi">📄 Lisensi</h2>
 
 Edvisor adalah perangkat lunak tertutup (*Closed Source Software*). Semua hak cipta dan hak kekayaan intelektual lainnya dilindungi.
 
 ---
 
-Dibuat dengan ❤️ menggunakan [CodeIgniter 3.13](https://codeigniter.com/)
+Dibuat dengan ❤️ menggunakan <a href="https://codeigniter.com/" target="_blank">CodeIgniter 3.13</a>
