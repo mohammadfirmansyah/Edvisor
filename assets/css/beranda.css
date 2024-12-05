@@ -1,0 +1,1360 @@
+.dashboard {
+    position: absolute;
+    top: 2.875rem;
+    left: 20rem;
+    font-size: 1.875rem;
+    font-weight: 600;
+}
+
+.date {
+    margin: 0;
+}
+
+.date-container {
+    position: absolute;
+    top: 2.563rem;
+    right: 2.3rem;
+    letter-spacing: 2px;
+    text-align: right;
+}
+
+.jadwal-terdekat {
+    position: absolute;
+    top: 14.688rem;
+    left: 20rem;
+    font-size: var(--font-size-5xl);
+    font-weight: 600;
+}
+
+.notifications-active-icon {
+    width: 1.25rem;
+    position: relative;
+    height: 1.25rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.notifications-active-icon1 {
+    width: 1.25rem;
+    position: relative;
+    height: 1.25rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.notifikasi {
+    position: relative;
+    font-weight: 500;
+}
+
+.nama-pengguna {
+    position: relative;
+    font-weight: 500;
+    max-width: 15.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.group-child {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    border-radius: var(--br-3xs);
+    background-color: var(--status-rose-600);
+    width: 1.875rem;
+    height: 1.125rem;
+}
+
+.div {
+    position: absolute;
+    top: 0.107rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.438rem;
+    height: 0.913rem;
+}
+
+.rectangle-parent {
+    width: 1.875rem;
+    position: relative;
+    height: 1.125rem;
+    color: var(--basic-white);
+    display: none;
+}
+
+.notifications-active-parent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-base);
+    gap: var(--gap-5xs);
+    font-size: var(--body-text-sm-font-semibold-size);
+    color: var(--neutral-600);
+}
+
+.frame-child {
+    width: 1.75rem;
+    position: relative;
+    height: 1.75rem;
+    object-fit: cover;
+    border: 0.125rem solid #EFF6FF;
+    border-radius: 50%;
+    filter: drop-shadow(1px 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+.first-observer-frame {
+    width: 1.75rem;
+    position: relative;
+    height: 1.75rem;
+    object-fit: cover;
+    margin-left: -0.688rem;
+    border: 0.125rem solid #EFF6FF;
+    border-radius: 50%;
+}
+
+.notification-container {
+    display: inline-block;
+    width: max-content;
+    max-width: 7rem;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: text-bottom;
+    position: relative;
+}
+
+.notification-container1 {
+    display: inline-block;
+    width: max-content;
+    max-width: 7rem;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: text-bottom;
+    position: relative;
+}
+
+.notification-from {
+    display: block;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: transform 0.3s linear;
+}
+
+.notification-from1 {
+    display: block;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: transform 0.3s linear;
+}
+
+.scroll-text {
+    white-space: nowrap;
+}
+
+.notification-box-parent:hover .notification-from,
+.notification-box-parent1:hover .notification-from1 {
+    overflow: visible;
+    text-overflow: unset;
+}
+
+.observer {
+    font-family: var(--heading-h5-text-xl);
+}
+
+.telah-mengundang-anda-menjadi {
+    color: var(--neutral-600);
+}
+
+.notification-box-container2 {
+    position: relative;
+    top: 0rem;
+    left: 0.063rem;
+    align-items: center;
+    width: 24.031rem;
+}
+
+.notification-box-container1 {
+    width: 100%;
+}
+
+.notification-box-container {
+    position: absolute;
+    top: 0rem;
+    left: 0.063rem;
+    display: flex;
+    align-items: center;
+    width: 16.563rem;
+}
+
+.menit-yang-lalu {
+    position: absolute;
+    top: 2.375rem;
+    left: 0rem;
+    font-weight: 500;
+    color: var(--neutral-500);
+    white-space: nowrap;
+}
+
+.menit-yang-lalu1 {
+    position: relative;
+    /* top: 1.438rem; */
+    /* left: 0rem; */
+    padding-top: 0.5rem;
+    font-weight: 500;
+    color: var(--neutral-500);
+    white-space: nowrap;
+}
+
+.notification-box-parent {
+    width: 16.625rem;
+    position: relative;
+    min-height: 3.313rem;
+}
+
+.notification-box-parent1 {
+    width: 100%;
+    position: relative;
+    min-height: 2.375rem;
+}
+
+.group-parent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-5xs) var(--padding-base);
+    gap: var(--gap-2xs);
+    background-color: var(--primary50);
+    transition: background-color 0.5s ease-in-out;
+}
+
+.group-parent.read {
+    background-color: transparent;
+}
+
+.isi-status {
+    position: relative;
+    line-height: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.text-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--body-text-sm-font-semibold-size);
+    color: var(--primary600);
+    padding-top: 1rem;
+}
+
+.text-button:hover, 
+.text-button1:hover {
+    text-decoration: underline;
+}
+
+.frame-parent {
+    position: absolute;
+    top: 6.625rem;
+    left: 66rem;
+    border-radius: var(--br-base);
+    background-color: var(--neutral-50);
+    width: 21.5rem;
+    height: 24.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-5xs) 0rem var(--padding-base);
+    box-sizing: border-box;
+    font-size: var(--font-size-xs);
+    color: var(--neutral-800);
+}
+
+.background-icon-lesson-study-dashboard {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    border-radius: var(--br-9xs);
+    background-color: var(--primary600);
+    width: 3rem;
+    height: 3rem;
+}
+
+.icon-lesson-study-dashboard {
+    position: absolute;
+    top: calc(50% - 16px);
+    left: calc(50% - 16px);
+    width: 2rem;
+    height: 2rem;
+    /* overflow: hidden; */
+}
+
+.background-icon-guru-model-dashboard {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    border-radius: var(--br-9xs);
+    background-color: #0D9488;
+    width: 3rem;
+    height: 3rem;
+}
+
+.icon-guru-model-dashboard {
+    position: absolute;
+    top: calc(50% - 16px);
+    left: calc(50% - 16px);
+    width: 2rem;
+    height: 2rem;
+    /* overflow: hidden; */
+}
+
+.rectangle-group {
+    width: 3rem;
+    position: relative;
+    height: 3rem;
+}
+
+.div1 {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    font-weight: 600;
+}
+
+.lesson-study {
+    position: absolute;
+    top: 1.688rem;
+    left: 0rem;
+    font-size: var(--font-size-base);
+    width: 7rem;
+}
+
+.parent {
+    width: 6.438rem;
+    position: relative;
+    height: 2.875rem;
+}
+
+.group-parent2 {
+    width: 13.875rem;
+    border-radius: var(--br-5xs);
+    background-color: var(--neutral-50);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-5xl) var(--padding-base);
+    box-sizing: border-box;
+    gap: var(--gap-xs);
+}
+
+.group {
+    width: 5.5rem;
+    position: relative;
+    height: 2.875rem;
+}
+
+.background-icon-observer-dashboard {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    border-radius: var(--br-9xs);
+    background-color: #db9341;
+    width: 3rem;
+    height: 3rem;
+}
+
+.icon-observer-dashboard {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    overflow: hidden;
+}
+
+.container {
+    width: 4.375rem;
+    position: relative;
+    height: 2.875rem;
+}
+
+.frame-group {
+    position: absolute;
+    top: 6.125rem;
+    left: 20rem;
+    width: 44.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--padding-5xs) 0rem;
+    box-sizing: border-box;
+    font-size: var(--heading-h5-text-xl-size);
+    color: var(--color-darkslategray-100);
+}
+
+.aktivitas-saya {
+    position: relative;
+    font-weight: 600;
+}
+
+.judul-status {
+    position: absolute;
+    left: 56.15rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cari-disini {
+    position: relative;
+    font-size: 2rem;
+    font-family: Oleo Script;
+}
+
+.search-parent {
+    width: 13.813rem;
+    border-radius: var(--br-5xs);
+    background-color: #e2e8f0;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+    box-sizing: border-box;
+    gap: var(--gap-5xs);
+    font-size: var(--font-size-base);
+    color: var(--neutral-400);
+}
+
+.aktivitas-saya-parent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.judul-nama-kelas {
+    width: 13.125rem;
+    position: absolute;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.judul-mata-pelajaran {
+    width: 8rem;
+    position: absolute;
+    left: 17.65rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    margin-right: -1.5rem;
+}
+
+.judul-guru-model {
+    width: 9.5rem;
+    position: absolute;
+    left: 27.35rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.data-guru-model {
+    width: max-content;
+    max-width: 9.5rem;
+    position: absolute;
+    left: 27.35rem;
+    font-weight: 600;
+    display: block;
+    align-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--neutral-900);
+    box-sizing: border-box;
+}
+
+.judul-observer {
+    width: 5.938rem;
+    position: absolute;
+    left:  calc(39.2rem - 0.688rem);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.judul-tanggal {
+    width: 8.5rem;
+    position: absolute;
+    left: 47rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.nama-kelas-parent {
+    position: relative;
+    width: 60.875rem;
+    height: 2.75rem;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0.687rem var(--padding-base);
+    box-sizing: border-box;
+    gap: var(--gap-21xl);
+    font-size: var(--font-size-base);
+    color: var(--neutral-400);
+}
+
+.data-nama-kelas {
+    width: max-content;
+    max-width: 13.75rem;
+    position: absolute;
+    display: block;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+    color: var(--neutral-900);
+    box-sizing: border-box;
+}
+
+.data-mata-pelajaran {
+    width: max-content;
+    max-width: 8rem;
+    position: absolute;
+    left: 17.65rem;
+    display: block;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+    color: var(--neutral-900);
+    box-sizing: border-box;
+}
+
+.next-observer-frame {
+    width: 1.75rem;
+    position: relative;
+    height: 1.75rem;
+    object-fit: cover;
+    margin-left: -0.688rem;
+    border: 0.125rem solid #EFF6FF;
+    border-radius: 50%;
+}
+
+.profile-groupvariant9 {
+    position: absolute;
+    left: 39.2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.tanggal-aktivitas-saya {
+    width: max-content;
+    max-width: 8.5rem;
+    position: absolute;
+    left: 47rem;
+    display: block;
+    align-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--neutral-900);
+    box-sizing: border-box;
+}
+
+.status-label {
+    position: absolute;
+    left: 56.15rem;
+    border-radius: var(--br-5xl);
+    background-color: var(--primary600);
+    overflow: hidden;
+    display: block;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-9xs) var(--padding-base);
+    color: var(--primary200);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item-tabel {
+    position: relative;
+    align-self: stretch;
+    display: flex;
+    height: 2rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-5xs) var(--padding-base);
+    gap: var(--gap-21xl);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.item-tabel:hover {
+    background-color: var(--primary100);
+}
+
+.status-label2 {
+    position: absolute;
+    left: 56.15rem;
+    border-radius: var(--br-5xl);
+    background-color: var(--status-amber-400);
+    overflow: hidden;
+    display: block;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-9xs) var(--padding-base);
+    color: var(--status-amber-100);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.status-label3 {
+    position: absolute;
+    left: 56.15rem;
+    border-radius: var(--br-5xl);
+    background-color: var(--status-teal-400);
+    overflow: hidden;
+    display: block;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-9xs) var(--padding-base);
+    color: var(--status-teal-50);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.status-label:hover .status-label2:hover .status-label3:hover {
+    text-decoration: none;
+}
+
+.frame-parent1 {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-size: var(--body-text-sm-font-semibold-size);
+    overflow: hidden;
+}
+
+.frame-parent2 {
+    overflow-x: scroll;
+    overflow-x: hidden;
+    /* height: 100%; */
+    width: 100%;
+    padding: 0;
+}
+
+.frame-parent3 {
+    overflow: auto;
+    width: 100%;
+    height: 32.5rem;
+}
+
+.frame-container {
+    position: absolute;
+    width: 67.5rem;
+    top: 33.125rem;
+    right: 2.5rem;
+    left: 20rem;
+    border-radius: var(--br-base);
+    background-color: var(--neutral-50);
+    height: 30.875rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-5xl) var(--padding-base);
+    box-sizing: border-box;
+    gap: 1.5rem;
+    font-size: var(--font-size-5xl);
+}
+
+.upcoming-schedule-child {
+    position: absolute;
+    top: 1.375rem;
+    left: 1.938rem;
+    box-shadow: 1px 0px 100px rgba(71, 56, 56, 0.25), 1px 0px 80px rgba(252, 252, 252, 0.08) inset;
+    border-radius: 5px;
+    background-color: var(--neutral-50);
+    width: 0.5rem;
+    height: 11.5rem;
+}
+
+.removebg-preview-1-icon {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    width: 7.094rem;
+    height: 7.319rem;
+    object-fit: contain;
+}
+
+.ellipse-div {
+    position: absolute;
+    top: 7.303rem;
+    left: 0.375rem;
+    filter: blur(33px);
+    border-radius: 50%;
+    background-color: #646269;
+    width: 5.888rem;
+    height: 0.569rem;
+    transform: rotate(-6.1deg);
+    transform-origin: 0 0;
+}
+
+.removebg-preview-1-parent {
+    position: absolute;
+    top: 3.438rem;
+    left: 3.688rem;
+    width: 7.094rem;
+    height: 7.869rem;
+}
+
+.kelas-jadwal-terdekat {
+    position: absolute;
+    top: 2.531rem;
+    left: 0.019rem;
+    font-size: var(--font-size-lg);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    text-align: left;
+    width: 27rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sekolah-jadwal-terdekat {
+    position: absolute;
+    top: 4.406rem;
+    left: 0rem;
+    letter-spacing: 0.05em;
+    width: 25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.guru-model2 {
+    position: absolute;
+    top: 0.063rem;
+    left: 0rem;
+    letter-spacing: 0.05em;
+    font-weight: 300;
+}
+
+.observer5 {
+    position: absolute;
+    top: 0rem;
+    left: 11.713rem;
+    letter-spacing: 0.05em;
+    font-weight: 300;
+}
+
+.group-child1 {
+    position: absolute;
+    top: 1.5rem;
+    left: 0rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    object-fit: cover;
+    border: 0.125rem solid #EFF6FF;
+    border-radius: 50%;
+    filter: drop-shadow(1px 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+.frame-child2 {
+    width: 2.25rem;
+    position: relative;
+    height: 2.25rem;
+    object-fit: cover;
+    border: 0.125rem solid #EFF6FF;
+    border-radius: 50%;
+    filter: drop-shadow(1px 2px 4px rgba(0, 0, 0, 0.25));
+    margin-left: -0.75rem;
+}
+
+.frame-child3 {
+    width: 2.25rem;
+    position: relative;
+    height: 2.25rem;
+    object-fit: cover;
+    margin-left: -0.688rem;
+    border: 0.125rem solid #EFF6FF;
+    border-radius: 50%;
+    filter: drop-shadow(1px 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+.vector-parent {
+    position: absolute;
+    top: 1.438rem;
+    left: calc(11.713rem + 0.75rem);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.guru-model-parent {
+    position: absolute;
+    top: 6.594rem;
+    left: 0rem;
+    width: 19.65rem;
+    height: 4rem;
+    font-size: var(--body-text-sm-font-semibold-size);
+    font-family: var(--font-lato);
+}
+
+.calendar-month-icon {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.tanggal-jadwal-terdekat {
+    position: absolute;
+    top: 0.031rem;
+    left: 1.6rem;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.alarm-icon {
+    position: absolute;
+    top: 0rem;
+    left: 12rem;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.jam-jadwal-terdekat {
+    position: absolute;
+    top: 0.031rem;
+    left: 13.668rem;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    width: 10rem;
+}
+
+.calendar-month-parent {
+    position: absolute;
+    top: 0.281rem;
+    left: 0.019rem;
+    width: 18.919rem;
+    height: 1.25rem;
+}
+
+.vector-icon {
+    position: absolute;
+    top: 4.938rem;
+    left: 26.75rem;
+    width: 1.25rem;
+    height: 2.063rem;
+}
+
+.kelas-jadwal-terdekat-parent {
+    position: absolute;
+    top: 1.813rem;
+    left: 12.25rem;
+    width: 30.438rem;
+    height: 11.063rem;
+    overflow: hidden;
+}
+
+.upcoming-schedule {
+    position: absolute;
+    top: 17.5rem;
+    left: 20rem;
+    border-radius: var(--br-base);
+    background-color: var(--primary600);
+    border: 1px solid #cbd5e1;
+    box-sizing: border-box;
+    width: 44.625rem;
+    height: 13.688rem;
+    overflow: hidden;
+    color: var(--neutral-50);
+}
+
+.upcoming-schedule:hover .kelas-jadwal-terdekat {
+    text-decoration: underline;
+}
+
+.upcoming-schedule:hover .sekolah-jadwal-terdekat {
+    text-decoration: underline;
+}
+
+.logo-ls-1 {
+    width: 1.681rem;
+    position: relative;
+    height: 2rem;
+    object-fit: cover;
+}
+
+.logo-ls-1-parent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: var(--font-size-5xl);
+    color: var(--neutral-900);
+}
+
+.profile-side-bar-child {
+    width: 13.25rem;
+    position: relative;
+    height: 7.438rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.profile-photo {
+    position: absolute;
+    overflow: hidden;
+    height: 5.5rem;
+    width: 5.5rem;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.email-pengguna {
+    position: relative;
+    font-size: 0.875rem;
+    color: #94a3b8;
+    max-width: 15.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-side-bar {
+    width: 15.313rem;
+    border-radius: var(--br-3xs);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-5xs) 2.875rem;
+    box-sizing: border-box;
+    gap: 0.25rem;
+    font-size: var(--font-size-base);
+    color: var(--neutral-600);
+}
+
+.profile-side-bar:hover .nama-pengguna {
+    text-decoration: underline;
+}
+
+.profile-side-bar:hover .email-pengguna {
+    text-decoration: underline;
+    text-decoration-color: var(--neutral-400);
+}
+
+.icon-sidebar-active {
+    width: 1.5rem;
+    position: relative;
+    height: 1.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
+
+.text-sidebar-default {
+    position: relative;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    color: var(--neutral-400);
+}
+
+.text-sidebar-active {
+    position: relative;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.item-side-bar-active {
+    width: 13.5rem;
+    border-radius: var(--br-5xs);
+    background-color: var(--primary600);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) var(--padding-base);
+    box-sizing: border-box;
+    gap: var(--gap-3xs);
+    color: var(--neutral-50);
+}
+
+.icon-sidebar-default {
+    width: 1.5rem;
+    position: relative;
+    height: 1.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.item-side-bar-default {
+    width: 13.5rem;
+    border-radius: var(--br-3xs);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) var(--padding-base);
+    box-sizing: border-box;
+    gap: var(--gap-3xs);
+}
+
+.item-side-bar-default:hover {
+    width: 13.5rem;
+    position: relative;
+    border-radius: 8px;
+    border-radius: var(--br-5xs);
+    background-color: var(--primary300);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) 1rem;
+    box-sizing: border-box;
+    gap: 0.625rem;
+    text-align: left;
+    font-size: 1.125rem;
+    color: var(--neutral-50);
+    font-family: var(--font-inter);
+}
+
+.item-side-bar-default:hover .icon-sidebar-default {
+    filter: brightness(0) invert(1);
+}
+
+.item-side-bar-default:hover .text-sidebar-default {
+    color: var(--neutral-50);
+}
+
+.menu-bar {
+    align-self: stretch;
+    height: 32.25rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: var(--padding-base);
+    box-sizing: border-box;
+    gap: var(--gap-5xs);
+}
+
+.item-side-bar-exit {
+    width: 13.5rem;
+    border-radius: var(--br-3xs);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) 2.312rem;
+    box-sizing: border-box;
+    gap: var(--gap-3xs);
+}
+
+.item-side-bar-exit:hover {
+    width: 13.5rem;
+    border-radius: var(--br-3xs);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) 2.312rem;
+    box-sizing: border-box;
+    gap: var(--gap-3xs);
+    text-decoration: underline;
+    letter-spacing: 0.05em;
+}
+
+.item-side-bar-exit:hover .text-sidebar-default {
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--neutral-400);
+}
+
+.sidebar {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    box-shadow: -4px 1px 38px rgba(59, 130, 246, 0.29);
+    border-radius: 0px var(--br-xl) var(--br-xl) 0px;
+    background-color: var(--neutral-50);
+    width: 17.5rem;
+    height: 64rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 3rem var(--padding-base);
+    box-sizing: border-box;
+    font-size: var(--font-size-lg);
+    color: var(--neutral-400);
+}
+
+.wrapper {
+    position: absolute;
+    top: 0rem;
+    right: 0rem;
+    border-radius: var(--br-9xs);
+    background-color: var(--status-amber-600);
+    width: 3rem;
+    height: 2.688rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-base) 0.312rem;
+    box-sizing: border-box;
+}
+
+.home-inner {
+    position: absolute;
+    top: -0.875rem;
+    left: -1.375rem;
+    border-radius: var(--br-5xs);
+    border: 5px solid var(--status-amber-600);
+    box-sizing: border-box;
+    width: 20rem;
+    height: 66.125rem;
+    overflow: hidden;
+    display: none;
+    font-size: var(--heading-h5-text-xl-size);
+    color: var(--basic-white);
+}
+
+.home {
+    min-width: 90rem;
+    position: relative;
+    background-color: #dbeafe;
+    min-height: 64rem;
+    text-align: left;
+    font-size: var(--font-size-base);
+    color: var(--neutral-900);
+    font-family: var(--heading-h5-text-xl);
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 16px;
+    width: 9rem;
+    text-overflow: ellipsis;
+}
+
+.search-input::placeholder {
+    color: var(--neutral-400)
+}
+
+.parent1 {
+    position: relative;
+    text-align: left;
+    font-size: var(--font-size-base);
+    color: var(--neutral-900);
+    font-family: var(--heading-h5-text-xl);
+    overflow: hidden;
+}
+
+.detail-notifikasi {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 16px;
+    background-color: #f8fafc;
+    width: 100%;
+    max-width: 28.813rem;
+    height: 100%;
+    max-height: 39.125rem;
+    overflow-y: auto;
+    font-size: 0.75rem;
+    color: #1e293b;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* overflow: hidden !important; */
+    z-index: 1;
+}
+
+.text-button-wrapper {
+    position: absolute;
+    bottom: 0rem;
+    left: 0rem;
+    background-color: #f8fafc;
+    width: 28.813rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 3.25rem;
+    box-sizing: border-box;
+    font-size: 0.875rem;
+    color: #2563eb;
+}
+
+.empty_notification {
+    position: absolute;
+    top: 50%;
+    font-size: 0.875rem;
+    text-align: center;
+    color: #BFDBFE;
+}
+
+.empty_activity {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    text-align: center;
+    font-size: 0.875rem;
+    color: #BFDBFE;
+}
+
+.text-button1 {
+    position: fixed;
+    top: 95.85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+#popupNotification {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+    z-index: 1;
+}
+
+.popup-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.popup-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: opacity 0.25s ease-in-out;
+}
+
+body.blur .content> :not(#popupNotification) {
+    filter: blur(5px);
+    transition: filter 0.25s ease-in-out;
+}
+
+.content > *:not(#popupNotification) {
+    transition: filter 0.25s ease-in-out;
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 90rem;
+    min-height: 64rem;
+    z-index: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.1s ease, visibility 0.1s ease;
+    background-color: #000;
+}
+
+.overlay-visible,
+.overlay-hidden {
+    transition: opacity 0.25s ease-in-out;
+}
+
+.overlay-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.overlay-visible {
+    opacity: 0.5 !important;
+    visibility: visible !important;
+}
+
+.notifications-active-icon.shake {
+    animation: shake 1s infinite;
+}
+
+@keyframes shake {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(-20deg); }
+    20% { transform: rotate(20deg); }
+    30% { transform: rotate(-16deg); }
+    40% { transform: rotate(16deg); }
+    50% { transform: rotate(-10deg); }
+    60% { transform: rotate(10deg); }
+    70% { transform: rotate(-6deg); }
+    80% { transform: rotate(6deg); }
+    90% { transform: rotate(-1deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.rectangle-parent {
+    transition: opacity 1s ease-out;
+}

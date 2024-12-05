@@ -1,0 +1,2279 @@
+.detail-kelas-child {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(245, 245, 245, 0.4);
+    width: 1440px;
+    height: 90px;
+    display: none;
+}
+
+.f4102d420364855a735c78e8c8c47f-icon {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 1440px;
+    height: 994.8px;
+    object-fit: cover;
+    display: none;
+}
+
+.xi-rekayasa-perangkat {
+    position: relative;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 600;
+    max-width: 30rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dasar-pemrograman {
+    position: relative;
+    font-size: 18px;
+    width: 30rem;
+    margin-bottom: -5px;
+}
+
+.dasar-pemrograman1 {
+    position: relative;
+    display: inline-block;
+    font-size: 18px;
+    max-width: 20rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dasar-pemrograman2 {
+    position: relative;
+    display: inline-block;
+    font-size: 18px;
+    max-width: 10rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kompetensi-dasar-menerapkan-container {
+    position: relative;
+    max-width: 30rem;
+}
+
+.kompetensi-dasar-menerapkan-container1 {
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kompetensi-dasar {
+    display: inline-block;
+    font-weight: 600;
+    max-width: 20rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+}
+
+.lesson-study {
+    font-size: 2rem;
+    font-family: Oleo Script;
+    position: relative;
+}
+
+.date-range-icon {
+    width: 20px;
+    position: relative;
+    height: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.date-range-parent {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.frame-wrapper {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 110px;
+    height: 20px;
+}
+
+.alarm-parent {
+    position: absolute;
+    top: 0px;
+    left: 173px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.group-parent {
+    width: 267px;
+    position: relative;
+    height: 20px;
+}
+
+.kode-kelas {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.f6y8iotrqwmuge7wobny {
+    position: relative;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 600;
+    max-width: 20rem;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kode-kelas-f6y8iotrqwmuge7wob-container {
+    position: absolute;
+    top: -13px;
+    left: 0px;
+    width: 30rem;
+}
+
+.iconoutlineduplicate {
+    width: 32px;
+    position: relative;
+    height: 32px;
+    overflow: hidden;
+    flex-shrink: 0;
+    bottom: -10px;
+}
+
+.tooltip-wrapper {
+    position: relative;
+    /* top: 0px; */
+    /* left: 300px; */
+    /* display: flex; */
+    /* flex-direction: column;
+    align-items: center;
+    justify-content: center; */
+    cursor: pointer;
+}
+
+.kode-kelas-f6y8iotrqwmuge7wob-parent {
+    width: 332px;
+    position: relative;
+    height: 32px;
+}
+
+.xi-rekayasa-perangkat-lunak-b-parent {
+    position: absolute;
+    top: 106px;
+    left: 320px;
+    border-radius: 16px;
+    background-color: #2563eb;
+    width: 620px;
+    height: 227px;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 24px 32px;
+    box-sizing: border-box;
+    gap: 16px;
+    color: #fff;
+}
+
+.date {
+    margin: 0;
+    font-size: 16px;
+}
+
+.date-container {
+    position: absolute;
+    top: 2.563rem;
+    right: 2.3rem;
+    letter-spacing: 2px;
+    text-align: right;
+}
+
+.iconsolidarrow-left {
+    position: absolute;
+    bottom: 0.125rem;
+    left: 0rem;
+    width: 2rem;
+    height: 2rem;
+    overflow: hidden;
+}
+
+.detail-kelas-group {
+    position: absolute;
+    top: 2.4rem;
+    left: 20rem;
+    width: 15rem;
+    height: 2.813rem;
+    font-size: 1.875rem;
+    color: #0f172a;
+}
+
+.detail-kelas1 {
+    position: absolute;
+    bottom: 0rem;
+    left: 3rem;
+    font-weight: 600;
+}
+
+.detail-kelas-item {
+    position: absolute;
+    top: -31px;
+    left: 1289px;
+    filter: blur(315px);
+    border-radius: 50%;
+    background-color: #fff;
+    width: 222px;
+    height: 222px;
+}
+
+.pdf-icon {
+    position: absolute;
+    top: calc(50% - 15px);
+    left: 8px;
+    width: 24px;
+    height: 30.7px;
+    object-fit: cover;
+}
+
+.iconsoliddocument-text2 {
+    position: absolute;
+    top: 174px;
+    left: 22px;
+    border-radius: 4px;
+    background-color: #dbeafe;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.text-button1 {
+    position: absolute;
+    top: 108px;
+    left: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.text-button2 {
+    position: absolute;
+    top: 170px;
+    left: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.observer1 {
+    position: absolute;
+    top: 18px;
+    left: 24px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.observer-child {
+    position: absolute;
+    top: -1px;
+    left: 340px;
+    border-right: 2px solid #bfdbfe;
+    box-sizing: border-box;
+    width: 2px;
+    height: 677px;
+}
+
+.bagas-nugroho {
+    position: absolute;
+    top: 18px;
+    left: 367px;
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 600;
+    width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nama-observer {
+    position: absolute;
+    top: 15px;
+    left: 81px;
+    line-height: 24px;
+    font-weight: 600;
+    width: 65%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.observeremail {
+    position: absolute;
+    top: 38px;
+    left: 81px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #64748b;
+    width: 65%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-01-icon {
+    position: absolute;
+    top: 13px;
+    left: 15px;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.item-observer {
+    position: relative;
+    height: 74px;
+    width: 100%;
+    border-radius: 4px 0px 0px 4px;
+    background-color: #bfdbfe;
+    cursor: pointer;
+}
+
+.list-observer {
+    position: absolute;
+    top: 63px;
+    left: 24px;
+    width: 316px;
+    height: calc(74px * 8);
+    font-size: 16px;
+    overflow-y: scroll;
+    flex-direction: column;
+    /* Baris vertikal */
+    overflow-y: auto;
+    /* Scroll jika konten melebihi */
+}
+
+.item-observer.active {
+    background-color: #bfdbfe;
+    /* Background aktif */
+}
+
+.item-observer.inactive {
+    background-color: #f8fafc;
+    /* Background tidak aktif */
+}
+
+/* Poin 5: Efek hover pada item-observer tidak aktif */
+.item-observer.inactive:hover {
+    background-color: #DBEAFE;
+    /* Background saat hover */
+}
+
+.daftar-catatan1 {
+    width: 222px;
+    position: relative;
+    line-height: 20px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+}
+
+.siswa-bertanya {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    padding-left: 19px;
+}
+
+.keaktifan-siswa {
+    position: relative;
+    line-height: 20px;
+    font-weight: 600;
+}
+
+.list-item-catatan-01 {
+    width: 290px;
+    background-color: #bfdbfe;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 4px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.list-item-catatan-011 {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.list-item-catatan-011:hover {
+    background-color: #EFF6FF;
+}
+
+.daftar-catatan-parent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 4px;
+    color: #0f172a;
+    height: 9.25rem;
+    overflow-y: auto;
+}
+
+.tipe-kegiatan {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    width: 139px;
+}
+
+.siswa-izin-bertanya {
+    position: relative;
+    line-height: 20px;
+    z-index: 0;
+}
+
+.siswa-izin-bertanya1 {
+    position: relative;
+    line-height: 1.5 !important;
+    /* Mengatur tinggi garis relatif */
+    white-space: normal;
+    /* Membungkus teks secara otomatis */
+    text-align: justify;
+}
+
+.kegiatan-siswa {
+    position: absolute;
+    top: 24px;
+    left: 0.94px;
+    border-radius: 8px;
+    border: 1px solid #94a3b8;
+    box-sizing: border-box;
+    width: 290.1px;
+    height: 33px;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 5px 26px 5px 10px;
+    color: #000;
+    text-align: justify;
+}
+
+.tipe-kegiatan-parent {
+    width: 291px;
+    position: relative;
+    height: 60px;
+}
+
+.detail-catatan {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    width: 149px;
+}
+
+.detail-catatan1 {
+    position: absolute;
+    top: 28px;
+    left: 0.94px;
+    border-radius: 8px;
+    border: 1px solid #94a3b8;
+    box-sizing: border-box;
+    width: 290.1px;
+    height: 73px;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 5px 10px 5px 10px;
+    color: #000;
+}
+
+.detail-catatan-parent {
+    width: 291px;
+    flex: 1;
+    position: relative;
+}
+
+.daftar-catatan {
+    position: absolute;
+    top: 62px;
+    left: 738px;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #bfdbfe;
+    box-sizing: border-box;
+    height: 379px;
+    width: 323px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 16px;
+    gap: 16px;
+    color: #64748b;
+}
+
+.siswa-yang-diamati {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    line-height: 20px;
+}
+
+.siswa-yang-diamati-wrapper {
+    width: 128px;
+    position: relative;
+    height: 20px;
+}
+
+.nomor-siswa-item {
+    width: 32px;
+    border-radius: 4px;
+    background-color: #2563eb;
+    color: #fff;
+    height: 32px;
+    font-weight: 600;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 3px;
+    box-sizing: border-box;
+}
+
+.nomor-siswa {
+    position: absolute;
+    top: 0px;
+    left: 192px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.nomor-siswa1 {
+    position: absolute;
+    top: 0px;
+    left: 144px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.nomor-siswa2 {
+    position: absolute;
+    top: 0px;
+    left: 96px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.nomor-siswa3 {
+    position: absolute;
+    top: 0px;
+    left: 48px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.nomor-siswa4 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.nomor-siswa-parent {
+    display: flex;
+    /* Menggunakan flex */
+    flex-direction: row;
+    /* Baris horizontal */
+    gap: 16px;
+    /* Jarak antar item */
+    width: calc(((32px + 16px) * 7) - 16px);
+    position: relative;
+    height: fit-content;
+    color: #fff;
+    overflow-x: scroll;
+}
+
+.frame-parent {
+    position: absolute;
+    top: 62px;
+    left: 365px;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #bfdbfe;
+    box-sizing: border-box;
+    width: 357px;
+    height: 94px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 16px 16px 0px 16px;
+    gap: 10px;
+    color: #64748b;
+}
+
+.rekaman-icon {
+    width: 13px;
+    position: relative;
+    height: 13px;
+}
+
+.rekaman-suara {
+    font-weight: 600;
+    line-height: 16px;
+}
+
+.rekaman-icon-parent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    z-index: 0;
+}
+
+.record-bar-child {
+    width: 0px;
+    position: relative;
+    height: 4px;
+    object-fit: contain;
+}
+
+.record-bar-child2 {
+    width: 0px;
+    position: relative;
+    height: 12px;
+    object-fit: contain;
+}
+
+.record-bar-child3 {
+    width: 0px;
+    position: relative;
+    height: 36px;
+    object-fit: contain;
+}
+
+.record-bar-child4 {
+    width: 0px;
+    position: relative;
+    height: 48px;
+    object-fit: contain;
+}
+
+.record-bar-child5 {
+    width: 0px;
+    position: relative;
+    height: 32px;
+    object-fit: contain;
+}
+
+.record-bar-child7 {
+    width: 0px;
+    position: relative;
+    height: 60px;
+    object-fit: contain;
+}
+
+.record-bar-child8 {
+    width: 0px;
+    position: relative;
+    height: 46px;
+    object-fit: contain;
+}
+
+.record-bar-child12 {
+    width: 0px;
+    position: relative;
+    height: 24px;
+    object-fit: contain;
+}
+
+.record-bar-child14 {
+    width: 0px;
+    position: relative;
+    height: 40px;
+    object-fit: contain;
+}
+
+.record-bar-child15 {
+    width: 0px;
+    position: relative;
+    height: 51px;
+    object-fit: contain;
+}
+
+.record-bar-child22 {
+    width: 0px;
+    position: relative;
+    height: 8px;
+    object-fit: contain;
+}
+
+.record-bar-child29 {
+    width: 0px;
+    position: relative;
+    height: 8px;
+    object-fit: contain;
+    opacity: 0.8;
+}
+
+.record-bar-child31 {
+    width: 0px;
+    position: relative;
+    height: 16px;
+    object-fit: contain;
+}
+
+.record-bar-child41 {
+    width: 0px;
+    position: relative;
+    height: 56px;
+    object-fit: contain;
+}
+
+.record-bar-child62 {
+    width: 0px;
+    position: relative;
+    height: 58px;
+    object-fit: contain;
+}
+
+.record-bar-child95 {
+    width: 0px;
+    position: relative;
+    height: 52px;
+    object-fit: contain;
+}
+
+.record-bar-child96 {
+    width: 0px;
+    position: relative;
+    height: 64px;
+    object-fit: contain;
+}
+
+.record-bar {
+    position: absolute;
+    top: 0px;
+    right: -1267px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.record-child {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    height: 66px;
+    pointer-events: none;
+}
+
+.record-item {
+    position: absolute;
+    width: 99%;
+    top: 80px;
+    right: 0%;
+    left: 0%;
+    border-radius: 10px;
+    background-color: #d9d9d9;
+    height: 5px;
+}
+
+/* Style untuk input range */
+input[type="range"].record-item #audioPosition {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    background: #d9d9d9;
+    border-radius: 5px;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* Firefox */
+input[type="range"].record-item#audioPosition::-moz-range-track {
+    height: 5px;
+    background: #d9d9d9;
+    border-radius: 5px;
+    outline: none;
+}
+
+input[type="range"].record-item#audioPosition::-moz-range-thumb {
+    width: 0;
+    height: 0;
+    border: none;
+    opacity: 0%;
+}
+
+/* WebKit */
+input[type="range"].record-item#audioPosition::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 0;
+    height: 0;
+    background: transparent;
+    border: none;
+    opacity: 0%;
+}
+
+
+/* Progress bar menggunakan background gradient */
+input[type="range"].record-item#audioPosition::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, #3b82f6 0%, #3b82f6 0%, #d9d9d9 0%, #d9d9d9 100%);
+}
+
+input[type="range"].record-item#audioPosition::-moz-range-progress {
+    background: #3b82f6;
+    height: 5px;
+    border-radius: 5px;
+}
+
+input[type="range"].record-item#audioPosition::-ms-fill-lower {
+    background: #3b82f6;
+    height: 5px;
+    border-radius: 5px;
+}
+
+.record-inner {
+    position: absolute;
+    width: 1%;
+    top: 80px;
+    right: 98.77%;
+    left: 0%;
+    border-radius: 10px;
+    background-color: #3b82f6;
+    height: 5px;
+}
+
+.iconsolidplay {
+    position: absolute;
+    top: 93px;
+    left: calc(50% - 19.5px);
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.iconsolidplay:hover {
+    filter: contrast(0.8);
+    filter: brightness(0.8);
+}
+
+.span {
+    color: #94a3b8;
+}
+
+.div6 {
+    position: absolute;
+    top: 97px;
+    left: 4px;
+    line-height: 16px;
+    font-weight: 600;
+}
+
+.record {
+    width: 325px;
+    position: relative;
+    background-color: #fff;
+    height: 132px;
+    overflow: hidden;
+    flex-shrink: 0;
+    z-index: 1;
+    color: #0f172a;
+}
+
+.download-button-icon3 {
+    width: 20px;
+    position: absolute;
+    margin: 0 !important;
+    top: 147px;
+    left: 317px;
+    height: 20px;
+    z-index: 2;
+}
+
+.share-button-icon3 {
+    width: 20px;
+    position: absolute;
+    margin: 0 !important;
+    top: 147px;
+    left: 279px;
+    height: 20px;
+    z-index: 3;
+}
+
+.rekaman {
+    position: absolute;
+    top: 457px;
+    left: 365px;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #bfdbfe;
+    box-sizing: border-box;
+    width: 357px;
+    overflow: visible;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 16px 12px;
+    gap: 16px 24px;
+    font-size: 12px;
+    color: #000;
+}
+
+.images-3-child {
+    position: absolute;
+    top: 3px;
+    left: 0px;
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+}
+
+.images-3 {
+    width: 64px;
+    position: relative;
+    border-radius: 4px;
+    height: 64px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-image: url('Images 3.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+}
+
+.images-2 {
+    width: 64px;
+    position: relative;
+    border-radius: 4px;
+    height: 64px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-image: url('Images 2.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+}
+
+.images-1 {
+    width: 64px;
+    position: relative;
+    border-radius: 4px;
+    height: 64px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background-image: url('Images 1.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+}
+
+.image-container {
+    width: 64px;
+    height: 64px;
+    overflow: hidden;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Overlay Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 90rem;
+    height: 64rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+}
+
+/* Modal aktif */
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Konten Modal */
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%) !important;
+    max-width: 70%; 
+    max-height: 70%;
+    background-color: #fff; /* Tambahkan latar belakang jika diperlukan */
+    border-radius: 8px;
+    overflow: hidden; /* Pastikan konten tidak melampaui */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transform: scale(0.8);
+    opacity: 0;
+    display: none;
+    z-index: 2000;
+    animation: zoomIn 0.3s forwards; /* Disesuaikan durasi animasi */
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Gambar di dalam Modal */
+.modal-content img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Memastikan aspek rasio tetap */
+    border-radius: 8px;
+}
+
+/* Animasi Zoom */
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Tombol Tutup (X) */
+.close-button {
+    position: absolute;
+    top: 10px; /* Disesuaikan untuk penempatan yang tepat */
+    right: 10px; /* Disesuaikan untuk penempatan yang tepat */
+    background-color: rgba(255, 255, 255, 0.8); /* Transparan sedikit */
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 30px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s, transform 0.2s;
+    z-index: 1001; /* Pastikan tombol di atas gambar */
+}
+
+.close-button:hover {
+    background-color: rgba(240, 240, 240, 0.9);
+    transform: scale(1.1); /* Efek hover yang halus */
+}
+
+.images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 107.5%;
+    margin: 0;
+    padding: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.dokumentasi {
+    position: absolute;
+    top: 457px;
+    left: 738px;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #bfdbfe;
+    box-sizing: border-box;
+    width: 323px;
+    height: 196px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 24px;
+    gap: 10px;
+    font-size: 12px;
+    color: #000;
+}
+
+.unduh-semua {
+    position: absolute;
+    top: 2px;
+    left: 242px;
+    font-size: 12px;
+    text-decoration: underline;
+    line-height: 16px;
+    color: #2563eb;
+    cursor: pointer;
+    
+}
+
+.observasi-dan-penilaian-parent {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 322px;
+    height: 20px;
+}
+
+.dokumen-observasi-inner {
+    width: 322px;
+    position: relative;
+    height: 20px;
+    color: #64748b;
+}
+
+.iconsoliddocument-text3 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.mei-20231 {
+    font-weight: 600;
+    white-space: pre-wrap;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.diperbarui-1002-27-container {
+    position: absolute;
+    top: 24px;
+    left: 50px;
+    font-size: 12px;
+    line-height: 16px;
+    color: #94a3b8;
+}
+
+.text-button-parent {
+    width: 325px;
+    position: relative;
+    height: 40px;
+    color: #1e293b;
+}
+
+.diperbarui-1040-27-container {
+    position: absolute;
+    top: 24px;
+    left: 48px;
+    line-height: 16px;
+}
+
+.text-button4 {
+    position: absolute;
+    top: 0px;
+    left: 48px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-size: 14px;
+    color: #1e293b;
+    cursor: default;
+}
+
+.text-button4:hover {
+    text-decoration: underline;
+}
+
+.iconsoliddocument-text-parent {
+    width: 325px;
+    position: relative;
+    height: 40px;
+    font-size: 12px;
+}
+
+.dokumen-observasi {
+    position: absolute;
+    top: 172px;
+    left: 365px;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #bfdbfe;
+    box-sizing: border-box;
+    height: 269px;
+    width: 357px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 16px;
+    gap: 24px;
+    color: #94a3b8;
+    overflow: visible;
+}
+
+.text-button6 {
+    position: absolute;
+    top: 410px;
+    left: 496px;
+    width: 160px;
+    height: 20px;
+    display: none;
+}
+
+.observer {
+    position: absolute;
+    top: 349px;
+    left: 320px;
+    border-radius: 16px 16px 0px 0px;
+    background-color: #f8fafc;
+    width: 1080px;
+    height: 675px;
+    overflow: hidden;
+    color: #1e293b;
+}
+
+.logo-ls-1 {
+    width: 26.9px;
+    position: relative;
+    height: 32px;
+    object-fit: cover;
+}
+
+.logo-ls-1-parent {
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-size: 24px;
+    color: #0f172a;
+}
+
+.profile-side-bar-child {
+    width: 212px;
+    position: relative;
+    height: 119px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.profile-photo {
+    position: absolute;
+    overflow: hidden;
+    height: 5.5rem;
+    width: 5.5rem;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.nama-pengguna {
+    position: relative;
+    font-weight: 500;
+    max-width: 15.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.email-pengguna {
+    position: relative;
+    font-size: 0.875rem;
+    color: #94a3b8;
+    max-width: 15.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-side-bar {
+    width: 15.313rem;
+    border-radius: var(--br-3xs);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-5xs) 2.875rem;
+    box-sizing: border-box;
+    gap: 0.25rem;
+    font-size: var(--font-size-base);
+    color: var(--neutral-600);
+}
+
+.profile-side-bar:hover .nama-pengguna {
+    text-decoration: underline;
+}
+
+.profile-side-bar:hover .email-pengguna {
+    text-decoration: underline;
+    text-decoration-color: var(--neutral-400);
+}
+
+.icon-sidebar-active {
+    width: 1.5rem;
+    position: relative;
+    height: 1.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+}
+
+.text-sidebar-default {
+    position: relative;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    color: var(--neutral-400);
+}
+
+.text-sidebar-active {
+    position: relative;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.item-side-bar-active {
+    width: 13.5rem;
+    border-radius: var(--br-5xs);
+    background-color: var(--primary600);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) var(--padding-base);
+    box-sizing: border-box;
+    gap: var(--gap-3xs);
+    color: var(--neutral-50);
+}
+
+.icon-sidebar-default {
+    width: 1.5rem;
+    position: relative;
+    height: 1.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.item-side-bar-default {
+    width: 13.5rem;
+    border-radius: var(--br-3xs);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) var(--padding-base);
+    box-sizing: border-box;
+    gap: var(--gap-3xs);
+}
+
+.item-side-bar-default:hover {
+    width: 13.5rem;
+    position: relative;
+    border-radius: 8px;
+    border-radius: var(--br-5xs);
+    background-color: var(--primary300);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) 1rem;
+    box-sizing: border-box;
+    gap: 0.625rem;
+    text-align: left;
+    font-size: 1.125rem;
+    color: var(--neutral-50);
+    font-family: var(--font-inter);
+}
+
+.item-side-bar-default:hover .icon-sidebar-default {
+    filter: brightness(0) invert(1);
+}
+
+.item-side-bar-default:hover .text-sidebar-default {
+    color: var(--neutral-50);
+}
+
+.menu-bar {
+    align-self: stretch;
+    height: 32.25rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 1rem;
+    box-sizing: border-box;
+    gap: 0.5rem;
+}
+
+.item-side-bar-exit {
+    width: 13.5rem;
+    border-radius: var(--br-3xs);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) 2.312rem;
+    box-sizing: border-box;
+    gap: var(--gap-3xs);
+}
+
+.item-side-bar-exit:hover {
+    width: 13.5rem;
+    border-radius: var(--br-3xs);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--padding-xs) var(--padding-xs) var(--padding-xs) 2.312rem;
+    box-sizing: border-box;
+    gap: var(--gap-3xs);
+    text-decoration: underline;
+    letter-spacing: 0.05em;
+}
+
+.item-side-bar-exit:hover .text-sidebar-default {
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--neutral-400);
+}
+
+.sidebar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    box-shadow: -4px 1px 38px rgba(59, 130, 246, 0.29);
+    border-radius: 0px 20px 20px 0px;
+    background-color: #f8fafc;
+    width: 280px;
+    height: 1024px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 48px 16px;
+    box-sizing: border-box;
+    font-size: 18px;
+    color: #94a3b8;
+}
+
+.detail-kelas {
+    min-width: 90rem;
+    position: relative;
+    background-color: #dbeafe;
+    min-height: 64rem;
+    text-align: left;
+    font-size: 14px;
+    color: var(--neutral-900);
+    font-family: var(--heading-h5-text-xl);
+}
+
+.kode-kelas-tersalin {
+    position: relative;
+    line-height: 20px;
+    white-space: nowrap;
+    display: none;
+}
+
+.kode-kelas-tersalin-wrapper {
+    position: absolute;
+    top: -23px;
+    left: 31px;
+    border-radius: 4px;
+    background-color: #334155;
+    overflow: hidden;
+    display: none;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 6px 8px;
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+    pointer-events: none;
+}
+
+.tooltip-wrapper1 {
+    position: absolute;
+    right: 2rem;
+    top: 14px;
+    cursor: pointer;
+}
+
+.kode-kelas-tersalin1 {
+    position: relative;
+    line-height: 20px;
+    white-space: nowrap;
+    /* display: none; */
+}
+
+.kode-kelas-tersalin-wrapper1 {
+    position: absolute;
+    top: -23px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 4px;
+    background-color: #334155;
+    overflow: hidden;
+    display: none;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 6px 8px;
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.tooltip-wrapper2 {
+    position: absolute;
+    right: 5rem;
+    top: 14px;
+    cursor: pointer;
+}
+
+.kode-kelas-tersalin2 {
+    position: relative;
+    line-height: 20px;
+    white-space: nowrap;
+    /* display: none; */
+}
+
+.kode-kelas-tersalin-wrapper2 {
+    position: absolute;
+    top: -23px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 4px;
+    background-color: #334155;
+    overflow: hidden;
+    display: none;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 6px 8px;
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Style untuk container utama */
+.berkas-yang-dibutuhkan-parent {
+    position: absolute;
+    top: 106px;
+    left: 964px;
+    border-radius: 16px;
+    background-color: #eff6ff;
+    width: 436px;
+    height: 227px;
+    font-size: 16px;
+    color: #1e293b;
+}
+
+/* Judul container */
+.berkas-yang-dibutuhkan {
+    position: absolute;
+    top: 10px;
+    left: calc(50% - 196px);
+    line-height: 24px;
+    font-weight: 600;
+    color: #000;
+}
+
+/* Garis pemisah */
+.frame-child {
+    position: absolute;
+    top: 41.5px;
+    border-top: 1px solid #cbd5e1;
+    box-sizing: border-box;
+    width: 100%;
+    height: 1px;
+}
+
+/* Style untuk teks judul setiap bagian */
+.ini-adalah-text {
+    position: relative;
+    line-height: 24px;
+    font-weight: 600;
+    cursor: default;
+}
+
+/* Efek underline saat hover pada judul */
+.ini-adalah-text:hover {
+    text-decoration: underline;
+}
+
+/* Container untuk teks button */
+.text-button,
+.text-button1,
+.text-button2 {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+/* Posisi spesifik untuk setiap teks button */
+.text-button {
+    top: 52px;
+    left: 78px;
+}
+
+.text-button1 {
+    top: 108px;
+    left: 80px;
+}
+
+.text-button2 {
+    top: 170px;
+    left: 80px;
+}
+
+/* Style untuk ukuran file */
+.kb,
+.kb1,
+.kb2 {
+    position: absolute;
+    font-size: 12px;
+    line-height: 16px;
+    color: #64748b;
+}
+
+/* Posisi spesifik untuk setiap ukuran file */
+.kb {
+    top: 80px;
+    left: 80px;
+}
+
+.kb1 {
+    top: 136px;
+    left: 80px;
+}
+
+.kb2 {
+    top: 198px;
+    left: 80px;
+}
+
+/* Style untuk ikon dokumen */
+.iconsoliddocument-text,
+.iconsoliddocument-text1,
+.iconsoliddocument-text2 {
+    position: absolute;
+    border-radius: 4px;
+    background-color: #dbeafe;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+}
+
+/* Posisi spesifik untuk setiap ikon dokumen */
+.iconsoliddocument-text {
+    top: 54px;
+    left: 22px;
+}
+
+.iconsoliddocument-text1 {
+    top: 112px;
+    left: 22px;
+}
+
+.iconsoliddocument-text2 {
+    top: 174px;
+    left: 22px;
+}
+
+/* Style untuk tombol download */
+.download-button,
+.download-button1,
+.download-button2,
+.download-button3,
+.download-button4 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Posisi spesifik untuk setiap tombol download */
+.download-button {
+    top: 64px;
+    left: 335px;
+}
+
+.download-button1 {
+    top: 118px;
+    left: 335px;
+}
+
+.download-button2 {
+    top: 174px;
+    left: 335px;
+}
+
+.download-button3 {
+    top: 147px;
+    left: 317px;
+    z-index: 2;
+    margin: 0 !important;
+}
+
+.download-button4 {
+    top: 10px;
+    left: 269px;
+}
+
+/* Lingkaran latar belakang tombol download */
+.download-button-child {
+    position: absolute;
+    height: 140%;
+    width: 140%;
+    top: -20%;
+    right: -20%;
+    bottom: -20%;
+    left: -20%;
+    border-radius: 50%;
+    background-color: #3b82f6;
+    transition: opacity 0.25s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Ikon download */
+.iconsoliddownload {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+    transition: opacity 0.25s ease-in-out;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Container untuk teks "Unduh" */
+.frame-parent1 {
+    position: absolute;
+    height: 205%;
+    top: -225%;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease-in-out;
+}
+
+/* Wrapper untuk teks "Unduh" */
+.unduh-wrapper {
+    position: absolute;
+    height: 78.05%;
+    top: 0%;
+    bottom: 21.95%;
+    left: calc(50% - 30px);
+    border-radius: 4px;
+    background-color: #334155;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 6px 8px;
+    box-sizing: border-box;
+}
+
+/* Ikon polygon di tombol download */
+.group-child {
+    position: absolute;
+    height: 29.27%;
+    width: 35%;
+    top: 70.73%;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+/* Teks "Unduh" */
+.unduh {
+    position: relative;
+    line-height: 20px;
+    white-space: nowrap;
+    color: #fff;
+}
+
+/* Style untuk tombol share */
+.share-button-icon,
+.share-button-icon1,
+.share-button-icon2,
+.share-button-icon3,
+.share-button-icon4 {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Posisi spesifik untuk setiap tombol share */
+.share-button-icon {
+    top: 64px;
+    left: 376px;
+}
+
+.share-button-icon1 {
+    top: 118px;
+    left: 376px;
+}
+
+.share-button-icon2 {
+    top: 174px;
+    left: 376px;
+}
+
+.share-button-icon3 {
+    top: 147px;
+    left: 279px;
+    margin: 0 !important;
+    z-index: 3;
+}
+
+.share-button-icon4 {
+    top: 10px;
+    left: 305px;
+}
+
+/* Lingkaran latar belakang tombol share */
+.share-button-icon-child {
+    position: absolute;
+    top: -4px;
+    left: -3px;
+    border-radius: 50%;
+    background-color: #2563eb;
+    width: 28px;
+    height: 28px;
+    transition: opacity 0.25s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Ikon share */
+.iconsolidshare {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 20px;
+    height: 20px;
+    transition: opacity 0.25s ease-in-out;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Container untuk teks "Bagikan" dan "Tautan Berhasil Disalin" */
+.frame-group1 {
+    position: absolute;
+    height: 205%;
+    width: 345%;
+    top: -225%;
+    right: -135%;
+    bottom: 120%;
+    left: -110%;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease-in-out;
+    z-index: 5;
+}
+
+/* Wrapper untuk teks bagikan */
+.bagikan-wrapper {
+    position: absolute;
+    height: 78.05%;
+    width: fit-content;
+    bottom: 21.95%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 4px;
+    background-color: #334155;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 6px 8px;
+    box-sizing: border-box;
+}
+
+/* Ikon polygon di tombol share */
+.group-item {
+    position: absolute;
+    height: 29.27%;
+    width: 30.43%;
+    top: 70.73%;
+    right: 36.23%;
+    bottom: 0%;
+    left: 33.33%;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+/* Teks "Bagikan" dan "Tautan Berhasil Disalin" */
+.bagikan {
+    position: relative;
+    line-height: 20px;
+    white-space: nowrap;
+    width: fit-content;
+    color: #fff;
+}
+
+/* Pesan 'Tautan Berhasil Disalin' disembunyikan secara default */
+.copySuccess {
+    display: none;
+}
+
+/* Menambahkan transisi saat hover pada tombol download */
+.download-button:hover .download-button-child,
+.download-button:hover .frame-parent1,
+.download-button1:hover .download-button-child,
+.download-button1:hover .frame-parent1,
+.download-button2:hover .download-button-child,
+.download-button2:hover .frame-parent1,
+.download-button3:hover .download-button-child,
+.download-button3:hover .frame-parent1,
+.download-button4:hover .download-button-child,
+.download-button4:hover .frame-parent1 {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Menambahkan transisi saat hover pada tombol share */
+.share-button-icon:hover .share-button-icon-child,
+.share-button-icon:hover .frame-group1,
+.share-button-icon1:hover .share-button-icon-child,
+.share-button-icon1:hover .frame-group1,
+.share-button-icon2:hover .share-button-icon-child,
+.share-button-icon2:hover .frame-group1,
+.share-button-icon3:hover .share-button-icon-child,
+.share-button-icon3:hover .frame-group1,
+.share-button-icon4:hover .share-button-icon-child,
+.share-button-icon4:hover .frame-group1 {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Menambahkan transisi pada ikon download dan share */
+.iconsoliddownload,
+.iconsolidshare,
+.download-button-child,
+.share-button-icon-child,
+.frame-parent1,
+.frame-group1 {
+    transition: opacity 0.25s ease-in-out, visibility 0.25s ease-in-out;
+}
+
+li {
+    list-style-type: none;
+    margin-left: -1rem;
+}
+
+/* Memusatkan wave secara vertikal */
+#audioWave {
+    display: block;
+    align-items: center;
+    height: 70px;
+    overflow: hidden;
+}
+
+/* Menyesuaikan tinggi canvas */
+#audioWave wave {
+    width: 100%;
+    height: 100%;
+}
+
+/* Jika diperlukan, tambahkan ini untuk memastikan wave terpusat */
+#audioWave canvas {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Custom scrollbar for WebKit browsers */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    ::-webkit-scrollbar {
+        width: 0.5rem !important;
+        /* Lebar scrollbar */
+        height: 0.5rem !important;
+        /* Tinggi scrollbar */
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent !important;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #DBEAFE !important;
+        /* Warna scrollbar */
+        background-clip: content-box !important;
+        /* Membuat padding terlihat */
+    }
+}
+
+/* Custom scrollbar for Firefox */
+@-moz-document url-prefix() {
+    html {
+        scrollbar-width: thin !important;
+        /* Ukuran scrollbar */
+        scrollbar-color: #DBEAFE transparent !important;
+        /* Warna thumb dan track */
+    }
+}
+
+.kegiatan-siswa::-webkit-scrollbar,
+.detail-catatan1::-webkit-scrollbar {
+    width: calc(0.5rem + 8px) !important;
+    /* Lebar scrollbar */
+    height: calc(0.5rem + 8px) !important;
+    /* Tinggi scrollbar */
+}
+
+.kegiatan-siswa::-webkit-scrollbar-thumb,
+.detail-catatan1::-webkit-scrollbar-thumb {
+    border: 4px solid transparent !important;
+    border-radius: 2px !important;
+}
+
+/* Gaya untuk modal preview .docx */
+.modal-overlay-docx {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content-docx {
+    position: relative;
+    width: 80%;
+    height: 80%;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.close-button-docx {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Keyframes untuk animasi zoom */
+@keyframes zoomIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes zoomOut {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* Animasi ketika iframe muncul */
+.iframe-container.show {
+    display: block !important;
+    animation: zoomIn 0.5s ease forwards;
+}
+
+/* Animasi ketika iframe ditutup */
+.iframe-container.hide {
+    display: none !important;
+    animation: zoomOut 0.5s ease forwards;
+}
+
+.iframe-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 90rem;
+    height: 64rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.iframe-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+    border-radius: 15px;
+    background-color: #fff;
+    width: 70%; 
+    height: 70%; 
+    z-index: 2000;
+    box-sizing: border-box;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transform: scale(0.8);
+    opacity: 0;
+    animation: zoomIn 0.3s forwards; /* Disesuaikan durasi animasi */
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.close-iframe {
+    position: absolute;
+    top: 10px; /* Disesuaikan untuk penempatan yang tepat */
+    right: 10px; /* Disesuaikan untuk penempatan yang tepat */
+    background-color: rgba(255, 255, 255, 0.8); /* Transparan sedikit */
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 30px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s, transform 0.2s;
+    z-index: 1001; /* Pastikan tombol di atas gambar */
+}
+
+.close-iframe:hover {
+    background-color: rgba(240, 240, 240, 0.9);
+    transform: scale(1.1); /* Efek hover yang halus */
+}
+
+#iframePreview {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 15px;
+}
+
+.showIFrame {
+    cursor: pointer !important;
+}

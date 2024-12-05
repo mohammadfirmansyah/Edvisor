@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: scroll !important;
+}
+
+#container {
+    margin: 0;
+    vertical-align: middle;
+    text-align: center;
+    /* Tinggi penuh viewport */
+    overflow: scroll;
+    /* Aktifkan scroll pada elemen ini */
+    scrollbar-width: none;
+    /* Firefox: Sembunyikan scrollbar */
+    -ms-overflow-style: none;
+    /* IE/Edge: Sembunyikan scrollbar */
+}
+
+/* Chrome, Safari, Opera */
+#container::-webkit-scrollbar {
+    display: none;
+}
+
+.docx-wrapper {
+    background-color: #dbeafe !important;
+}
+
+.docx {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.0) !important;
+}

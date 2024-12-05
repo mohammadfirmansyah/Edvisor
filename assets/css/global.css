@@ -1,0 +1,150 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+    scroll-behavior: smooth;
+    /* Smooth scrolling */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
+}
+
+body {
+    overflow: hidden;
+    transform-origin: top left;
+    -webkit-transform-origin: top left;
+    -webkit-overflow-scrolling: touch;
+    /* Enable smooth scrolling for iOS */
+    font-family: 'Inter', sans-serif;
+}
+
+html,
+body {
+    scroll-behavior: smooth;
+    /* Optional: smooth scrolling */
+}
+
+.link {
+    text-decoration: none !important;
+    border: 0px !important;
+    cursor: pointer !important;;
+}
+
+.link-color-unset {
+    color: unset;
+}
+
+.link-cursor-hovering {
+    cursor: pointer;
+}
+
+.link-cursor-hovering:hover > * {
+    text-decoration: underline;
+}
+
+.unselectable-text {
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+}
+
+/* Custom scrollbar for WebKit browsers */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    ::-webkit-scrollbar {
+        width: 0rem;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+}
+
+/* Custom scrollbar for Firefox */
+@-moz-document url-prefix() {
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+    }
+}
+
+:root {
+
+    /* fonts */
+    --heading-h5-text-xl: Inter;
+    --font-lato: Lato;
+
+    /* font sizes */
+    --heading-h5-text-xl-size: 1.25rem;
+    --font-size-lg: 1.125rem;
+    --body-text-sm-font-semibold-size: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-5xl: 1.5rem;
+    --font-size-xs: 0.75rem;
+
+    /* Colors */
+    --primary100: #dbeafe;
+    --status-amber-600: #d97706;
+    --basic-white: #fff;
+    --neutral-50: #f8fafc;
+    --neutral-400: #94a3b8;
+    --primary300: #60a5fa;
+    --primary600: #2563eb;
+    --primary700: #1d4ed8;
+    --neutral-600: #475569;
+    --color-lightslategray: #94a3b8;
+    --color-darkslategray: #334155;
+    --color-darkslategray-100: #334155;
+    --neutral-800: #1e293b;
+    --neutral-900: #0f172a;
+    --status-amber-400: #f59e0b;
+    --status-amber-100: #fef3c7;
+    --status-teal-400: #2dd4bf;
+    --status-teal-600: #0d9488;
+    --status-teal-50: #97ffe7;
+    --primary200: #bfdbfe;
+    --primary50: #eff6ff;
+    --neutral-300: #cbd5e1;
+    --neutral-500: #64748b;
+    --status-rose-600: #e11d48;
+    --color-black: #000;
+
+
+    /* Gaps */
+    --gap-3xs: 0.625rem;
+    --gap-5xs: 0.5rem;
+    --gap-21xl: 2.5rem;
+    --gap-xs: 0.75rem;
+    --gap-2xs: 0.687rem;
+
+    /* Paddings */
+    --padding-base: 1rem;
+    --padding-xs: 0.75rem;
+    --padding-5xs: 0.5rem;
+    --padding-5xl: 1.5rem;
+    --padding-9xs: 0.25rem;
+
+    /* Border radiuses */
+    --br-5xs: 8px;
+    --br-9xs: 4px;
+    --br-xl: 20px;
+    --br-3xs: 10px;
+    --br-base: 16px;
+    --br-5xl: 24px;
+
+}

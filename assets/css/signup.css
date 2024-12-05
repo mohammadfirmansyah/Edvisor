@@ -1,0 +1,515 @@
+.logo-ls-1 {
+    width: 2.5rem;
+    position: relative;
+    height: 3.019rem;
+    object-fit: cover;
+}
+
+.lesson-study {
+    position: relative;
+    line-height: 3rem;
+    font-family: Oleo Script;
+    font-size: 3rem;
+}
+
+.logo-ls-1-parent {
+    position: absolute;
+    top: 3.938rem;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    font-size: 2rem;
+    color: #0f172a;
+}
+
+.daftar-akun {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    line-height: 2.5rem;
+    font-weight: 600;
+}
+
+.isi-data-berikut {
+    position: absolute;
+    top: 3rem;
+    left: 0rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: #000;
+}
+
+.heading-daftar-akun {
+    position: absolute;
+    top: 10.813rem;
+    left: 6.875rem;
+    width: 13.875rem;
+    height: 4.5rem;
+    font-size: 2.25rem;
+    color: #1e293b;
+}
+
+.label {
+    position: absolute;
+    width: 100%;
+    top: 0rem;
+    left: 0rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.label span {
+    margin-left: 0.5rem;
+}
+
+.text-filled {
+    position: relative;
+    margin: auto;
+    padding: auto;
+    border: none;
+    outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: transparent;
+    font-size: 16px;
+    width: 31.5rem;
+    color: #334155;
+    white-space: nowrap;
+}
+
+.text-filled1 {
+    position: relative;
+    display: inline-block;
+    margin: auto;
+    padding: auto;
+    border: none;
+    outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: transparent;
+    font-size: 16px;
+    width: 33.5rem;
+    color: #334155;
+    white-space: nowrap;
+}
+
+.text-filled::placeholder,
+.text-filled1::placeholder {
+    color: #94a3b8;
+}
+
+.text-filled-wrapper {
+    position: absolute;
+    top: 0.625rem;
+    left: 0.75rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.input-field-inner {
+    position: absolute;
+    width: 100%;
+    top: 1.75rem;
+    right: 0rem;
+    left: 0rem;
+    border-radius: 8px;
+    border: 1px solid #94a3b8;
+    box-sizing: border-box;
+    height: 2.75rem;
+    overflow: hidden;
+    color: #94a3b8;
+    transition: 0.2s ease-in-out;
+}
+
+.input-field-inner:hover {
+    border: 1px solid #3B82F6;
+    box-shadow: 0 0 0 1px #3B82F6 inset;
+}
+
+.input-field-inner:focus-within {
+    border: 1px solid #3B82F6;
+    box-shadow: 0 0 0 1px #c7d2fe;
+}
+
+.input-field {
+    position: absolute;
+    top: 18.313rem;
+    left: 6.875rem;
+    width: 35.563rem;
+    height: 4.75rem;
+}
+
+.button {
+    position: absolute;
+    top: 44.75rem;
+    left: 6.875rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #2563eb;
+    width: 35.563rem;
+    height: 2.688rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    color: #fff;
+
+}
+
+.button:hover {
+    background-color: #1D4ED8;
+}
+
+.button:disabled {
+    background-color: #bfdbfe;
+    pointer-events: none;
+}
+
+.sudah-punya-akun {
+    position: absolute;
+    top: 51.5rem;
+    left: 16.938rem;
+    line-height: 1.5rem;
+    color: #000;
+}
+
+.ini-adalah-text {
+    position: relative;
+    line-height: 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.text-button {
+    position: absolute;
+    top: 51.5rem;
+    left: 26.75rem;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #2563eb;
+}
+
+.login-child {
+    position: absolute;
+    top: 49.969rem;
+    left: 6.781rem;
+    border-top: 1px solid #cbd5e1;
+    box-sizing: border-box;
+    width: 35.688rem;
+    height: 0.063rem;
+}
+
+.input-field1 {
+    position: absolute;
+    top: 25.063rem;
+    left: 6.875rem;
+    width: 35.563rem;
+    height: 4.563rem;
+}
+
+.kata-sandi-inner {
+    position: absolute;
+    width: 100%;
+    top: 1.75rem;
+    right: 0rem;
+    left: 0rem;
+    border-radius: 8px;
+    border: 1px solid #94a3b8;
+    box-sizing: border-box;
+    height: 2.75rem;
+    overflow: hidden;
+    color: #94a3b8;
+    transition: 0.2s ease-in-out;
+}
+
+.kata-sandi-inner:hover {
+    border: 1px solid #3B82F6;
+    box-shadow: 0 0 0 1px #3B82F6 inset;
+}
+
+.kata-sandi-inner:focus-within {
+    border: 1px solid #3B82F6;
+    box-shadow: 0 0 0 1px #c7d2fe;
+}
+
+.kata-sandi-child {
+    position: absolute;
+    top: 0rem;
+    right: 0rem;
+    width: 3.25rem;
+    height: 2.75rem;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.kata-sandi-child1 {
+    position: absolute;
+    top: 0rem;
+    right: 0rem;
+    width: 3.25rem;
+    height: 2.75rem;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.kata-sandi {
+    position: absolute;
+    top: 38.188rem;
+    left: 6.875rem;
+    width: 35.563rem;
+    height: 4.563rem;
+}
+
+.icon {
+    position: absolute;
+    height: 82%;
+    width: 5.99%;
+    top: 9.72%;
+    right: 93.26%;
+    bottom: 8.28%;
+    left: -0.2rem;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+.terdiri-dari-minimal {
+    position: absolute;
+    top: 0%;
+    left: 1.5rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    width: 30rem;
+}
+
+.security-warning {
+    position: absolute;
+    top: 1.813rem;
+    left: 1.625rem;
+    width: 30rem;
+    height: 1.25rem;
+}
+
+.icon1 {
+    position: absolute;
+    height: 82%;
+    width: 5.99%;
+    top: 9.72%;
+    right: 93.26%;
+    bottom: 8.28%;
+    left: -0.2rem;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+.mengandung-setidaknya-1 {
+    position: absolute;
+    top: 0rem;
+    left: 1.5rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    width: 30rem;
+}
+
+.security-warning1 {
+    position: absolute;
+    top: 3.563rem;
+    left: 1.625rem;
+    width: 30rem;
+    height: 1.25rem;
+}
+
+.icon2 {
+    position: absolute;
+    height: 82%;
+    width: 5.99%;
+    top: 9.72%;
+    right: 93.26%;
+    bottom: 8.28%;
+    left: -0.2rem;
+    max-width: 100%;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+.mengandung-setidaknya-11 {
+    position: absolute;
+    top: 0%;
+    left: 1.5rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    width: 30rem;
+}
+
+.security-warning2 {
+    position: absolute;
+    top: 5.313rem;
+    left: 1.625rem;
+    width: 30rem;
+    height: 1.25rem;
+}
+
+.password-security {
+    position: absolute;
+    top: 4.125rem;
+    border-radius: 0px 0px 8px 8px;
+    background-color: #fff;
+    border-right: 1px solid #94a3b8;
+    border-bottom: 1px solid #94a3b8;
+    border-left: 1px solid #94a3b8;
+    box-sizing: border-box;
+    width: 100%;
+    height: 9.125rem;
+    overflow: hidden;
+    font-size: 0.875rem;
+    color: #000;
+    display: none;
+    z-index: 1;
+}
+
+.kata-sandi-inner1 {
+    z-index: 2;
+}
+
+.blink {
+    width: 0.063rem;
+    position: relative;
+    background-color: #1e293b;
+    height: 1.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.rectangle-div {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    border-radius: 8px;
+    border: 1px solid #6366f1;
+    box-sizing: border-box;
+}
+
+.frame-parent {
+    position: absolute;
+    width: calc(100% + 4px);
+    top: 1.625rem;
+    right: -0.125rem;
+    left: -0.125rem;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 2px solid #c7d2fe;
+    box-sizing: border-box;
+    height: 3rem;
+    overflow: hidden;
+}
+
+.regis-kata-sandi {
+    position: absolute;
+    top: 31.625rem;
+    left: 6.813rem;
+    width: 35.625rem;
+    height: 4.563rem;
+}
+
+.login {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #fff;
+    width: 47.563rem;
+    min-height: 64rem;
+}
+
+.psa1ttmlqiu-1-icon {
+    position: absolute;
+    top: 0rem;
+    left: calc(50% - 6.5px);
+    width: 10.563rem;
+    height: 4.188rem;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.tersedia-juga-di {
+    position: absolute;
+    top: 1.313rem;
+    left: calc(50% - 162.5px);
+    line-height: 1.5rem;
+}
+
+.psa1ttmlqiu-1-parent {
+    position: absolute;
+    top: 49.125rem;
+    left: calc(50% - 186.5px);
+    width: 20.313rem;
+    height: 4.188rem;
+}
+
+.sinkronisasi-aplikasi-mobile {
+    position: absolute;
+    top: 4.438rem;
+    left: 11.125rem;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-weight: 600;
+    color: #1e293b;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 19.5rem;
+}
+
+.illustrasi-sinkronisasi-icon {
+    position: absolute;
+    top: 9.5rem;
+    left: 2.813rem;
+    width: 35.875rem;
+    height: 34.875rem;
+    object-fit: contain;
+}
+
+.group-parent {
+    position: absolute;
+    top: 0rem;
+    left: 0rem;
+    background-color: #dbeafe;
+    width: 42.438rem;
+    min-height: 64rem;
+    overflow: hidden;
+    color: #000;
+}
+
+.sign-up {
+    min-width: 47.5625rem;
+    max-width: 90rem;
+    position: relative;
+    min-height: 64rem;
+    text-align: left;
+    font-size: 1rem;
+    color: #000;
+    font-family: Inter;
+}
+
+.validity-icon {
+    margin-left: 0.5rem;
+    font-size: 1rem;
+}

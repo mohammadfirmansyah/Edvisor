@@ -1,0 +1,277 @@
+classDiagram
+    %% Kelas untuk Tabel 'Users'
+    class Users {
+        +int user_id
+        +string full_name
+        +string email_address
+        +string password
+        +datetime last_password_reset
+        +string remember_token
+        +string current_session_id
+        +datetime last_activity
+        +string src_profile_photo
+        +string registration_number
+        +enum status
+        +datetime created_at
+        +datetime updated_at
+        +createUser(full_name, email_address, password)
+        +getUserById(user_id)
+        +getAllUsersExcept(user_id)
+        +getUserByEmail(email_address)
+        +getUserByRememberToken(token)
+        +updateUser(user_id, data)
+        +updateActivity(user_id, data)
+        +checkInactiveUsers()
+    }
+
+    %% Kelas untuk Tabel 'ci_sessions'
+    class ci_sessions {
+        +string id
+        +int user_id
+        +string ip_address
+        +int timestamp
+        +blob data
+        +enum status
+        +createSession(id, user_id, ip_address, data)
+        +getSessionById(id)
+        +updateSession(id, data)
+        +deleteSession(id)
+        +deleteInactiveSessions()
+        +deleteSessionsWithNullUserId()
+        +deleteInactiveSessionsByUserId(user_id)
+        +deleteOtherSessions(user_id, current_session_id)
+        +deleteSessionsByUserId(user_id)
+    }
+
+    %% Kelas untuk Tabel 'Classes'
+    class Classes {
+        +int class_id
+        +string class_name
+        +string school_name
+        +string subject
+        +string basic_competency
+        +date date
+        +time start_time
+        +time end_time
+        +string class_code
+        +string src_student_data_file
+        +string src_teaching_module_file
+        +string src_learning_media_file
+        +int creator_user_id
+        +datetime created_at
+        +datetime updated_at
+        +createClass(data)
+        +getClassById(class_id)
+        +getClassByCode(class_code)
+        +getClassesByCreator(creator_user_id)
+        +getClassesWithStatus(user_id)
+        +getClassesWithStatusByCreator(creator_user_id)
+        +getUpcomingClasses(user_id)
+        +updateClass(class_id, data)
+        +deleteClass(class_id)
+        +countClassesByCreator(user_id)
+        +checkClassCodeExists(class_code)
+    }
+
+    %% Kelas untuk Tabel 'ClassObservers'
+    class ClassObservers {
+        +int class_id
+        +int observer_user_id
+        +datetime created_at
+        +datetime updated_at
+        +addObserver(class_id, observer_user_id)
+        +getObserver(class_id, observer_user_id)
+        +getObserversByClass(class_id)
+        +getObserversWithDetails(class_id)
+        +getLatestObservers(class_id, limit)
+        +getClassesByObserver(user_id)
+        +getClassesWithStatusByObserver(observer_user_id)
+        +removeObserver(class_id, observer_user_id)
+        +removeObserverWithRelatedData(class_id, observer_user_id)
+        +deleteObserversByClass(class_id)
+        +countClassesByObserver(user_id)
+        +isUserObserver(class_id, user_id)
+    }
+
+    %% Kelas untuk Tabel 'ObservedStudents'
+    class ObservedStudents {
+        +int class_id
+        +int observer_user_id
+        +string student_number
+        +datetime created_at
+        +datetime updated_at
+        +addObservedStudent(class_id, observer_user_id, student_number)
+        +getObservedStudents(class_id, observer_user_id)
+        +getStudentNumbersByObserver(class_id, observer_user_id)
+        +getStudentNumbersByClass(class_id)
+        +getUniqueStudentNumbersByClass(class_id)
+        +deleteObservedStudentsByClass(class_id)
+        +deleteObservedStudentWithRelatedData(class_id, observer_user_id, student_number)
+        +deleteAllObservedStudentsWithRelatedData(class_id, observer_user_id)
+    }
+
+    %% Kelas untuk Tabel 'Notifications'
+    class Notifications {
+        +int notification_id
+        +int sender_id
+        +int receiver_id
+        +int class_id
+        +text notification_text
+        +string notification_type
+        +datetime timestamp
+        +datetime updated_at
+        +createNotification(sender_id, receiver_id, class_id, notification_text, notification_type)
+        +getNotificationsByReceiver(receiver_id)
+        +deleteNotification(notification_id)
+        +deleteNotificationsByClass(class_id)
+    }
+
+    %% Kelas untuk Tabel 'TeachingActivityAssessment'
+    class TeachingActivityAssessment {
+        +int assessment_id
+        +int class_id
+        +int observer_user_id
+        +int score_question1
+        +int score_question2
+        +int score_question3
+        +int score_question4
+        +int score_question5
+        +int score_question6
+        +int score_question7
+        +int score_question8
+        +int score_question9
+        +int score_question10
+        +int total_score
+        +float converted_value
+        +text notes
+        +string src_signature_file
+        +datetime created_at
+        +datetime updated_at
+        +createAssessment(data)
+        +getAssessmentsByClass(class_id)
+        +getAssessment(class_id, observer_user_id)
+        +updateAssessment(assessment_id, data)
+        +deleteAssessmentByObserver(class_id, observer_user_id)
+        +deleteAssessmentsByClass(class_id)
+    }
+
+    %% Kelas untuk Tabel 'StudentObservationSheet'
+    class StudentObservationSheet {
+        +int observation_id
+        +int class_id
+        +int observer_user_id
+        +text notes
+        +string src_signature_file
+        +datetime created_at
+        +datetime updated_at
+        +createObservationSheet(data)
+        +getObservationSheetsByClass(class_id)
+        +getObservationSheet(class_id, observer_user_id)
+        +updateObservationSheet(observation_id, data)
+        +deleteObservationSheetsByClass(class_id)
+    }
+
+    %% Kelas untuk Tabel 'StudentObservationDetails'
+    class StudentObservationDetails {
+        +int observation_id
+        +string student_number
+        +int indicator_number
+        +boolean value
+        +datetime created_at
+        +datetime updated_at
+        +addObservationDetail(data)
+        +getObservationDetails(observation_id)
+        +deleteObservationDetails(observation_id)
+        +deleteObservationDetailsByStudentNumber(class_id, observer_user_id, student_number)
+        +deleteAllObservationDetailsByObserver(class_id, observer_user_id)
+        +deleteObservationDetailsByClass(class_id)
+    }
+
+    %% Kelas untuk Tabel 'StudentActivityNotes'
+    class StudentActivityNotes {
+        +int activity_notes_id
+        +int class_id
+        +int observer_user_id
+        +text answer_question1
+        +text answer_question2
+        +text answer_question3
+        +text answer_question4
+        +text answer_question5
+        +string src_signature_file
+        +datetime created_at
+        +datetime updated_at
+        +createActivityNote(data)
+        +getActivityNotesByClass(class_id)
+        +getActivityNote(class_id, observer_user_id)
+        +updateActivityNote(activity_notes_id, data)
+        +deleteActivityNoteByObserver(class_id, observer_user_id)
+        +deleteActivityNotesByClass(class_id)
+    }
+
+    %% Kelas untuk Tabel 'ClassVoiceRecordings'
+    class ClassVoiceRecordings {
+        +int recording_id
+        +int class_id
+        +int observer_user_id
+        +string file_src
+        +datetime created_at
+        +datetime updated_at
+        +createRecording(class_id, observer_user_id, file_src)
+        +getRecordingByClassAndObserver(class_id, observer_user_id)
+        +getRecordingByClass(class_id)
+        +deleteRecordingsByClass(class_id)
+        +deleteRecordingsByClassAndObserver(class_id, observer_user_id)
+    }
+
+    %% Kelas untuk Tabel 'SpecialNotes'
+    class SpecialNotes {
+        +int note_id
+        +int class_id
+        +int observer_user_id
+        +string activity_type
+        +text note_details
+        +datetime created_at
+        +datetime updated_at
+        +createNote(data)
+        +getNotesByClassAndObserver(class_id, observer_user_id)
+        +getNotesByClass(class_id)
+        +deleteNotesByClass(class_id)
+        +deleteNotesByClassAndObserver(class_id, observer_user_id)
+    }
+
+    %% Kelas untuk Tabel 'ClassDocumentationFiles'
+    class ClassDocumentationFiles {
+        +int documentation_id
+        +int class_id
+        +int observer_user_id
+        +string file_src
+        +datetime created_at
+        +datetime updated_at
+        +createDocumentation(class_id, observer_user_id, file_src)
+        +getDocumentationsByClassAndObserver(class_id, observer_user_id)
+        +getDocumentationsByClass(class_id)
+        +deleteDocumentationsByClass(class_id)
+        +deleteDocumentationsByClassAndObserver(class_id, observer_user_id)
+    }
+
+    %% Hubungan antar Kelas
+    Users "1" --> "0..*" ci_sessions : has
+    Users "1" --> "0..*" Classes : creates
+    Classes "1" --> "0..*" ClassObservers : has
+    Users "1" --> "0..*" ClassObservers : becomes observer
+    Classes "1" --> "0..*" Notifications : triggers
+    Users "1" --> "0..*" Notifications : sends & receives
+    ClassObservers "1" --> "0..*" ObservedStudents : observes
+    Classes "1" --> "0..*" TeachingActivityAssessment : has
+    ClassObservers "1" --> "1" TeachingActivityAssessment : assesses
+    Classes "1" --> "0..*" StudentObservationSheet : has
+    ClassObservers "1" --> "1" StudentObservationSheet : observes
+    StudentObservationSheet "1" --> "0..*" StudentObservationDetails : has
+    Classes "1" --> "0..*" StudentActivityNotes : has
+    ClassObservers "1" --> "1" StudentActivityNotes : notes
+    Classes "1" --> "0..*" ClassVoiceRecordings : has
+    ClassObservers "1" --> "1" ClassVoiceRecordings : notes
+    Classes "1" --> "0..*" SpecialNotes : has
+    ClassObservers "1" --> "0..*" SpecialNotes : notes
+    Classes "1" --> "0..*" ClassDocumentationFiles : documents
+    ClassObservers "1" --> "0..*" ClassDocumentationFiles : documents
