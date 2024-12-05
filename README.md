@@ -3,7 +3,7 @@
 
 ![Edvisor Logo](assets/img/logo.png)
 
-![Release](https://img.shields.io/endpoint?url=https://<TOKEN>@raw.githubusercontent.com/mohammadfirmansyah/Edvisor/main/badges/release-badge.json&style=for-the-badge)
+![Release](https://img.shields.io/badge/Release-1.0.0-blue?style=for-the-badge)
 </div>
 
 ## 📋 Daftar Isi
