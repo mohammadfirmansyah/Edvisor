@@ -1,26 +1,52 @@
-name: Update Release Badge
+name: Update Release and Pre-release Badges
 
 on:
   release:
     types: [published]
 
 jobs:
-  update-badge:
+  update-badges:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Update README Badge
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Get Latest Release Tag
+        id: get_release
         run: |
           latest_release=$(jq -r .release.tag_name < "$GITHUB_EVENT_PATH")
-          badge_url="https://img.shields.io/badge/Release-$latest_release-brightgreen?style=for-the-badge"
-          sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?style=for-the-badge|$badge_url|g" README.md
+          echo "::set-output name=release::$latest_release"
+
+      - name: Get Latest Pre-release Tag
+        id: get_prerelease
+        run: |
+          # Mendapatkan daftar semua pre-releases
+          prereleases=$(curl -s https://api.github.com/repos/mohammadfirmansyah/Edvisor/releases | jq -r '.[] | select(.prerelease) | .tag_name')
+          # Mengambil pre-release terbaru
+          latest_prerelease=$(echo "$prereleases" | head -n 1)
+          echo "::set-output name=prerelease::$latest_prerelease"
+
+      - name: Update README Badges
+        run: |
+          # Update Release Badge
+          release_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$release?style=for-the-badge"
+          sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?style=for-the-badge|$release_badge_url|g" README.md
+
+          # Update Pre-release Badge
+          if [ "$prerelease" != "null" ]; then
+            prerelease_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$prerelease?include_prereleases&label=Pre-release&style=for-the-badge"
+            sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&style=for-the-badge|$prerelease_badge_url|g" README.md
+          else
+            echo "No pre-release found."
+          fi
 
       - name: Commit Changes
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
-          git commit -m "Update release badge to $latest_release" || echo "No changes to commit"
+          git commit -m "Update release and pre-release badges to $release and $prerelease" || echo "No changes to commit"
           git push

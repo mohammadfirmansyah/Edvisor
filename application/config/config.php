@@ -23,7 +23,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/edvisor/';
+// Mendapatkan hostname dari permintaan saat ini
+$host = $_SERVER['HTTP_HOST'];
+
+// Mendefinisikan subdomain localTunnel
+$localTunnelSubdomain = 'edvisorfilkomub.loca.lt';
+
+// Menentukan base_url berdasarkan hostname
+if ($host === 'localhost') {
+    $config['base_url'] = 'http://localhost/edvisor/';
+} elseif ($host === $localTunnelSubdomain) {
+    $config['base_url'] = 'https://' . $localTunnelSubdomain . '/';
+} else {
+    // Default atau penanganan lainnya
+    $config['base_url'] = 'http://localhost/edvisor/';
+}
 
 /*
 |--------------------------------------------------------------------------
