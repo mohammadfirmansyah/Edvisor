@@ -203,6 +203,11 @@ Untuk memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pr
 
 5. **Definisikan Subdomain yang Ingin Digunakan sebagai Alamat Web Hosting**  
    - Pastikan subdomain yang dipilih unik agar bisa digunakan.
+      
+     ```php
+     $localTunnelSubdomain = '<subdomain>.loca.lt';
+     ```
+
    - Contoh:
    
      ```php
@@ -231,7 +236,7 @@ Untuk memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pr
    </VirtualHost>
 
    <VirtualHost *:<port HTTP>>
-       ServerName <subdomain yang sudah didefinisikan>
+       ServerName <subdomain yang sudah didefinisikan>.loca.lt
        DocumentRoot "C:/xampp/htdocs/edvisor"
        <Directory "C:/xampp/htdocs/edvisor">
            Options Indexes FollowSymLinks Includes ExecCGI
