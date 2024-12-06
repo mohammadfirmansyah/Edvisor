@@ -3,12 +3,8 @@
 
   ![Edvisor Logo](assets/img/logo.png)
 
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases" target="_blank" style="text-decoration: none !important;">
-    <img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Pre-release&style=for-the-badge&color=lightgray" alt="Pre-release">
-  </a>
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest" target="_blank" style="text-decoration: none !important;">
-    <img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?style=for-the-badge" alt="Release">
-  </a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases" target="_blank" style="text-decoration: none !important;"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Pre-release&style=for-the-badge&color=lightgray" alt="Pre-release"></a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest" target="_blank" style="text-decoration: none !important;"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?style=for-the-badge" alt="Release"></a>
 </div>
 
 <h2 id="daftar-isi">📋 Daftar Isi</h2>
