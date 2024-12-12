@@ -13,7 +13,7 @@ class GlobalAssetsInjector
      * Metode injectAssets
      *
      * Menyisipkan tag <link> untuk CSS dan tag <script> untuk JS ke dalam output HTML.
-     * Aset tambahan akan disisipkan jika pengguna sedang login.
+     * Aset global disisipkan di <head> dan aset tambahan (auth_js) disisipkan di footer (<body>).
      *
      * @param mixed $params Parameter tambahan yang mungkin diperlukan (tidak digunakan dalam metode ini)
      * @return void
@@ -43,24 +43,30 @@ class GlobalAssetsInjector
         $output = $CI->output->get_output();
 
         // Membangun tag <link> untuk setiap file CSS global
-        $css_tags = '';
+        $global_css_tags = '';
         foreach ($global_css as $css) {
-            $css_tags .= $this->buildCssTag($css);
+            $global_css_tags .= $this->buildCssTag($css);
         }
 
         // Membangun tag <script> untuk setiap file JS global
-        $js_tags = '';
+        $global_js_tags = '';
         foreach ($global_js as $js) {
-            $js_tags .= $this->buildJsTag($js);
+            $global_js_tags .= $this->buildJsTag($js);
         }
 
-        // Jika pengguna login, tambahkan aset tambahan
-        if (!empty($auth_css) || !empty($auth_js)) {
+        // Membangun tag <link> untuk setiap file CSS auth (jika ada)
+        $auth_css_tags = '';
+        if (!empty($auth_css)) {
             foreach ($auth_css as $css) {
-                $css_tags .= $this->buildCssTag($css);
+                $auth_css_tags .= $this->buildCssTag($css);
             }
+        }
+
+        // Membangun tag <script> untuk setiap file JS auth (jika ada)
+        $auth_js_tags = '';
+        if (!empty($auth_js)) {
             foreach ($auth_js as $js) {
-                $js_tags .= $this->buildJsTag($js);
+                $auth_js_tags .= $this->buildJsTag($js);
             }
         }
 
@@ -75,15 +81,28 @@ class GlobalAssetsInjector
         EOD;
 
         // Membangun semua script untuk disisipkan di head
-        $all_scripts = $inline_script . "\n" . $css_tags . $js_tags;
+        $head_assets = $inline_script . "\n" . $global_css_tags . $global_js_tags;
 
-        // Menyisipkan semua aset di awal tag </head>
+        // Menyisipkan aset global di akhir <head>
         if (strpos($output, '</head>') !== false) {
             // Menyisipkan aset sebelum </head>
-            $output = str_replace('</head>', $all_scripts . '</head>', $output);
+            $output = str_replace('</head>', $head_assets . '</head>', $output);
         } else if (strpos($output, '<head>') !== false) {
             // Menyisipkan aset segera setelah <head>
-            $output = preg_replace('/<head>(.*?)<\/head>/is', '<head>' . $all_scripts . '$1</head>', $output);
+            $output = preg_replace('/<head>(.*?)<\/head>/is', '<head>' . $head_assets . '$1</head>', $output);
+        }
+
+        // Menyisipkan aset auth_css dan auth_js di akhir <body>
+        if (!empty($auth_css_tags) || !empty($auth_js_tags)) {
+            $footer_assets = $auth_css_tags . $auth_js_tags;
+
+            if (strpos($output, '</body>') !== false) {
+                // Menyisipkan aset sebelum </body>
+                $output = str_replace('</body>', $footer_assets . '</body>', $output);
+            } else if (strpos($output, '<body>') !== false) {
+                // Menyisipkan aset segera setelah <body>
+                $output = preg_replace('/<body>(.*?)<\/body>/is', '<body>' . '$1' . $footer_assets . '</body>', $output);
+            }
         }
 
         // Mengatur output yang telah dimodifikasi

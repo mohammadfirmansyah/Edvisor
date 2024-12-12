@@ -14,8 +14,7 @@ class Controller extends CI_Controller
   /**
    * Konstruktor Controller
    *
-   * Menginisialisasi helper, library, dan model yang diperlukan.
-   * Mengatur konfigurasi enkripsi.
+   * Menginisialisasi helper, library, model, dan konfigurasi enkripsi.
    * Mengecek apakah pengguna sudah login dan mengatur data pengguna untuk semua view.
    */
   public function __construct()
@@ -125,17 +124,21 @@ class Controller extends CI_Controller
       // Cek apakah ada cookie "remember_me"
       $remember_token = get_cookie('remember_me');
       if ($remember_token) {
+        // Mendapatkan pengguna berdasarkan token "remember_me"
         $user = $this->User->getUserByRememberToken($remember_token);
         if ($user) {
-          // Cek apakah sudah ada sesi aktif di browser lain
+          // Cek apakah sudah ada sesi aktif di browser lain atau status 'wait'
           if ($user->current_session_id) {
             $existing_session = $this->SessionModel->getSessionById($user->current_session_id);
-            if ($existing_session && $existing_session->status === 'active') {
-              // Sesi aktif di browser lain, tidak dapat login
+            if ($existing_session && ($existing_session->status === 'active' || $existing_session->status === 'wait')) {
+              // Sesi aktif di browser lain atau status 'wait', tidak dapat login
               $this->session->set_flashdata('login_error', 'Akun Anda sudah digunakan di browser lain.');
               redirect('pageLogin');
             }
           }
+
+          // Mulai transaksi untuk memastikan konsistensi data
+          $this->db->trans_start();
 
           // Regenerasi session ID dan menghapus sesi lama
           $this->session->sess_regenerate(TRUE);
@@ -155,14 +158,23 @@ class Controller extends CI_Controller
           // Memperbarui user_id dan status pada tabel ci_sessions menggunakan SessionModel
           $this->SessionModel->updateSession(session_id(), ['user_id' => $user->user_id, 'status' => 'active']);
 
-          // Hapus sesi dengan user_id null di tabel ci_sessions
+          // Menghapus sesi dengan user_id null di tabel ci_sessions
           $this->SessionModel->deleteSessionsWithNullUserId();
 
-          // Hapus sesi lama yang tidak aktif untuk user ini
+          // Menghapus sesi lama yang tidak aktif untuk user ini
           $this->SessionModel->deleteInactiveSessionsByUserId($user->user_id);
 
-          // Hapus sesi lain yang aktif untuk user ini kecuali sesi saat ini
+          // Menghapus sesi lain yang aktif untuk user ini kecuali sesi saat ini
           $this->SessionModel->deleteOtherSessions($user->user_id, session_id());
+
+          // Commit transaksi
+          $this->db->trans_complete();
+
+          if ($this->db->trans_status() === FALSE) {
+            // Jika transaksi gagal, set flashdata dan redirect ke login
+            $this->session->set_flashdata('login_error', 'Terjadi kesalahan saat memproses login. Silakan coba lagi.');
+            redirect('pageLogin');
+          }
 
           // Menyediakan data pengguna untuk semua view
           $this->user = $user;
@@ -185,14 +197,26 @@ class Controller extends CI_Controller
         if ($user->current_session_id !== session_id()) {
           // Cek status sesi yang disimpan di database
           $existing_session = $this->SessionModel->getSessionById($user->current_session_id);
-          if ($existing_session && $existing_session->status === 'active') {
-            // Sesi aktif di browser lain, tidak dapat login
+          if ($existing_session && ($existing_session->status === 'active' || $existing_session->status === 'wait')) {
+            // Sesi aktif di browser lain atau status 'wait', tidak dapat login
             $this->session->set_flashdata('session_invalid', 'Sesi Anda sudah aktif di browser lain.');
             redirect('pageLogin'); // Redirect ke login tanpa logout
           } else {
-            // Sesi sebelumnya tidak aktif, izinkan login dan perbarui sesi baru
+            // Sesi sebelumnya tidak aktif atau status tidak 'active'/'wait', izinkan login dan perbarui sesi baru
+            $this->db->trans_start();
+
+            // Memperbarui aktivitas pengguna
             $this->User->updateActivity($user_id, ['current_session_id' => session_id(), 'status' => 'active']);
             $this->SessionModel->updateSession(session_id(), ['user_id' => $user_id, 'status' => 'active']);
+
+            // Commit transaksi
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+              // Jika transaksi gagal, set flashdata dan redirect ke login
+              $this->session->set_flashdata('session_invalid', 'Terjadi kesalahan saat memproses sesi. Silakan login kembali.');
+              redirect('pageLogin');
+            }
           }
         }
 
@@ -221,8 +245,8 @@ class Controller extends CI_Controller
         // Memperbarui user_id dan status pada tabel ci_sessions menggunakan SessionModel
         $this->SessionModel->updateSession(session_id(), ['user_id' => $user_id, 'status' => 'active']);
 
-        $this->user = $user;
         // Menyediakan variabel 'user' untuk semua view
+        $this->user = $user;
         $this->load->vars(['user' => $user]);
       } else {
         // Pengguna tidak ditemukan, logout
@@ -248,18 +272,19 @@ class Controller extends CI_Controller
       // Memperbarui waktu aktivitas terakhir dan status sesi
       $update_data = [
         'last_activity' => date('Y-m-d H:i:s'),
-        'status' => $status === 'active' ? 'active' : 'inactive'
+        'status' => $status === 'active' ? 'active' : ($status === 'wait' ? 'wait' : 'inactive')
+        // Mengatur status berdasarkan input 'active', 'wait', atau lainnya menjadi 'inactive'
       ];
       $this->User->updateActivity($user_id, $update_data);
 
       // Memperbarui user_id dan status pada tabel ci_sessions menggunakan SessionModel
       $session_update_data = [
         'user_id' => $user_id,
-        'status' => $status === 'active' ? 'active' : 'inactive'
+        'status' => $status === 'active' ? 'active' : ($status === 'wait' ? 'wait' : 'inactive')
       ];
       $this->SessionModel->updateSession(session_id(), $session_update_data);
 
-      // Pastikan tidak ada flashdata yang diatur di sini
+      // Mengembalikan respon sukses
       echo json_encode(['status' => 'success']);
     } else {
       // Jika sesi tidak valid, kembalikan pesan error
@@ -4134,11 +4159,14 @@ class Controller extends CI_Controller
 
     // Memastikan user_id ada
     if ($user_id) {
+      // Mulai transaksi untuk memastikan konsistensi data saat logout
+      $this->db->trans_start();
+
       // Memperbarui database untuk menghapus current_session_id, remember_token, last_activity, dan status
       $update_data = [
         'current_session_id' => NULL,
         'remember_token' => NULL,
-        'last_activity' => NULL,
+        'last_activity' => date('Y-m-d H:i:s'),
         'status' => 'inactive' // Mengatur status sesi menjadi inactive
       ];
       $this->User->updateActivity($user_id, $update_data);
@@ -4166,6 +4194,15 @@ class Controller extends CI_Controller
           }
         }
       }
+
+      // Commit transaksi
+      $this->db->trans_complete();
+
+      if ($this->db->trans_status() === FALSE) {
+        // Jika transaksi gagal, set flashdata dan redirect ke login
+        $this->session->set_flashdata('logout_error', 'Terjadi kesalahan saat proses logout. Silakan coba lagi.');
+        redirect('pageLogin');
+      }
     }
 
     // Menghapus semua data session
@@ -4176,6 +4213,11 @@ class Controller extends CI_Controller
 
     // Hapus cookie "remember_me"
     delete_cookie('remember_me');
+
+    // Menambahkan header untuk mencegah caching aset autentikasi
+    $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    $this->output->set_header('Cache-Control: post-check=0, pre-check=0', false);
+    $this->output->set_header('Pragma: no-cache');
 
     // Redirect ke halaman login
     redirect('pageLogin');
@@ -4196,17 +4238,21 @@ class Controller extends CI_Controller
     // Cek apakah ada cookie "remember_me"
     $remember_token = get_cookie('remember_me');
     if ($remember_token) {
+      // Mendapatkan pengguna berdasarkan token "remember_me"
       $user = $this->User->getUserByRememberToken($remember_token);
       if ($user) {
-        // Cek apakah sudah ada sesi aktif di browser lain
+        // Cek apakah sudah ada sesi aktif di browser lain atau status 'wait'
         if ($user->current_session_id) {
           $existing_session = $this->SessionModel->getSessionById($user->current_session_id);
-          if ($existing_session && $existing_session->status === 'active') {
-            // Sesi aktif di browser lain, tidak dapat login
+          if ($existing_session && ($existing_session->status === 'active' || $existing_session->status === 'wait')) {
+            // Sesi aktif di browser lain atau status 'wait', tidak dapat login
             $this->session->set_flashdata('login_error', 'Akun Anda sudah digunakan di browser lain.');
             redirect('pageLogin');
           }
         }
+
+        // Mulai transaksi untuk memastikan konsistensi data
+        $this->db->trans_start();
 
         // Regenerasi session ID dan menghapus sesi lama
         $this->session->sess_regenerate(TRUE);
@@ -4226,11 +4272,20 @@ class Controller extends CI_Controller
         // Memperbarui user_id dan status pada tabel ci_sessions menggunakan SessionModel
         $this->SessionModel->updateSession(session_id(), ['user_id' => $user->user_id, 'status' => 'active']);
 
-        // Hapus sesi lama yang tidak aktif untuk user ini
+        // Menghapus sesi lama yang tidak aktif untuk user ini
         $this->SessionModel->deleteInactiveSessionsByUserId($user->user_id);
 
-        // Hapus sesi lain yang aktif untuk user ini kecuali sesi saat ini
+        // Menghapus sesi lain yang aktif untuk user ini kecuali sesi saat ini
         $this->SessionModel->deleteOtherSessions($user->user_id, session_id());
+
+        // Commit transaksi
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE) {
+          // Jika transaksi gagal, set flashdata dan redirect ke login
+          $this->session->set_flashdata('login_error', 'Terjadi kesalahan saat memproses login otomatis. Silakan login kembali.');
+          redirect('pageLogin');
+        }
 
         // Menyediakan data pengguna untuk semua view
         $this->user = $user;
@@ -4244,6 +4299,7 @@ class Controller extends CI_Controller
     // Memeriksa semua pengguna dan menonaktifkan yang tidak aktif
     $this->User->checkInactiveUsers();
 
+    // Menyiapkan data untuk view
     $data["title"] = "Login";
 
     // Mendapatkan flashdata untuk pesan SweetAlert2
@@ -4257,16 +4313,17 @@ class Controller extends CI_Controller
     // Load cookie helper untuk mendapatkan cookie 'notification'
     $this->load->helper('cookie');
 
-    // Get 'notification' cookie
+    // Mendapatkan 'notification' cookie
     $notification_cookie = get_cookie('notification');
 
     if ($notification_cookie) {
+      // Decode JSON notifikasi
       $notification = json_decode($notification_cookie, true);
 
-      // Pass notification data to view
+      // Pass notification data ke view
       $data['notification'] = $notification;
 
-      // Delete the 'notification' cookie
+      // Hapus cookie 'notification' setelah dibaca
       delete_cookie('notification');
     } else {
       $data['notification'] = null;
@@ -4274,11 +4331,11 @@ class Controller extends CI_Controller
 
     // Menambahkan script untuk menghapus 'login_timestamp' dari localStorage saat halaman login dimuat
     $data['clear_login_timestamp_script'] = "
-                <script>
-                    // Hapus loginTimestamp dari localStorage saat halaman login dimuat
-                    localStorage.removeItem('login_timestamp');
-                </script>
-            ";
+            <script>
+                // Hapus loginTimestamp dari localStorage saat halaman login dimuat
+                localStorage.removeItem('login_timestamp');
+            </script>
+        ";
 
     // Menghapus sesi yang tidak aktif saat mengakses halaman login
     $this->SessionModel->deleteInactiveSessions();
@@ -4291,6 +4348,12 @@ class Controller extends CI_Controller
    * Memproses Login Pengguna
    *
    * Mengautentikasi pengguna berdasarkan email dan password, serta menangani opsi "Ingat Saya".
+   * 
+   * @param string $email_address Alamat email pengguna yang dikirim dari form.
+   * @param string $password Password pengguna yang dikirim dari form.
+   * @param string $remember_me Nilai checkbox "Ingat Saya" dari form.
+   * @param string $browser Informasi nama browser yang dikirim dari form (diisi oleh JavaScript).
+   * @param string $mode Informasi mode browser (private/normal) yang dikirim dari form (diisi oleh JavaScript).
    */
   public function formLogin()
   {
@@ -4298,6 +4361,10 @@ class Controller extends CI_Controller
     $email_address = $this->input->post('email_address');
     $password      = $this->input->post('password');
     $remember_me   = $this->input->post('remember_me'); // Mengambil nilai checkbox "Ingat Saya"
+
+    // Mengambil data browser dan mode dari input hidden
+    $browser = $this->input->post('browser', TRUE);
+    $mode    = $this->input->post('mode', TRUE);
 
     // Validasi input dasar
     if (empty($email_address) || empty($password)) {
@@ -4309,15 +4376,18 @@ class Controller extends CI_Controller
     $user = $this->User->getUserByEmail($email_address);
 
     if ($user && password_verify($password, $user->password)) {
-      // Cek apakah sudah ada sesi aktif di browser lain
+      // Cek apakah sudah ada sesi aktif di browser lain atau status 'wait'
       if ($user->current_session_id) {
         $existing_session = $this->SessionModel->getSessionById($user->current_session_id);
-        if ($existing_session && $existing_session->status === 'active') {
-          // Jika ada sesi aktif di browser lain, blokir login
+        if ($existing_session && ($existing_session->status === 'active' || $existing_session->status === 'wait')) {
+          // Jika ada sesi aktif di browser lain atau status 'wait', blokir login
           $this->session->set_flashdata('login_error', 'Akun Anda sudah digunakan di browser lain.');
           redirect('pageLogin');
         }
       }
+
+      // Mulai transaksi untuk memastikan konsistensi data saat login
+      $this->db->trans_start();
 
       // Hapus sesi dengan user_id null di tabel ci_sessions
       $this->SessionModel->deleteSessionsWithNullUserId();
@@ -4333,7 +4403,9 @@ class Controller extends CI_Controller
       $update_data = [
         'current_session_id' => session_id(),
         'last_activity' => date('Y-m-d H:i:s'),
-        'status' => 'active' // Mengatur status sesi menjadi aktif
+        'status' => 'active',
+        'last_browser' => $browser, // Menyimpan nama browser terakhir yang digunakan
+        'last_mode' => $mode       // Menyimpan mode browser terakhir (private/normal)
       ];
 
       // Jika "Ingat Saya" dicentang
@@ -4366,14 +4438,29 @@ class Controller extends CI_Controller
       // Memperbarui data pengguna di database
       $this->User->updateActivity($user->user_id, $update_data);
 
-      // Memperbarui user_id dan status pada tabel ci_sessions menggunakan SessionModel
-      $this->SessionModel->updateSession(session_id(), ['user_id' => $user->user_id, 'status' => 'active']);
+      // Memperbarui user_id, status, browser, dan mode_private pada tabel ci_sessions menggunakan SessionModel
+      // mode_private bernilai TRUE/FALSE sesuai dengan $mode
+      $this->SessionModel->updateSession(session_id(), [
+        'user_id' => $user->user_id,
+        'status' => 'active',
+        'browser' => $browser,
+        'mode_private' => ($mode === 'private' ? 1 : 0)
+      ]);
 
       // Hapus sesi lama yang tidak aktif untuk user ini
       $this->SessionModel->deleteInactiveSessionsByUserId($user->user_id);
 
       // Hapus sesi lain yang aktif untuk user ini kecuali sesi saat ini
       $this->SessionModel->deleteOtherSessions($user->user_id, session_id());
+
+      // Commit transaksi
+      $this->db->trans_complete();
+
+      if ($this->db->trans_status() === FALSE) {
+        // Jika transaksi gagal, set flashdata dan redirect ke login
+        $this->session->set_flashdata('error', 'Terjadi kesalahan saat proses login. Silakan coba lagi.');
+        redirect('pageLogin');
+      }
 
       // Menyediakan data pengguna untuk semua view
       $this->user = $user;

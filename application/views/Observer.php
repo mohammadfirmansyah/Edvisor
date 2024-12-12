@@ -286,12 +286,12 @@
         const overflowInfo = isElementOverflowing(element);
 
         if (!overflowInfo.overflowing) {
-            // console.log(`Tidak perlu animasi untuk elemen:`, element);
-            // console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Tidak melebihi toleransi 1px)`);
+            console.log(`Tidak perlu animasi untuk elemen:`, element);
+            console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Tidak melebihi toleransi 1px)`);
             return;
         } else {
-            // console.log(`Animasi diperlukan untuk elemen:`, element);
-            // console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Melebihi toleransi 1px)`);
+            console.log(`Animasi diperlukan untuk elemen:`, element);
+            console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Melebihi toleransi 1px)`);
         }
 
         // Simpan teks asli dalam data attribute untuk pemulihan nanti
@@ -759,7 +759,7 @@
                     nomorSiswaIdInput.value = selectedNomorSiswa.join(",");
                     infoPemilihan.textContent = `Siswa Dipilih: ${selectedNomorSiswa.length} / 12`; // Update informasi
                     updateButtonState();
-                    // console.log("Selected Nomor Siswa IDs:", nomorSiswaIdInput.value);
+                    console.log("Selected Nomor Siswa IDs:", nomorSiswaIdInput.value);
                 });
 
                 // Tambahkan elemen siswa ke container
@@ -907,9 +907,9 @@
                 tersedia.push(parseInt(el.getAttribute("data-nomor-id"), 10));
             });
 
-            // console.log(`Tersedia: ${tersedia.join(", ")}`);
-            // console.log(`Dipilih: ${dipilih.join(", ")}`);
-            // console.log(`Tidak Tersedia: ${tidakTersediaList.join(", ")}`);
+            console.log(`Tersedia: ${tersedia.join(", ")}`);
+            console.log(`Dipilih: ${dipilih.join(", ")}`);
+            console.log(`Tidak Tersedia: ${tidakTersediaList.join(", ")}`);
         }
 
         // Initial call to log status

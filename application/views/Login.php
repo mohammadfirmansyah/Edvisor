@@ -69,6 +69,10 @@
                     </div>
                 </div>
 
+                <!-- Field tersembunyi untuk browser dan mode -->
+                <input type="hidden" name="browser" id="browser">
+                <input type="hidden" name="mode" id="mode">
+
                 <button type="submit" class="button link">
                     <div class="ini-adalah-text">Masuk</div>
                 </button>
@@ -98,6 +102,9 @@
 <!-- Sertakan jQuery dan SweetAlert2 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Sertakan file detectIncognito.js -->
+<script src="detectIncognito.js"></script>
 
 <script>
     // Menunggu hingga halaman selesai dimuat
@@ -198,7 +205,9 @@
         /**
          * Fungsi untuk menampilkan pesan notifikasi secara bergantian
          *
-         * @param {Array} msgs Array yang berisi objek pesan notifikasi
+         * @param {Array} msgs - Array yang berisi objek pesan notifikasi.
+         *                       Parameter 'msgs' adalah array dari objek yang masing-masing memiliki
+         *                       properti seperti 'icon', 'title', 'text', dan 'confirmButtonColor' untuk SweetAlert2.
          */
         function showMessagesSequentially(msgs) {
             if (msgs.length === 0) return;
@@ -269,9 +278,9 @@
             checkbox.addEventListener('change', function() {
                 // Log jika checkbox dicentang atau tidak dicentang
                 if (checkbox.checked) {
-                    // console.log('Checkbox dicentang');
+                    console.log('Checkbox dicentang');
                 } else {
-                    // console.log('Checkbox tidak dicentang');
+                    console.log('Checkbox tidak dicentang');
                 }
             });
         }
@@ -289,6 +298,17 @@
         }
 
         setFocus();
+    });
+
+    // Mendeteksi browser dan mode incognito menggunakan detectIncognito.js
+    // dan menyimpannya pada field tersembunyi dalam form.
+    detectIncognito().then((result) => {
+        const browserField = document.getElementById('browser');
+        const modeField = document.getElementById('mode');
+
+        // Set nilai browser dan mode (private/normal)
+        browserField.value = result.browserName;
+        modeField.value = result.isPrivate ? 'private' : 'normal';
     });
 </script>
 

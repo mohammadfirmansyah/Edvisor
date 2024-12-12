@@ -29,11 +29,16 @@ $host = $_SERVER['HTTP_HOST'];
 // Mendefinisikan subdomain localTunnel
 $localTunnelSubdomain = 'edvisorfilkomub.loca.lt';
 
+// Mendefinisikan subdomain localToNet
+$localToNetSubdomain = 'edvisorfilkomub.localto.net';
+
 // Menentukan base_url berdasarkan hostname
 if ($host === 'localhost') {
     $config['base_url'] = 'http://localhost/edvisor/';
 } elseif ($host === $localTunnelSubdomain) {
     $config['base_url'] = 'https://' . $localTunnelSubdomain . '/';
+} elseif ($host === $localToNetSubdomain) {
+    $config['base_url'] = 'https://' . $localToNetSubdomain . '/';
 } else {
     // Default atau penanganan lainnya
     $config['base_url'] = 'http://localhost/edvisor/';
@@ -240,7 +245,7 @@ $config['allow_get_array'] = TRUE;
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------

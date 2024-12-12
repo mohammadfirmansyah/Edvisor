@@ -89,7 +89,7 @@
     // Fungsi utama untuk mendeteksi mode incognito dan menampilkan peringatan
     function detectAndWarn() {
         detectIncognito().then((result) => {
-            // console.log(`Browser: ${result.browserName}, Mode Privat: ${result.isPrivate}`);
+            console.log(`Browser: ${result.browserName}, Mode Privat: ${result.isPrivate}`);
             if (result.isPrivate) {
                 showIncognitoWarning();
                 // Menghentikan eksekusi skrip selanjutnya

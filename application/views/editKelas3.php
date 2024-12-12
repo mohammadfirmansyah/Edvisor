@@ -645,7 +645,7 @@
                     observerIdInput.value = observerId;
                     observerList.style.display = "none";
 
-                    // console.log(`Observer yang dipilih: ${observerName}, ID: ${observerId}`);
+                    console.log(`Observer yang dipilih: ${observerName}, ID: ${observerId}`);
                     updateButtonState();
                 });
             });
@@ -660,9 +660,9 @@
                 .filter(Boolean); // Nomor siswa yang tersedia
             const dipilih = selectedNomorSiswa.map((num) => parseInt(num, 10)); // Nomor siswa yang dipilih
             const tidakTersediaList = Array.from(tidakTersedia).map((num) => parseInt(num, 10)); // Nomor siswa yang tidak tersedia
-            // console.log(`Tersedia: ${tersedia.join(", ")}`);
-            // console.log(`Dipilih: ${dipilih.join(", ")}`);
-            // console.log(`Tidak Tersedia: ${tidakTersediaList.join(", ")}`);
+            console.log(`Tersedia: ${tersedia.join(", ")}`);
+            console.log(`Dipilih: ${dipilih.join(", ")}`);
+            console.log(`Tidak Tersedia: ${tidakTersediaList.join(", ")}`);
         }
 
         /**
@@ -807,7 +807,7 @@
                     nomorSiswaIdInput.value = selectedNomorSiswa.join(",");
                     infoPemilihan.textContent = `Siswa Dipilih: ${selectedNomorSiswa.length} / 12`; // Update informasi
                     updateButtonState();
-                    // console.log("Selected Nomor Siswa IDs:", nomorSiswaIdInput.value);
+                    console.log("Selected Nomor Siswa IDs:", nomorSiswaIdInput.value);
                 });
 
                 // Tambahkan elemen siswa ke container
@@ -819,9 +819,9 @@
          * Fungsi untuk log pilihan saat ini
          */
         function logSelections() {
-            // console.log(`Observer terpilih: ${observerIdInput.value}`);
-            // console.log(`Nomor siswa terpilih: ${nomorSiswaIdInput.value}`);
-            // console.log(`Tidak Tersedia: ${Array.from(tidakTersedia).join(", ")}`);
+            console.log(`Observer terpilih: ${observerIdInput.value}`);
+            console.log(`Nomor siswa terpilih: ${nomorSiswaIdInput.value}`);
+            console.log(`Tidak Tersedia: ${Array.from(tidakTersedia).join(", ")}`);
         }
 
         /**
@@ -1065,7 +1065,7 @@
                     src_profile_photo: profileSrc // Tambahkan src_profile_photo
                 });
 
-                // console.log("Saved Observer Data:", savedObserversData);
+                console.log("Saved Observer Data:", savedObserversData);
 
                 logSelections();
                 resetSelections();
@@ -1120,7 +1120,7 @@
 
                 // Hapus data observer dari savedObserversData
                 savedObserversData = savedObserversData.filter(data => data.observerId !== parseInt(observerId));
-                // console.log("Saved Observer Data:", savedObserversData);
+                console.log("Saved Observer Data:", savedObserversData);
 
                 // Perbarui hidden input nomorTidakTersedia
                 nomorTidakTersediaInput.value = Array.from(tidakTersedia).join(",");
@@ -1263,7 +1263,7 @@
                     class_id: encrypted_idKelas
                 },
                 success: function(response) {
-                    // console.log('Data berhasil disimpan di sesi:', response);
+                    console.log('Data berhasil disimpan di sesi:', response);
                 },
                 error: function(xhr, status, error) {
                     console.error('Gagal menyimpan data di sesi:', error);

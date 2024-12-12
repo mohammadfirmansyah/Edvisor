@@ -7,8 +7,8 @@
     <title>DOCX Viewer</title>
     <base href="<?php echo base_url(); ?>">
     <link rel="stylesheet" href="assets/css/previewform.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docx-preview-lib@0.1.14-fix-3/dist/docx-preview.min.js"></script>
+    <script src="assets/js/jszip.js"></script>
+    <script src="assets/js/docx-preview.js"></script>
 </head>
 
 <body>
@@ -42,7 +42,7 @@
              * @param {HTMLElement} document.getElementById("container") - Elemen tempat dokumen akan dirender
              */
             docx.renderAsync(blob, document.getElementById("container"))
-                .then(() => // console.log("docx: finished rendering")) // Log ketika rendering selesai
+                .then(() => console.log("docx: finished rendering")) // Log ketika rendering selesai
                 .catch(err => console.error("Error during rendering:", err)); // Menangani error selama rendering
         })
         .catch(err => {

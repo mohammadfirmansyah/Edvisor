@@ -17,6 +17,7 @@
 - [Instalasi](#instalasi)
   - [Instalasi menggunakan localhost](#instalasi-menggunakan-localhost)
   - [Instalasi menggunakan localTunnel](#instalasi-menggunakan-localtunnel)
+  - [Instalasi menggunakan localToNet](#instalasi-menggunakan-localtonet)
 - [Kontribusi](#kontribusi)
 - [Dokumentasi](#dokumentasi)
   - [User Flow dan Class Diagram](#user-flow-dan-class-diagram)
@@ -34,11 +35,12 @@ Untuk mengelola pengembangan dan pembaruan Edvisor secara sistematis, kami mener
 
 | Komponen       | Keterangan                                                                                                                                                                                                                                                                                                                                                                              |
 |----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Digit 1**  | **Versi Major**: Menandakan perubahan besar yang mungkin tidak kompatibel dengan versi sebelumnya. Contohnya termasuk perubahan arsitektur atau penghapusan fitur lama.                                                                                                                                                                                                                   |
-| **Digit 2**  | **Versi Minor**: Menunjukkan penambahan fitur baru yang kompatibel dengan versi sebelumnya. Perbaikan ini meningkatkan fungsionalitas tanpa mengganggu kestabilan sistem.                                                                                                                                                                                                                       |
+| **Digit 1**  | **Versi Major**: Menandakan perubahan besar yang mungkin tidak kompatibel dengan versi sebelumnya (breaking changes). Contohnya termasuk perubahan arsitektur atau penghapusan fitur lama.                                                                                                                                                                                                   |
+| **Digit 2**  | **Versi Minor**: Menunjukkan penambahan fitur baru yang kompatibel dengan versi sebelumnya. Perubahan ini meningkatkan fungsionalitas tanpa mengganggu kestabilan sistem.                                                                                                                                                                                                                  |
 | **Digit 3**  | **Versi Patch**: Menandakan perbaikan bug kecil atau peningkatan keamanan yang tidak mempengaruhi fungsionalitas utama aplikasi.                                                                                                                                                                                                                                                               |
-| **Label** | **Label Prerelease**: Menandakan status pengembangan versi yang belum stabil. Terdapat empat kategori utama:<br>- **Alpha**: Versi awal yang masih dalam tahap pengembangan dan pengujian internal. Cocok untuk pengujian awal, namun tidak direkomendasikan untuk produksi.<br>- **Beta**: Versi yang telah melewati pengujian internal dan siap untuk diuji oleh kelompok pengguna terbatas. Masih mungkin terdapat bug yang perlu diperbaiki.<br>- **Release Candidate (RC)**: Versi yang hampir stabil dan siap untuk rilis final, kecuali ditemukan bug kritis.<br>- **Release**: Versi stabil yang siap digunakan secara luas setelah melalui pengujian menyeluruh. |
-| **Nomor** | Menandakan urutan iterasi dari setiap rilis prerelease. Ini membantu dalam melacak pembaruan berkelanjutan selama tahap pengembangan prerelease. Contoh: `.1`, `.2`, `.3`, dll.   |
+| **Label Prerelease** | Menandakan status pengembangan versi yang belum stabil. Terdapat empat kategori utama:<br>- **Alpha**: Versi awal untuk pengujian internal.<br>- **Beta**: Versi setelah alpha yang siap diuji oleh kelompok pengguna terbatas.<br>- **Release Candidate (RC)**: Versi yang hampir stabil, menunggu pengujian akhir.<br>- **Release**: Versi stabil yang siap digunakan secara luas. |
+| **Label Khusus** | Menandakan rilis khusus dalam konteks pengembangan seperti:<br>- **Hotfix**: Perbaikan cepat pada masalah kritis di versi produksi tanpa menunggu rilis berikutnya.<br>- **Security Patch**: Tambalan keamanan untuk mengatasi kerentanan.<br>- **Maintenance Release**: Rilis perawatan rutin untuk meningkatkan stabilitas dan kinerja.<br>- **Rollback**: Rilis yang mengembalikan perubahan karena adanya masalah serius. |
+| **Nomor** | Menandakan urutan iterasi dari setiap rilis (prerelease atau label khusus). Contoh: `.1`, `.2`, `.3`, dll. |
 
 **Contoh Penomoran Versi:**
 
@@ -48,6 +50,7 @@ Untuk mengelola pengembangan dan pembaruan Edvisor secara sistematis, kami mener
 - `1.1.0-beta.2`: Penambahan fitur baru pada versi minor dengan revisi beta kedua.
 - `1.1.0-rc.1`: Release Candidate pertama sebelum rilis final.
 - `1.1.0`: Rilis final yang stabil dan siap digunakan secara luas.
+- `1.1.0-hotfix.1`: Rilis khusus hotfix untuk memperbaiki masalah kritis pada versi 1.1.0.
 - `2.0.0`: Versi major kedua dengan perubahan signifikan dan kemungkinan tidak kompatibel dengan versi sebelumnya.
 
 **Panduan Penerapan Penomoran Versi:**
@@ -62,14 +65,18 @@ Untuk mengelola pengembangan dan pembaruan Edvisor secara sistematis, kami mener
 
 3. **Perubahan Besar atau Tidak Kompatibel:**
    - Tingkatkan **Major** versi.
-   - Contoh: Dari `1.1.1` menjadi `2.0.0`.
+   - Contoh: Dari `1.1.0` menjadi `2.0.0`.
 
 4. **Rilis Prerelease (Alpha, Beta, RC):**
    - Tambahkan label prerelease dengan nomor urut.
    - Contoh: `1.1.0-beta.1`, `1.1.0-beta.2`, hingga `1.1.0-rc.1`.
 
-5. **Rilis Final:**
-   - Hilangkan label prerelease setelah mencapai stabilitas.
+5. **Rilis Label Khusus (Hotfix, Security Patch, dsb.):**
+   - Tambahkan label khusus dengan nomor urut.
+   - Contoh: `1.1.0-hotfix.1`, `1.1.0-securitypatch.1`.
+
+6. **Rilis Final:**
+   - Hilangkan label prerelease atau label khusus setelah mencapai stabilitas.
    - Contoh: Dari `1.1.0-rc.1` menjadi `1.1.0`.
 
 Dengan mengikuti format penomoran versi ini, kami memastikan bahwa setiap rilis Edvisor dapat dilacak dengan jelas, memudahkan pengguna dan pengembang dalam memahami tingkat perubahan dan kompatibilitas antar versi.
@@ -126,8 +133,8 @@ Dengan mengikuti format penomoran versi ini, kami memastikan bahwa setiap rilis 
 16. **Profil Pengguna**  
     Melihat dan mengubah profil pengguna.
     
-17. **Kompatibilitas Akses Publik melalui localTunnel** 🆕 <br>
-    Memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pribadi menggunakan **localTunnel**.
+17. **Kompatibilitas Akses Publik**  
+    Memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pribadi pengembang menggunakan <a href="https://localtunnel.github.io/www/" target="_blank">localTunnel</a> dan <a href="https://localtonet.com/" target="_blank">LocalToNet</a>.
 
 <h3 id="fitur-yang-belum-diimplementasikan">🕒 Fitur yang Belum Diimplementasikan</h3>
 
@@ -155,8 +162,11 @@ Dengan mengikuti format penomoran versi ini, kami memastikan bahwa setiap rilis 
 8. **Integrasi API dengan Aplikasi Mobile**  
    Menghubungkan API Edvisor berbasis web dengan aplikasi mobile.
    
-9. **Dukungan Mode Private Browser**  
-   Menambahkan dukungan stabil untuk mode Private Browser, mengatasi kendala pada update heartbeat saat browser ditutup.
+9. **Pengamanan CSRF**  
+    Menambahkan mekanisme CSRF untuk meningkatkan keamanan sistem.
+
+10. **Konfigurasi Pesan Logging**  
+    Melakukan konfigurasi pesan logging di dalam controller dan model untuk memudahkan troubleshooting dan audit.
 
 <h2 id="instalasi">🛠 Instalasi</h2>
 
@@ -205,7 +215,7 @@ Untuk memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pr
    - Pastikan subdomain yang dipilih unik agar bisa digunakan.
       
      ```php
-     $localTunnelSubdomain = '<subdomain>.loca.lt';
+     $localTunnelSubdomain = '[subdomain].loca.lt';
      ```
 
    - Contoh:
@@ -221,11 +231,11 @@ Untuk memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pr
    - Buka file `httpd-vhosts.conf` menggunakan text editor favorit Anda.
 
 8. **Tambahkan Konfigurasi Virtual Hosts pada Baris Paling Bawah File `httpd-vhosts.conf`**  
-   - Tambahkan kode berikut dengan mengganti `<port HTTP>` dan `<subdomain yang sudah didefinisikan>` sesuai dengan konfigurasi Anda:
+   - Tambahkan kode berikut dengan mengganti `[port HTTP]` dan `[subdomain yang sudah didefinisikan]` sesuai dengan konfigurasi Anda:
    <br>
 
    ```apache
-   <VirtualHost *:<port HTTP>>
+   <VirtualHost *:[port HTTP]>
        ServerName localhost
        DocumentRoot "C:/xampp/htdocs/"
        <Directory "C:/xampp/htdocs/">
@@ -236,7 +246,7 @@ Untuk memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pr
    </VirtualHost>
 
    <VirtualHost *:<port HTTP>>
-       ServerName <subdomain yang sudah didefinisikan>.loca.lt
+       ServerName [subdomain yang sudah didefinisikan].loca.lt
        DocumentRoot "C:/xampp/htdocs/edvisor"
        <Directory "C:/xampp/htdocs/edvisor">
            Options Indexes FollowSymLinks Includes ExecCGI
@@ -303,7 +313,7 @@ Untuk memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pr
     <br>
     
     ```bash
-    lt --port <port HTTP> --subdomain <subdomain yang sudah didefinisikan>
+    lt --port [port HTTP] --subdomain [subdomain yang sudah didefinisikan]
     ```
     
     **Contoh:**
@@ -342,6 +352,164 @@ Untuk memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pr
     3. Cari bagian **IPv4 Address** dan salin alamatnya.
     4. Masukkan alamat IP tersebut sebagai password tunnel saat diminta.
 
+### Instalasi menggunakan LocalToNet
+
+Setelah berhasil menggunakan localTunnel, Anda juga dapat menggunakan <a href="https://localtonet.com/" target="_blank">LocalToNet</a> sebagai alternatif untuk membuat aplikasi Edvisor dapat diakses secara publik.
+
+1. **Pastikan Instalasi di Localhost Selesai**
+   - Pastikan langkah [Instalasi menggunakan localhost](#instalasi-menggunakan-localhost) telah selesai.
+
+2. **Jalankan Apache dalam XAMPP dan Catat Port HTTP**
+   - Buka XAMPP Control Panel.
+   - Jalankan Apache dan MySQL, catat port HTTP (biasanya port 80).
+
+3. **Buka Direktori Konfigurasi Aplikasi**
+   - Navigasikan ke `xampp/htdocs/Edvisor/application/config`.
+
+4. **Edit File 'config.php'**
+   - Buka `config.php` menggunakan text editor favorit Anda.
+
+5. **Definisikan Subdomain LocalToNet**
+   ```php
+   $localToNetSubdomain = '<subdomain>.localto.net';
+   ```
+   
+   **Contoh:**
+   ```php
+   $localToNetSubdomain = 'edvisorfilkomub.localto.net';
+   ```
+
+6. **Buka Direktori Konfigurasi Virtual Hosts**
+   - Navigasikan ke `xampp/apache/conf/extra/`.
+
+7. **Edit File 'httpd-vhosts.conf'**
+   - Buka `httpd-vhosts.conf` menggunakan text editor favorit Anda.
+
+8. **Tambahkan Konfigurasi Virtual Hosts**
+   - Tambahkan kode berikut dengan mengganti `[port HTTP]` dan `[subdomain yang sudah didefinisikan]` sesuai dengan konfigurasi Anda:
+   <br>
+
+   ```apache
+   <VirtualHost *:[port HTTP]>
+       ServerName localhost
+       DocumentRoot "C:/xampp/htdocs/"
+       <Directory "C:/xampp/htdocs/">
+           Options Indexes FollowSymLinks Includes ExecCGI
+           AllowOverride All
+           Require all granted
+       </Directory>
+   </VirtualHost>
+
+   <VirtualHost *:[port HTTP]>
+    ServerAdmin webmaster@localto.net
+    ServerName [subdomain yang sudah didefinisikan].localto.net
+    DocumentRoot "C:/xampp/htdocs/Edvisor"
+    <Directory "C:/xampp/htdocs/Edvisor">
+        Options Indexes FollowSymLinks Includes ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ErrorLog "logs/[subdomain yang sudah didefinisikan].localto.net-error.log"
+    CustomLog "logs/[subdomain yang sudah didefinisikan].localto.net-access.log" common
+   </VirtualHost>
+   ```
+
+   **Contoh:**
+   ```apache
+   <VirtualHost *:80>
+       ServerName localhost
+       DocumentRoot "C:/xampp/htdocs/"
+       <Directory "C:/xampp/htdocs/">
+           Options Indexes FollowSymLinks Includes ExecCGI
+           AllowOverride All
+           Require all granted
+       </Directory>
+   </VirtualHost>
+
+   <VirtualHost *:80>
+    ServerAdmin webmaster@localto.net
+    ServerName edvisorfilkomub.localto.net
+    DocumentRoot "C:/xampp/htdocs/Edvisor"
+    <Directory "C:/xampp/htdocs/Edvisor">
+        Options Indexes FollowSymLinks Includes ExecCGI
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ErrorLog "logs/edvisorfilkomub.localto.net-error.log"
+    CustomLog "logs/edvisorfilkomub.localto.net-access.log" common
+   </VirtualHost>
+   ```
+
+9. **Daftarkan akun di LocalToNet**
+   - Daftar dan masuk melalui situs resmi <a href="https://localtonet.com/" target="_blank">LocalToNet</a>.
+
+10. **Tambahkan Balance (Opsional)**
+    - Menambah balance untuk meningkatkan bandwidth.
+
+11. **Buka My Tunnels > HTTP**
+    - Buka sidebar LocalToNet, lalu akses halaman Tunnel HTTP.
+   
+12. **Isi Formulir Tunnel**
+    ```
+    Process Type: Custom SubDomain
+    Auth Token: Default
+    Server: SG-Singapore
+    SubDomain: [subdomain yang sudah didefinisikan]
+    Domain: localto.net
+    IP: 127.0.0.1
+    Port: [port HTTP]
+    ```
+
+    **Contoh:**
+    ```
+    Process Type: Custom SubDomain
+    Auth Token: Default
+    Server: SG-Singapore
+    SubDomain: edvisorfilkomub.localto.net
+    Domain: localto.net
+    IP: 127.0.0.1
+    Port: 80
+    ```
+
+    Klik **Create**.
+
+13. **Install LocalToNet Client**
+    - Unduh dan instal aplikasi LocalToNet Client di perangkat Anda melalui situs resmi <a href="https://localtonet.com/download" target="_blank">LocalToNet</a>.
+
+14. **Ekstrak dan Jalankan localtonet.exe**
+    - Ekstrak berkas, kemudian jalankan `localtonet.exe`. Setelah dijalankan, Command Prompt akan muncul.
+
+15. **Buka Halaman User Token**
+    - Akses Halaman <a href="https://localtonet.com/usertoken" target="_blank">User Token</a> menggunakan browser.
+
+16. **Salin Token Default**
+    - Salin token, kemudian tempelkan di Command Prompt dan tekan **Enter**.
+
+17. **Tunggu Status Tersambung**
+    - Pastikan **Session Status** menjadi 'Connected'.
+
+18. **Buka Halaman Tunnel di LocalToNet**
+    - Akses Halaman <a href="https://localtonet.com/tunnel/http" target="_blank">Tunnel</a>, lalu klik tombol **Start** pada Tunnel yang dibuat.
+
+19. **Tunggu Status Menjadi OK**
+    - Pastikan **Status** pada Command Prompt menjadi 'OK'.
+
+20. **Uji Halaman Web**
+
+    **Contoh URL:**
+    ```bash
+    https://edvisorfilkomub.localto.net/
+    ```
+
+21. **Uji dengan Perangkat dan Jaringan Berbeda**  
+    - Pastikan aplikasi Edvisor dapat diakses dari berbagai perangkat dan jaringan untuk memastikan kompatibilitas serta kestabilan akses publik.
+
+22. **Pastikan Internet Stabil**
+    - Pastikan koneksi internet Anda stabil agar akses pengguna tidak terganggu.
+
+23. **Matikan Proteksi Akses Web pada Antivirus (Opsional)**
+    - Apabila URL diblokir, matikan proteksi akses web pada antivirus pengguna.
+
 <h2 id="kontribusi">🤝 Kontribusi</h2>
 
 Kontribusi untuk pengembangan Edvisor sangat kami hargai. Berikut adalah panduan untuk berkontribusi:
@@ -358,6 +526,22 @@ Kontribusi untuk pengembangan Edvisor sangat kami hargai. Berikut adalah panduan
 4. **Akses Assets**  
    Buka direktori `Edvisor/assets/` untuk mengakses dan mengelola aset seperti gambar, CSS, dan JavaScript.
 
+5. **Menampilkan console.log**  
+   - Buka direktori `Edvisor/assets/js/hideConsole.js`
+   - Ubah nilai variabel:
+
+     ```javascript
+     const hideLogs = true;
+     ```
+
+     Menjadi:
+
+     ```javascript
+     const hideLogs = false;
+     ```
+   
+   Dengan perubahan ini, pesan `console.log` akan muncul pada console browser untuk memudahkan debugging.
+
 <h2 id="dokumentasi">📚 Dokumentasi</h2>
 
 ### User Flow dan Class Diagram
@@ -370,27 +554,57 @@ Kami telah menyediakan dokumentasi visual untuk memudahkan pemahaman alur penggu
 
 **Penjelasan User Flow:**
 
-User Flow pada Edvisor mengilustrasikan alur interaksi pengguna dalam produk ini dengan dua peran utama: **Observer** dan **Guru Model**. Berikut adalah langkah-langkah interaksi pengguna:
+User Flow pada Edvisor menggambarkan alur interaksi pengguna dalam produk ini dengan dua peran utama: **Observer** dan **Guru Model**. Berikut adalah langkah-langkah interaksi pengguna:
 
 1. **Memulai Interaksi:**
-   Pengguna memulai dengan membuka aplikasi Edvisor dan diberikan pilihan untuk **mendaftar akun baru** atau **login** jika sudah memiliki akun.
+   - Pengguna membuka aplikasi Edvisor.
+   - Pengguna diberikan pilihan untuk **Mendaftar Akun** atau **Login**.
 
-2. **Login dan Akses Beranda:**
-   Setelah berhasil login, pengguna akan diarahkan ke **beranda aplikasi**. Di beranda, pengguna dapat memilih untuk mendapatkan bantuan jika diperlukan.
+2. **Proses Pendaftaran atau Login:**
+   - **Mendaftar Akun:**
+     - Jika memilih **Mendaftar Akun**, pengguna akan melalui proses pendaftaran terlebih dahulu.
+     - Setelah pendaftaran berhasil, pengguna diarahkan untuk melakukan **Login**.
+   - **Login:**
+     - Jika pengguna sudah memiliki akun, mereka dapat langsung memilih opsi **Login**.
+     - Setelah berhasil login, pengguna diarahkan ke **Halaman Akses Beranda**.
 
-3. **Pemilihan Peran:**
-   Setelah mendapatkan bantuan, pengguna memiliki opsi untuk memilih peran sebagai **Observer** atau **Guru Model**.
+3. **Akses Beranda:**
+   - Di **Halaman Beranda**, pengguna memiliki beberapa opsi:
+     - Memilih peran sebagai **Guru Model**.
+     - Memilih peran sebagai **Observer**.
+     - Memilih opsi **Bantuan** untuk mendapatkan panduan lebih lanjut.
+   - **Opsi Bantuan:**
+     - Jika memilih **Bantuan**, pengguna akan menerima panduan yang diperlukan.
+     - Setelah menerima panduan, proses berakhir.
+
+4. **Pemilihan Peran:**
+   - Pengguna memilih untuk menjadi **Guru Model** atau **Observer**.
    
-- **Sebagai Observer:**
-  - Pengguna memilih untuk menjadi Observer dan melanjutkan dengan **bergabung ke dalam kelas** dengan memasukkan **kode kelas** yang diberikan oleh Guru Model.
-  - Setelah bergabung, Observer akan **mengisi formulir observasi** yang berkaitan dengan kegiatan mengajar.
-  - Proses ini selesai setelah formulir diisi dan disimpan.
+   - **Sebagai Guru Model:**
+     1. **Membuat Kelas Guru Model:**
+        - Mengisi detail kelas.
+        - Mengunggah berkas yang relevan.
+        - Memilih **Observer** yang akan berpartisipasi.
+        - Menentukan nomor siswa untuk kelas tersebut.
+        - Menyimpan formulir yang telah diisi.
+        - Setelah menyimpan, pengguna kembali ke **Halaman Beranda**.
+     2. **Lihat Hasil Observasi:**
+        - Memilih kelas yang diinginkan.
+        - Melihat hasil observasi yang dilakukan oleh **Observer**.
+        - Mengunduh formulir observasi jika diperlukan.
+        - Proses ini berakhir setelah hasil observasi dilihat.
    
-- **Sebagai Guru Model:**
-  - Pengguna memilih untuk menjadi Guru Model dan melanjutkan dengan **membuat kelas baru** dengan mengisi detail kelas dan **mengunggah berkas** yang diperlukan.
-  - Guru Model dapat **menentukan observer** yang akan berpartisipasi serta **memilih nomor siswa** yang akan diamati dalam kelas tersebut.
-  - Sistem akan menghasilkan **kode kelas** yang dapat digunakan oleh Observer untuk bergabung.
-  - Terakhir, Guru Model dapat **melihat hasil observasi** yang telah dilakukan oleh Observer.
+   - **Sebagai Observer:**
+     1. **Gabung Kelas Guru Model:**
+        - Memasukkan **kode kelas** yang diberikan oleh **Guru Model**.
+        - Memilih nomor siswa yang sesuai.
+        - Menyimpan formulir tersebut.
+        - Setelah menyimpan, pengguna kembali ke **Halaman Beranda**.
+     2. **Observasi Kelas:**
+        - Memilih kelas yang ingin diobservasi.
+        - Mengisi formulir pengamatan yang relevan.
+        - Menyimpan formulir pengamatan.
+        - Proses ini berakhir setelah formulir disimpan.
 
 Dengan alur ini, Edvisor memastikan bahwa kedua peran utama dapat berinteraksi secara efektif dalam mendukung pelaksanaan *lesson study*.
 
@@ -506,12 +720,9 @@ Berikut adalah beberapa screenshot yang menggambarkan antarmuka dan fitur Edviso
 6. **Formulir**  
    ![Formulir](screenshot/Formulir.jpeg)
 
-7. **Private Browsing**  
-   ![Private Browsing](screenshot/Private%20Browsing.jpeg)
-
 <h2 id="kredit">🎓 Kredit</h2>
 
-### Pembina Proyek
+### Pelopor Inovasi dalam Pengembangan Proyek
 
 - **Nama:** Ir. Retno Indah Rokhmawati, S.Pd., M.Pd.
 

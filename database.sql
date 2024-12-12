@@ -1,3 +1,6 @@
+-- Menghapus database 'edvisor' jika sudah ada
+DROP DATABASE IF EXISTS edvisor;
+
 -- Membuat database 'edvisor' jika belum ada
 CREATE DATABASE IF NOT EXISTS edvisor;
 USE edvisor;
@@ -12,9 +15,11 @@ CREATE TABLE IF NOT EXISTS Users (
     remember_token VARCHAR(255) NULL DEFAULT NULL, -- Token untuk fitur 'remember me'
     current_session_id VARCHAR(128) NULL DEFAULT NULL, -- ID sesi saat ini pengguna
     last_activity DATETIME NULL DEFAULT NULL, -- Waktu aktivitas terakhir pengguna
+    last_browser VARCHAR(255), -- Browser terakhir yang digunakan pengguna
+    last_mode ENUM('private', 'normal') DEFAULT 'normal', -- Mode terakhir pengguna (private/normal)
     src_profile_photo VARCHAR(255), -- Sumber file foto profil pengguna
     registration_number VARCHAR(50), -- Nomor registrasi pengguna
-    status ENUM('active', 'inactive') DEFAULT 'inactive', -- Status pengguna (aktif/inaktif)
+    status ENUM('active', 'wait', 'inactive') DEFAULT 'inactive', -- Status pengguna (aktif/menunggu/inaktif)
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Waktu pembuatan data pengguna
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP -- Waktu terakhir data pengguna diperbarui
 ) ENGINE=InnoDB;
@@ -27,9 +32,11 @@ CREATE TABLE IF NOT EXISTS ci_sessions (
     id VARCHAR(128) NOT NULL, -- ID sesi (Primary Key)
     user_id INT NULL, -- ID pengguna yang terkait dengan sesi (Foreign Key ke Users)
     ip_address VARCHAR(45) NOT NULL, -- Alamat IP pengguna
+    browser VARCHAR(255), -- Browser yang digunakan selama sesi
+    mode_private BOOLEAN DEFAULT FALSE, -- Mode private sesi (true/false)
     timestamp INT(10) UNSIGNED DEFAULT 0 NOT NULL, -- Timestamp sesi
     data BLOB NOT NULL, -- Data sesi dalam bentuk BLOB
-    status ENUM('active', 'inactive') DEFAULT 'inactive', -- Status sesi (aktif/inaktif)
+    status ENUM('active', 'wait', 'inactive') DEFAULT 'inactive', -- Status sesi (aktif/inaktif)
     PRIMARY KEY (id), -- Menetapkan 'id' sebagai Primary Key
     KEY `ci_sessions_timestamp` (`timestamp`), -- Indeks pada kolom 'timestamp' untuk mempercepat query
     KEY `ci_sessions_user_id` (`user_id`), -- Indeks pada kolom 'user_id' untuk mempercepat query
@@ -196,3 +203,74 @@ CREATE TABLE IF NOT EXISTS StudentActivityNotes (
     FOREIGN KEY (class_id) REFERENCES Classes(class_id), -- Hubungan Foreign Key ke tabel Classes
     FOREIGN KEY (observer_user_id) REFERENCES Users(user_id) -- Hubungan Foreign Key ke tabel Users
 ) ENGINE=InnoDB;
+
+-- Mengaktifkan event scheduler
+SET GLOBAL event_scheduler = ON;
+
+-- Mengubah delimiter untuk pembuatan event
+DELIMITER //
+
+-- Menghapus event 'check_wait_users' jika sudah ada dan membuat event baru
+DROP EVENT IF EXISTS `check_wait_users` //
+
+CREATE EVENT `check_wait_users`
+ON SCHEDULE EVERY 1 SECOND -- Mengatur jadwal setiap 1 detik
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    -- Mengubah pengguna yang statusnya 'wait' lebih dari 10 detik menjadi 'inactive'
+    UPDATE Users u
+    INNER JOIN ci_sessions s ON u.current_session_id = s.id
+    SET 
+        u.status = 'inactive', 
+        u.last_activity = NULL, 
+        u.current_session_id = NULL,
+        s.status = 'inactive', 
+        s.user_id = NULL
+    WHERE 
+        u.status = 'wait'
+        AND u.last_activity IS NOT NULL
+        AND TIMESTAMPDIFF(SECOND, u.last_activity, NOW()) > 10;
+
+    -- Mengubah pengguna yang statusnya 'active' lebih dari 30 menit menjadi 'inactive'
+    UPDATE Users u
+    INNER JOIN ci_sessions s ON u.current_session_id = s.id
+    SET 
+        u.status = 'inactive', 
+        u.last_activity = NULL, 
+        u.current_session_id = NULL,
+        s.status = 'inactive', 
+        s.user_id = NULL
+    WHERE 
+        u.status = 'active'
+        AND u.last_activity IS NOT NULL
+        AND TIMESTAMPDIFF(SECOND, u.last_activity, NOW()) > 1800;
+END //
+
+-- Menghapus event 'cleanup_ci_sessions' jika sudah ada dan membuat event baru
+DROP EVENT IF EXISTS `cleanup_ci_sessions` //
+
+CREATE EVENT `cleanup_ci_sessions`
+ON SCHEDULE EVERY 1 SECOND -- Mengatur jadwal setiap 1 detik
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    -- Menghapus semua data di ci_sessions yang memiliki ip_address sama lebih dari satu
+    DELETE FROM ci_sessions
+    WHERE ip_address IN (
+        SELECT ip_address
+        FROM (
+            SELECT ip_address
+            FROM ci_sessions
+            GROUP BY ip_address
+            HAVING COUNT(*) > 1
+        ) AS dup
+    );
+
+    -- Menghapus data di ci_sessions yang memiliki status 'inactive'
+    DELETE FROM ci_sessions
+    WHERE status = 'inactive';
+END //
+
+-- Mengembalikan delimiter ke default
+DELIMITER ;

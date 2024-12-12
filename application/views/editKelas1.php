@@ -315,9 +315,9 @@
             }
             saveButton.disabled = !allFilled;
             if (allFilled) {
-                // console.log("Semua input sudah terisi.");
+                console.log("Semua input sudah terisi.");
             } else {
-                // console.log("Masih ada input yang kosong.");
+                console.log("Masih ada input yang kosong.");
             }
         }
 
@@ -326,7 +326,7 @@
          * @param {string} inputName - Nama input yang telah diisi
          */
         function logInputFilled(inputName) {
-            // console.log(`${inputName} sudah terisi.`);
+            console.log(`${inputName} sudah terisi.`);
         }
 
         /**
@@ -702,12 +702,12 @@
             const overflowInfo = isElementOverflowing(element);
 
             if (!overflowInfo.overflowing) {
-                // console.log(`Tidak perlu animasi untuk elemen:`, element);
-                // console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Tidak melebihi toleransi 1px)`);
+                console.log(`Tidak perlu animasi untuk elemen:`, element);
+                console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Tidak melebihi toleransi 1px)`);
                 return;
             } else {
-                // console.log(`Animasi diperlukan untuk elemen:`, element);
-                // console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Melebihi toleransi 1px)`);
+                console.log(`Animasi diperlukan untuk elemen:`, element);
+                console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Melebihi toleransi 1px)`);
             }
 
             // Simpan teks asli dalam data attribute untuk pemulihan nanti

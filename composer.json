@@ -16,7 +16,8 @@
 		"dompdf/dompdf": "*",
 		"tecnickcom/tcpdf": "*",
 		"mpdf/mpdf": "*",
-		"spatie/browsershot": "*"
+		"spatie/browsershot": "*",
+		"cboden/ratchet": "*"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"

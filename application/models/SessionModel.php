@@ -110,8 +110,22 @@ class SessionModel extends CI_Model
         // Menambahkan timestamp pembaruan
         $data['timestamp'] = time();
 
+        // Jika user_id ada, ambil data browser dan mode dari tabel Users
+        if (isset($data['user_id']) && !empty($data['user_id'])) {
+            // Mendapatkan data pengguna
+            $user = $this->db->get_where('Users', ['user_id' => $data['user_id']])->row();
+            if ($user) {
+                // Mengatur nilai browser dari last_browser di tabel Users
+                $data['browser'] = isset($data['browser']) ? $data['browser'] : $user->last_browser;
+                // Mengatur nilai mode_private dari last_mode di tabel Users
+                // Jika last_mode 'private' maka mode_private = 1, jika tidak maka 0
+                $data['mode_private'] = isset($data['mode_private']) ? $data['mode_private'] : ($user->last_mode === 'private' ? 1 : 0);
+            }
+        }
+
         // Menambahkan kondisi WHERE untuk session_id
         $this->db->where('id', $session_id);
+
         // Melakukan update data
         return $this->db->update($this->table, $data);
     }

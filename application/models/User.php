@@ -149,11 +149,11 @@ class User extends CI_Model
 
                 // Batas waktu inaktivitas 1800 detik (30 menit)
                 if ($interval > 1800) {
-                    // Update status menjadi 'inactive' dan hapus session_id serta last_activity
+                    // Update status menjadi 'inactive' dan hapus session_id
                     $update_data = [
                         'status' => 'inactive',
                         'current_session_id' => NULL,
-                        'last_activity' => NULL
+                        'last_activity' => date('Y-m-d H:i:s')
                     ];
                     $this->updateActivity($user->user_id, $update_data);
 

@@ -341,12 +341,12 @@
 			const overflowInfo = isElementOverflowing(element);
 
 			if (!overflowInfo.overflowing) {
-				// console.log(`Tidak perlu animasi untuk elemen:`, element);
-				// console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Tidak melebihi toleransi 1px)`);
+				console.log(`Tidak perlu animasi untuk elemen:`, element);
+				console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Tidak melebihi toleransi 1px)`);
 				return;
 			} else {
-				// console.log(`Animasi diperlukan untuk elemen:`, element);
-				// console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Melebihi toleransi 1px)`);
+				console.log(`Animasi diperlukan untuk elemen:`, element);
+				console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Melebihi toleransi 1px)`);
 			}
 
 			// Menyimpan teks asli dalam atribut data untuk pemulihan nanti

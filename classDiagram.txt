@@ -9,6 +9,8 @@ classDiagram
         +string remember_token
         +string current_session_id
         +datetime last_activity
+        +string last_browser
+        +enum last_mode
         +string src_profile_photo
         +string registration_number
         +enum status
@@ -29,10 +31,12 @@ classDiagram
         +string id
         +int user_id
         +string ip_address
+        +string browser
+        +boolean mode_private
         +int timestamp
         +blob data
         +enum status
-        +createSession(id, user_id, ip_address, data)
+        +createSession(id, user_id, ip_address, browser, mode_private, data)
         +getSessionById(id)
         +updateSession(id, data)
         +deleteSession(id)
@@ -270,7 +274,7 @@ classDiagram
     Classes "1" --> "0..*" StudentActivityNotes : has
     ClassObservers "1" --> "1" StudentActivityNotes : notes
     Classes "1" --> "0..*" ClassVoiceRecordings : has
-    ClassObservers "1" --> "1" ClassVoiceRecordings : notes
+    ClassObservers "1" --> "1" ClassVoiceRecordings : record
     Classes "1" --> "0..*" SpecialNotes : has
     ClassObservers "1" --> "0..*" SpecialNotes : notes
     Classes "1" --> "0..*" ClassDocumentationFiles : documents
