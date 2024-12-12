@@ -214,16 +214,15 @@ DELIMITER //
 DROP EVENT IF EXISTS `check_wait_users` //
 
 CREATE EVENT `check_wait_users`
-ON SCHEDULE EVERY 1 SECOND -- Mengatur jadwal setiap 1 detik
+ON SCHEDULE EVERY 10 SECOND -- Mengatur jadwal setiap 10 detik
 STARTS CURRENT_TIMESTAMP
 DO
 BEGIN
-    -- Mengubah pengguna yang statusnya 'wait' lebih dari 10 detik menjadi 'inactive'
+    -- Mengubah status pengguna dari 'wait' menjadi 'inactive' jika tidak ada aktivitas selama lebih dari 10 detik
     UPDATE Users u
     INNER JOIN ci_sessions s ON u.current_session_id = s.id
     SET 
         u.status = 'inactive', 
-        u.last_activity = NULL, 
         u.current_session_id = NULL,
         s.status = 'inactive', 
         s.user_id = NULL
@@ -232,41 +231,28 @@ BEGIN
         AND u.last_activity IS NOT NULL
         AND TIMESTAMPDIFF(SECOND, u.last_activity, NOW()) > 10;
 
-    -- Mengubah pengguna yang statusnya 'active' lebih dari 30 menit menjadi 'inactive'
+    -- Mengubah status pengguna dari 'active' menjadi 'inactive' jika tidak ada pembaruan aktivitas selama lebih dari 1 menit
     UPDATE Users u
     INNER JOIN ci_sessions s ON u.current_session_id = s.id
     SET 
         u.status = 'inactive', 
-        u.last_activity = NULL, 
         u.current_session_id = NULL,
         s.status = 'inactive', 
         s.user_id = NULL
     WHERE 
         u.status = 'active'
         AND u.last_activity IS NOT NULL
-        AND TIMESTAMPDIFF(SECOND, u.last_activity, NOW()) > 1800;
+        AND TIMESTAMPDIFF(SECOND, u.last_activity, NOW()) > 60;
 END //
 
 -- Menghapus event 'cleanup_ci_sessions' jika sudah ada dan membuat event baru
 DROP EVENT IF EXISTS `cleanup_ci_sessions` //
 
 CREATE EVENT `cleanup_ci_sessions`
-ON SCHEDULE EVERY 1 SECOND -- Mengatur jadwal setiap 1 detik
+ON SCHEDULE EVERY 10 SECOND -- Mengatur jadwal setiap 10 detik
 STARTS CURRENT_TIMESTAMP
 DO
 BEGIN
-    -- Menghapus semua data di ci_sessions yang memiliki ip_address sama lebih dari satu
-    DELETE FROM ci_sessions
-    WHERE ip_address IN (
-        SELECT ip_address
-        FROM (
-            SELECT ip_address
-            FROM ci_sessions
-            GROUP BY ip_address
-            HAVING COUNT(*) > 1
-        ) AS dup
-    );
-
     -- Menghapus data di ci_sessions yang memiliki status 'inactive'
     DELETE FROM ci_sessions
     WHERE status = 'inactive';
