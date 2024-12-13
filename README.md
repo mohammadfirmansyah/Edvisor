@@ -245,7 +245,7 @@ Untuk memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pr
        </Directory>
    </VirtualHost>
 
-   <VirtualHost *:<port HTTP>>
+   <VirtualHost *:[port HTTP]>
        ServerName [subdomain yang sudah didefinisikan].loca.lt
        DocumentRoot "C:/xampp/htdocs/edvisor"
        <Directory "C:/xampp/htdocs/edvisor">
@@ -309,7 +309,7 @@ Untuk memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pr
     Pastikan **localTunnel** terinstal dengan benar.
 
 14. **Jalankan localTunnel** 
-    - Jalankan perintah berikut dengan mengganti <port HTTP> dan <subdomain> sesuai dengan konfigurasi Anda
+    - Jalankan perintah berikut dengan mengganti [port HTTP] dan [subdomain] sesuai dengan konfigurasi Anda
     <br>
     
     ```bash
@@ -371,7 +371,7 @@ Setelah berhasil menggunakan localTunnel, Anda juga dapat menggunakan <a href="h
 
 5. **Definisikan Subdomain LocalToNet**
    ```php
-   $localToNetSubdomain = '<subdomain>.localto.net';
+   $localToNetSubdomain = '[subdomain].localto.net';
    ```
    
    **Contoh:**
