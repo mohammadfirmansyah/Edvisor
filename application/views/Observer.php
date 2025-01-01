@@ -423,7 +423,7 @@
         if (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: 'Terjadi Kesalahan',
                 text: error,
                 confirmButtonText: 'OK',
                 confirmButtonColor: '#2563EB'
@@ -597,7 +597,7 @@
             if (classCode === '') {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
+                    title: 'Terjadi Kesalahan',
                     text: 'Anda harus mengisi kode',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#2563EB'
@@ -660,7 +660,7 @@
                         // Tampilkan pesan error sesuai dengan jenis kesalahan
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
+                            title: 'Terjadi Kesalahan',
                             text: data.message,
                             confirmButtonText: 'OK',
                             confirmButtonColor: '#2563EB'
@@ -672,7 +672,7 @@
                     console.error('Error:', error);
                     showSweetAlert({
                         icon: 'error',
-                        title: 'Error',
+                        title: 'Terjadi Kesalahan',
                         text: 'Terjadi kesalahan saat mencari kelas.',
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#2563EB'
@@ -841,7 +841,7 @@
                 // Jika tidak ada siswa yang dipilih, tampilkan pesan error
                 showSweetAlert({
                     icon: 'error',
-                    title: 'Error',
+                    title: 'Terjadi Kesalahan',
                     text: 'Anda harus memilih setidaknya satu siswa.',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#2563EB'
@@ -907,7 +907,7 @@
                         // Tampilkan pesan error
                         showSweetAlert({
                             icon: 'error',
-                            title: 'Error',
+                            title: 'Terjadi Kesalahan',
                             text: data.message,
                             confirmButtonText: 'OK',
                             confirmButtonColor: '#2563EB'
@@ -919,7 +919,7 @@
                     console.error('Error:', error);
                     showSweetAlert({
                         icon: 'error',
-                        title: 'Error',
+                        title: 'Terjadi Kesalahan',
                         text: 'Terjadi kesalahan saat menyimpan data observer.',
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#2563EB'

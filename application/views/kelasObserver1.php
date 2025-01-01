@@ -355,7 +355,7 @@
         if (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: 'Terjadi Kesalahan',
                 text: error,
                 confirmButtonText: 'OK',
                 confirmButtonColor: '#2563EB'
@@ -1045,7 +1045,7 @@
                             // Menampilkan SweetAlert2 error
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Error',
+                                title: 'Terjadi Kesalahan',
                                 text: 'File tidak tersedia di situs.',
                                 footer: 'Silakan coba lagi.',
                                 confirmButtonText: 'OK',
@@ -1056,7 +1056,7 @@
                     // Menampilkan SweetAlert2 error jika filePath tidak valid
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
+                        title: 'Terjadi Kesalahan',
                         text: 'File tidak tersedia untuk diunduh.',
                         footer: 'Silakan coba lagi.',
                         confirmButtonText: 'OK',

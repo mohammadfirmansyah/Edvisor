@@ -557,7 +557,7 @@
         if (error) {
             messages.push({
                 icon: 'error',
-                title: 'Error',
+                title: 'Terjadi Kesalahan',
                 text: error,
                 confirmButtonColor: '#2563EB'
             });
@@ -607,7 +607,7 @@
         if (deprecated) {
             messages.push({
                 icon: 'warning',
-                title: 'Deprecated',
+                title: 'Tidak Lagi Didukung',
                 text: deprecated,
                 confirmButtonColor: '#F59E0B'
             });
@@ -617,7 +617,7 @@
         if (errorLong) {
             messages.push({
                 icon: 'error',
-                title: 'Error',
+                title: 'Terjadi Kesalahan',
                 html: '<pre style="text-align: left;">' + errorLong + '</pre>',
                 customClass: {
                     popup: 'swal-wide'

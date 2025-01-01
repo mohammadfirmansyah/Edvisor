@@ -512,7 +512,7 @@
 		if (error) {
 			Swal.fire({
 				icon: 'error',
-				title: 'Error',
+				title: 'Terjadi Kesalahan',
 				text: error,
 				confirmButtonText: 'OK',
 				confirmButtonColor: '#2563EB'
@@ -1197,7 +1197,7 @@
 								console.error('There was a problem with the fetch operation:', error);
 								Swal.fire({
 									icon: 'error',
-									title: 'Error',
+									title: 'Terjadi Kesalahan',
 									text: 'File tidak tersedia untuk diunduh.',
 									footer: 'Silakan coba lagi.',
 									confirmButtonText: 'OK',
@@ -1208,7 +1208,7 @@
 						Swal.close(); // Menutup loading modal jika filepath tidak valid
 						Swal.fire({
 							icon: 'error',
-							title: 'Error',
+							title: 'Terjadi Kesalahan',
 							text: 'File tidak tersedia untuk diunduh.',
 							footer: 'Silakan coba lagi.',
 							confirmButtonText: 'OK',
@@ -1331,7 +1331,7 @@
 				} else {
 					Swal.fire({
 						icon: 'error',
-						title: 'Error',
+						title: 'Terjadi Kesalahan',
 						text: 'File tidak tersedia.',
 						confirmButtonText: 'OK',
 						confirmButtonColor: '#2563EB'
@@ -1621,7 +1621,7 @@
 			} else {
 				Swal.fire({
 					icon: 'error',
-					title: 'Error',
+					title: 'Terjadi Kesalahan',
 					text: 'ID Kelas tidak ditemukan.',
 					confirmButtonText: 'OK',
 					confirmButtonColor: '#2563EB'
@@ -1687,7 +1687,7 @@
 			} else {
 				Swal.fire({
 					icon: 'error',
-					title: 'Error',
+					title: 'Terjadi Kesalahan',
 					text: 'ID Kelas tidak ditemukan.',
 					confirmButtonText: 'OK',
 					confirmButtonColor: '#2563EB'
@@ -1742,7 +1742,7 @@
 							console.error('There was a problem with the fetch operation:', error);
 							Swal.fire({
 								icon: 'error',
-								title: 'Error',
+								title: 'Terjadi Kesalahan',
 								text: 'File tidak tersedia untuk diunduh.',
 								footer: 'Silakan coba lagi.',
 								confirmButtonText: 'OK',
@@ -1753,7 +1753,7 @@
 					Swal.close(); // Menutup loading modal jika filepath tidak valid
 					Swal.fire({
 						icon: 'error',
-						title: 'Error',
+						title: 'Terjadi Kesalahan',
 						text: 'File tidak tersedia untuk diunduh.',
 						footer: 'Silakan coba lagi.',
 						confirmButtonText: 'OK',
@@ -1785,7 +1785,7 @@
 				} else {
 					Swal.fire({
 						icon: 'error',
-						title: 'Error',
+						title: 'Terjadi Kesalahan',
 						text: 'Tautan tidak tersedia untuk dibagikan.',
 						footer: 'Silakan coba lagi.',
 						confirmButtonText: 'OK',
@@ -1815,7 +1815,7 @@
 					Swal.close(); // Menutup loading modal
 					Swal.fire({
 						icon: 'error',
-						title: 'Error',
+						title: 'Terjadi Kesalahan',
 						text: 'Tidak ada observer aktif.',
 						confirmButtonText: 'OK',
 						confirmButtonColor: '#2563EB'
@@ -1854,7 +1854,7 @@
 						console.error('There was a problem with the fetch operation:', error);
 						Swal.fire({
 							icon: 'error',
-							title: 'Error',
+							title: 'Terjadi Kesalahan',
 							text: 'File tidak tersedia untuk diunduh.',
 							footer: 'Silakan coba lagi.',
 							confirmButtonText: 'OK',

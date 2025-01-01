@@ -20,7 +20,7 @@ class GlobalAssetsInjector
      *
      * @var string
      */
-    private $asset_version = '1.2.1.1'; // Ubah sesuai kebutuhan
+    private $asset_version = '1.2.1.2'; // Ubah sesuai kebutuhan
 
     /**
      * Tahun Rilis

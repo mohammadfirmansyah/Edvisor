@@ -186,7 +186,7 @@
                 if (loginError) {
                     messages.push({
                         icon: 'error',
-                        title: 'Error Login',
+                        title: 'Terjadi Kesalahan Saat Login',
                         text: loginError,
                         footer: `
                         <div style="text-align: left; font-size: 14px; color: #555;">

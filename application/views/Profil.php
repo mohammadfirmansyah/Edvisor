@@ -265,7 +265,7 @@
             if (error) {
                 Swal.fire({
                     icon: 'error', // Ikon error
-                    title: 'Error', // Judul alert
+                    title: 'Terjadi Kesalahan', // Judul alert
                     text: error, // Isi pesan error
                     confirmButtonText: 'OK', // Teks tombol konfirmasi
                     confirmButtonColor: '#2563EB' // Warna tombol konfirmasi
@@ -754,7 +754,7 @@
                             } else if (data.status === 'error') {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Error',
+                                    title: 'Terjadi Kesalahan',
                                     text: data.message,
                                     confirmButtonText: 'OK',
                                     confirmButtonColor: '#2563EB'
@@ -762,7 +762,7 @@
                             } else {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Error',
+                                    title: 'Terjadi Kesalahan',
                                     text: 'Respons tidak dikenali dari server.',
                                     confirmButtonText: 'OK',
                                     confirmButtonColor: '#2563EB'
@@ -771,7 +771,7 @@
                         } catch (e) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Error',
+                                title: 'Terjadi Kesalahan',
                                 text: 'Terjadi kesalahan saat memproses respons dari server.',
                                 confirmButtonText: 'OK',
                                 confirmButtonColor: '#2563EB'

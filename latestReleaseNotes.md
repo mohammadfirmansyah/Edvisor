@@ -1,11 +1,12 @@
 ## 📢 Release Notes
 
-### v1.2.1-hotfix.1
+### v1.2.1-hotfix.2
 
 **Perbaikan yang Telah Dilakukan:**
 
-1. **Perbaikan Penyimpanan Catatan di Lembar Catatan Siswa**
-   - Mengatasi masalah yang menyebabkan pengguna tidak dapat menyimpan Catatan pada formulir Lembar Catatan Siswa akibat inkonsistensi nama input. Perbaikan ini memastikan proses penyimpanan formulir berjalan dengan stabil dan efektif.
+1. **Perbaikan Format Pesan Error di SweetAlert2**
+   - **Konsistensi dan Bahasa yang Lebih Sopan**  
+     Memperbaiki format pesan error saat SweetAlert2 tampil agar menjadi lebih konsisten dan menggunakan bahasa Indonesia yang lebih sopan. Perubahan ini bertujuan untuk memberikan pengalaman pengguna yang lebih baik dan komunikasi yang lebih jelas saat terjadi kesalahan.
 
 <details>
   <summary><h3 id="instalasi-menggunakan-localhost">Instalasi menggunakan localhost</h3></summary>

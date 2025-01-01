@@ -397,7 +397,7 @@
         if (error) {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: 'Terjadi Kesalahan',
                 text: error,
                 confirmButtonText: 'OK',
                 confirmButtonColor: '#2563EB'
