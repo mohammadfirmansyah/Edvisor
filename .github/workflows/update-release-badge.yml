@@ -53,6 +53,12 @@ jobs:
 
           echo "latest_status=$latest_status" >> $GITHUB_OUTPUT
 
+      - name: Debug Before
+        # Melihat isi README.md sebelum kita lakukan sed
+        run: |
+          echo "==== README.md Sebelum Sed ===="
+          cat README.md
+
       - name: Update README Badges
         run: |
           # Ambil data dari step sebelumnya
@@ -66,22 +72,25 @@ jobs:
           [[ "$latest_status" == "BETA" ]] && color="important"   # oranye
 
           # 1. Latest Release
-          # Mencari:   ?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational
-          # -> Pastikan di README.md cocok
+          # Mencari:   https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational
           release_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$release?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational"
           sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational|$release_badge_url|g" README.md
 
           # 2. Latest Status
           # Mencari:   https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge
-          # -> Ada dua dash: STATUS--blue
           latest_status_badge_url="https://img.shields.io/badge/LATEST%20STATUS-$latest_status-$color?style=for-the-badge"
           sed -i "s|https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge|$latest_status_badge_url|g" README.md
 
           # 3. Latest Update
           # Mencari:   https://img.shields.io/badge/Latest%20Update--blue?style=for-the-badge&color=lightgrey
-          # -> Ada dua dash: Update--blue
           latest_update_badge_url="https://img.shields.io/badge/Latest%20Update-$release_date-blue?style=for-the-badge&color=lightgrey"
           sed -i "s|https://img.shields.io/badge/Latest%20Update--blue?style=for-the-badge&color=lightgrey|$latest_update_badge_url|g" README.md
+
+      - name: Debug After
+        # Melihat isi README.md setelah sed
+        run: |
+          echo "==== README.md Setelah Sed ===="
+          cat README.md
 
       - name: Commit Changes
         run: |
