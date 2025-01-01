@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title><?php echo $title; ?></title>
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/gurumodel.css" />
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
 </head>
 
 <body>
@@ -119,7 +117,7 @@
                                 <div class="profile-groupvariant9">
                                     <?php if (!empty($class->latest_observers)): ?>
                                         <?php foreach ($class->latest_observers as $observer): ?>
-                                            <img oncontextmenu="return false;" class="profile-groupvariant9-item" alt="<?php echo htmlspecialchars($observer->full_name); ?>" src="<?php echo base_url($observer->src_profile_photo); ?>">
+                                            <img oncontextmenu="return false;" class="profile-groupvariant9-item" alt="<?php echo isset($observer->full_name) ? htmlspecialchars($observer->full_name, ENT_QUOTES, 'UTF-8') : 'Observer'; ?>" src="<?php echo !empty($observer->src_profile_photo) ? base_url($observer->src_profile_photo) : base_url('assets/default/default_profile_picture.jpg'); ?>">
                                         <?php endforeach; ?>
                                     <?php else: ?>
                                         <!-- Jika tidak ada observer, tampilkan placeholder atau kosong -->
@@ -163,7 +161,7 @@
     </div>
 </body>
 
-<script>   
+<script>
     // Event yang dijalankan setelah seluruh konten DOM dimuat
     document.addEventListener("DOMContentLoaded", function() {
         // Mendapatkan elemen flashdata
@@ -220,8 +218,8 @@
         document.getElementById('timeDisplay').innerText = timeString;
     }
 
-    // Memanggil fungsi updateDateTime setiap 500 milidetik untuk memperbarui waktu
-    setInterval(updateDateTime, 500);
+    // Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+    setInterval(updateDateTime, 0);
 
     // Memastikan waktu saat ini ditampilkan saat memuat halaman
     updateDateTime();
@@ -253,6 +251,16 @@
                 }
             });
         });
+    });
+
+    // Fokus input saat elemen dengan kelas 'search-parent' diklik
+    document.querySelectorAll('.search-parent').forEach(function(element) {
+        const input = element.querySelector('input');
+        if (input) {
+            element.addEventListener('click', function() {
+                input.focus();
+            });
+        }
     });
 
     // Event listener untuk pengurutan tabel
@@ -437,23 +445,6 @@
             // Menghapus tanda panah pada semua header
             headers.forEach(header => header.innerText = header.innerText.replace(/[\u2191\u2193]/g, ''));
         }
-    });
-
-
-    // Event listener tambahan untuk mengatur fokus pada input pencarian
-    document.addEventListener("DOMContentLoaded", function() {
-        const searchInput = document.querySelector('.search-input'); // Input pencarian
-
-        /**
-         * Fungsi untuk mengatur fokus pada input pencarian setelah delay
-         */
-        function setFocus() {
-            setTimeout(() => {
-                searchInput.focus(); // Mengatur fokus pada input pencarian
-            }, 300); // Tambahkan delay 300ms
-        }
-
-        setFocus(); // Memanggil fungsi setFocus
     });
 
     // Fungsi yang dijalankan saat seluruh halaman telah dimuat

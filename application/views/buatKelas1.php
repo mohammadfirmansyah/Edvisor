@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title><?php echo $title; ?></title>
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/buatkelas1.css" />
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
 </head>
 
 <body>
@@ -29,36 +27,44 @@
             </a>
             <a class="profile-side-bar link" href="sidebarProfile">
                 <div class="profile-side-bar-child" alt="">
-                    <img oncontextmenu="return false;" class="profile-photo" src="<?php echo !empty($user->src_profile_photo) ? $user->src_profile_photo : 'assets/default/default_profile_picture.jpg'; ?>" alt="">
+                    <img oncontextmenu="return false;" class="profile-photo"
+                        src="<?php echo !empty($user->src_profile_photo) ? $user->src_profile_photo : 'assets/default/default_profile_picture.jpg'; ?>"
+                        alt="">
                 </div>
                 <div class="nama-pengguna"><?= htmlspecialchars($user->full_name, ENT_QUOTES, 'UTF-8'); ?></div>
                 <div class="email-pengguna"><?= htmlspecialchars($user->email_address, ENT_QUOTES, 'UTF-8'); ?></div>
             </a>
             <div class="menu-bar">
                 <a class="item-side-bar-default link" href="sidebarBeranda">
-                    <img oncontextmenu="return false;" class="icon-sidebar-default" alt="" src="assets/img/icon_beranda.svg">
+                    <img oncontextmenu="return false;" class="icon-sidebar-default" alt=""
+                        src="assets/img/icon_beranda.svg">
                     <div class="text-sidebar-default">Beranda</div>
                 </a>
                 <a class="item-side-bar-active link" href="sidebarGuruModel">
-                    <img oncontextmenu="return false;" class="icon-sidebar-active" alt="" src="assets/img/icon_guru_model.svg">
+                    <img oncontextmenu="return false;" class="icon-sidebar-active" alt=""
+                        src="assets/img/icon_guru_model.svg">
                     <div class="text-sidebar-active">Guru Model</div>
                 </a>
                 <a class="item-side-bar-default link" href="sidebarObserver">
-                    <img oncontextmenu="return false;" class="icon-sidebar-default" alt="" src="assets/img/icon_observer.svg">
+                    <img oncontextmenu="return false;" class="icon-sidebar-default" alt=""
+                        src="assets/img/icon_observer.svg">
                     <div class="text-sidebar-default">Observer</div>
                 </a>
                 <a class="item-side-bar-default link" href="sidebarBantuan">
-                    <img oncontextmenu="return false;" class="icon-sidebar-default" alt="" src="assets/img/icon_bantuan.svg">
+                    <img oncontextmenu="return false;" class="icon-sidebar-default" alt=""
+                        src="assets/img/icon_bantuan.svg">
                     <div class="text-sidebar-default">Bantuan</div>
                 </a>
             </div>
             <a class="item-side-bar-exit link" href="sidebarLogout">
-                <img oncontextmenu="return false;" class="icon-sidebar-default" alt="" src="assets/img/icon_keluar.svg">
+                <img oncontextmenu="return false;" class="icon-sidebar-default" alt=""
+                    src="assets/img/icon_keluar.svg">
                 <div class="text-sidebar-default">Keluar</div>
             </a>
         </div>
         <a class="buat-kelas-group link" href="sidebarGuruModel">
-            <img oncontextmenu="return false;" class="iconsolidarrow-left" alt="" src="assets/img/icon_arrow_left.svg">
+            <img oncontextmenu="return false;" class="iconsolidarrow-left" alt=""
+                src="assets/img/icon_arrow_left.svg">
             <div class="buat-kelas2">Buat Kelas
             </div>
         </a>
@@ -93,11 +99,11 @@
             </div>
             <div class="input-with-label-parent">
                 <!-- Form untuk mengisi detail kelas -->
-                <form enctype="multipart/form-data" action="formDetailKelas" method="POST">
+                <form enctype="multipart/form-data" action="formDetailKelas" method="POST" id="buatKelasForm">
                     <!-- Nama Kelas -->
                     <div class="input-field">
                         <div class="label">Nama Kelas</div>
-                        <div class="input-field-inner">
+                        <div class="input-field-inner" id="namaKelasContainer">
                             <div class="placeholder-wrapper">
                                 <input type="text" id="namaKelas" name="class_name" class="placeholder"
                                     placeholder="Masukkan Nama Kelas..."
@@ -108,7 +114,7 @@
                     <!-- Nama Sekolah -->
                     <div class="input-field1">
                         <div class="label">Nama Sekolah</div>
-                        <div class="input-field-inner">
+                        <div class="input-field-inner" id="namaSekolahContainer">
                             <div class="placeholder-wrapper">
                                 <input type="text" id="namaSekolah" name="school_name" class="placeholder"
                                     placeholder="Masukkan Nama Sekolah..."
@@ -119,7 +125,7 @@
                     <!-- Mata Pelajaran -->
                     <div class="input-field2">
                         <div class="label">Mata Pelajaran</div>
-                        <div class="input-field-inner">
+                        <div class="input-field-inner" id="mataPelajaranContainer">
                             <div class="placeholder-wrapper">
                                 <input type="text" id="mataPelajaran" name="subject" class="placeholder"
                                     placeholder="Masukkan Mata Pelajaran..."
@@ -130,10 +136,10 @@
                     <!-- Kompetensi Dasar -->
                     <div class="text-area">
                         <div class="label">Kompetensi Dasar</div>
-                        <div class="input-field-inner1">
+                        <div class="input-field-inner1" id="kompetensiDasarContainer">
                             <div class="placeholder-wrapper">
-                                <div id="kompetensiDasar" name="basic_competency" class="placeholder1"
-                                    contenteditable="true" placeholder="Masukkan Kompetensi Dasar"><?= isset($session_data['basic_competency']) ? htmlspecialchars($session_data['basic_competency'], ENT_QUOTES, 'UTF-8') : ''; ?></div>
+                                <textarea id="kompetensiDasar" name="basic_competency" class="placeholder1"
+                                    placeholder="Masukkan Kompetensi Dasar..."><?= isset($session_data['basic_competency']) ? htmlspecialchars($session_data['basic_competency'], ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -142,10 +148,13 @@
                         <!-- Tanggal -->
                         <div class="input-field3">
                             <div class="label">Tanggal</div>
-                            <div class="input-field-inner">
+                            <div class="input-field-inner" id="tanggalContainer">
                                 <div class="placeholder-wrapper">
                                     <input type="text" id="tanggal" name="date" class="placeholder2"
                                         placeholder="DD/MM/YYYY"
+                                        inputmode="numeric"
+                                        maxlength="10"
+                                        autocomplete="off"
                                         value="<?= isset($session_data['date']) ? htmlspecialchars(date('d/m/Y', strtotime($session_data['date'])), ENT_QUOTES, 'UTF-8') : ''; ?>">
                                 </div>
                                 <button id="buttonTanggal" type="button" class="icon-button">
@@ -157,34 +166,42 @@
                         <!-- Jam Mulai -->
                         <div class="input-field4">
                             <div class="label">Mulai</div>
-                            <div class="input-field-inner">
+                            <div class="input-field-inner" id="jamMulaiContainer">
                                 <div class="placeholder-wrapper">
                                     <input type="text" id="jamMulai" name="start_time" class="placeholder3"
                                         placeholder="HH:MM"
+                                        inputmode="numeric"
+                                        maxlength="5"
+                                        autocomplete="off"
                                         value="<?= isset($session_data['start_time']) ? htmlspecialchars(date('H:i', strtotime($session_data['start_time'])), ENT_QUOTES, 'UTF-8') : ''; ?>">
                                 </div>
                                 <button id="buttonJamMulai" type="button" class="icon-button">
-                                    <img oncontextmenu="return false;" class="iconoutlinecalendar" alt="Clock" src="assets/img/icon_clock_form.svg">
+                                    <img oncontextmenu="return false;" class="iconoutlinecalendar" alt="Clock"
+                                        src="assets/img/icon_clock_form.svg">
                                 </button>
                             </div>
                         </div>
                         <!-- Jam Selesai -->
                         <div class="input-field5">
                             <div class="label">Selesai</div>
-                            <div class="input-field-inner">
+                            <div class="input-field-inner" id="jamSelesaiContainer">
                                 <div class="placeholder-wrapper">
                                     <input type="text" id="jamSelesai" name="end_time" class="placeholder3"
                                         placeholder="HH:MM"
+                                        inputmode="numeric"
+                                        maxlength="5"
+                                        autocomplete="off"
                                         value="<?= isset($session_data['end_time']) ? htmlspecialchars(date('H:i', strtotime($session_data['end_time'])), ENT_QUOTES, 'UTF-8') : ''; ?>">
                                 </div>
                                 <button id="buttonJamSelesai" type="button" class="icon-button">
-                                    <img oncontextmenu="return false;" class="iconoutlinecalendar" alt="Clock" src="assets/img/icon_clock_form.svg">
+                                    <img oncontextmenu="return false;" class="iconoutlinecalendar" alt="Clock"
+                                        src="assets/img/icon_clock_form.svg">
                                 </button>
                             </div>
                         </div>
                     </div>
                     <!-- Tombol Selanjutnya -->
-                    <button type="submit" id="Selanjutnya" class="button link">
+                    <button type="submit" id="Selanjutnya" class="button link" disabled>
                         <div class="button1">Selanjutnya</div>
                     </button>
                 </form>
@@ -193,6 +210,9 @@
     </div>
 </body>
 
+<!-- Script SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Script utama -->
 <script>
     // Menunggu seluruh konten DOM dimuat sebelum menjalankan skrip
     document.addEventListener("DOMContentLoaded", function() {
@@ -222,40 +242,37 @@
                 confirmButtonColor: '#2563EB' // Warna tombol konfirmasi
             });
         }
-    });
 
-    // Fungsi untuk memperbarui tanggal dan waktu saat ini
-    function updateDateTime() {
-        const now = new Date(); // Mendapatkan waktu saat ini
-        const optionsDate = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        };
-        const optionsTime = {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        };
+        // Fungsi untuk memperbarui tanggal dan waktu saat ini
+        function updateDateTime() {
+            const now = new Date(); // Mendapatkan waktu saat ini
+            const optionsDate = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            const optionsTime = {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
 
-        // Format tanggal dan jam dalam bahasa Indonesia
-        const dateString = now.toLocaleDateString('id-ID', optionsDate);
-        const timeString = now.toLocaleTimeString('id-ID', optionsTime);
+            // Format tanggal dan jam dalam bahasa Indonesia
+            const dateString = now.toLocaleDateString('id-ID', optionsDate);
+            const timeString = now.toLocaleTimeString('id-ID', optionsTime);
 
-        // Mengupdate elemen HTML dengan tanggal dan waktu yang telah diformat
-        document.getElementById('dateDisplay').innerText = dateString;
-        document.getElementById('timeDisplay').innerText = timeString;
-    }
+            // Mengupdate elemen HTML dengan tanggal dan waktu yang telah diformat
+            document.getElementById('dateDisplay').innerText = dateString;
+            document.getElementById('timeDisplay').innerText = timeString;
+        }
 
-    // Memanggil fungsi updateDateTime setiap setengah detik untuk memperbarui waktu secara real-time
-    setInterval(updateDateTime, 500);
+        // Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+        setInterval(updateDateTime, 0);
 
-    // Memastikan waktu saat ini ditampilkan saat memuat halaman
-    updateDateTime();
+        // Memastikan waktu saat ini ditampilkan saat memuat halaman
+        updateDateTime();
 
-    // Menjalankan kode setelah DOM selesai dimuat
-    document.addEventListener("DOMContentLoaded", function() {
         // Mendapatkan elemen input dan tombol terkait
         const dateInput = document.getElementById('tanggal');
         const startTimeInput = document.getElementById('jamMulai');
@@ -264,23 +281,32 @@
         const dateButton = document.getElementById('buttonTanggal');
         const startTimeButton = document.getElementById('buttonJamMulai');
         const endTimeButton = document.getElementById('buttonJamSelesai');
+        const basicCompetencyTextarea = document.getElementById('kompetensiDasar');
+
+        // Mendapatkan container input-field-inner untuk setiap input
+        const tanggalContainer = document.getElementById('tanggalContainer');
+        const jamMulaiContainer = document.getElementById('jamMulaiContainer');
+        const jamSelesaiContainer = document.getElementById('jamSelesaiContainer');
 
         // Objek yang menyimpan semua input untuk memudahkan pengelolaan
         const inputs = {
             class_name: document.getElementById('namaKelas'),
             school_name: document.getElementById('namaSekolah'),
             subject: document.getElementById('mataPelajaran'),
-            basic_competency: document.getElementById('kompetensiDasar'),
+            basic_competency: basicCompetencyTextarea,
             date: dateInput,
             start_time: startTimeInput,
             end_time: endTimeInput
         };
 
         // Menambahkan fokus pada input namaKelas saat halaman dibuka
-        inputs.class_name.focus();
+        inputs.class_name.focus({
+            preventScroll: true
+        });
+        setCursorToEnd(inputs.class_name);
 
         /**
-         * Fungsi untuk memeriksa apakah semua input sudah terisi
+         * Fungsi untuk memeriksa apakah semua input sudah terisi dan valid
          */
         function checkAllInputs() {
             let allFilled = true;
@@ -288,7 +314,10 @@
                 const input = inputs[key];
                 if (input) {
                     // Memeriksa apakah input kosong
-                    if ((key === "basic_competency" && input.innerText.trim() === "") || (input.value !== undefined && input.value.trim() === "")) {
+                    if (key === "basic_competency" && input.value.trim() === "") {
+                        allFilled = false;
+                        break;
+                    } else if (key !== "basic_competency" && input.value.trim() === "") {
                         allFilled = false;
                         break;
                     }
@@ -297,12 +326,25 @@
                     break;
                 }
             }
+
+            // Validasi Jam Selesai
+            if (allFilled) {
+                const startTime = parseTime(startTimeInput.value);
+                const endTime = parseTime(endTimeInput.value);
+                if (startTime && endTime) {
+                    const difference = (endTime - startTime) / 60000; // Difference in minutes
+                    if (difference < 1) {
+                        allFilled = false;
+                    }
+                }
+            }
+
             // Mengaktifkan atau menonaktifkan tombol selanjutnya berdasarkan status pengisian
             nextButton.disabled = !allFilled;
             if (allFilled) {
-                console.log("Semua input sudah terisi.");
+                console.log("Semua input sudah terisi dan valid.");
             } else {
-                console.log("Masih ada input yang kosong.");
+                console.log("Masih ada input yang kosong atau tidak valid.");
             }
         }
 
@@ -325,16 +367,18 @@
          * @param {Event} event - Event input
          */
         dateInput.addEventListener('input', function(event) {
-            let value = dateInput.value.replace(/[^\d\/]/g, ''); // Menghapus karakter selain digit dan '/'
-            if (value.length > 2 && value[2] !== '/') {
-                value = value.slice(0, 2) + '/' + value.slice(2);
+            let value = dateInput.value.replace(/\D/g, ''); // Menghapus karakter selain digit
+            if (value.length > 8) {
+                value = value.slice(0, 8);
             }
-            if (value.length > 5 && value[5] !== '/') {
-                value = value.slice(0, 5) + '/' + value.slice(5);
+
+            // Menambahkan '/' setelah 2 dan 4 digit
+            if (value.length > 4) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4, 8);
+            } else if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
             }
-            if (value.length > 10) {
-                value = value.slice(0, 10);
-            }
+
             dateInput.value = value;
 
             // Jika panjang nilai sudah mencapai format DD/MM/YYYY, perbaiki tanggal
@@ -347,12 +391,12 @@
             }
 
             logInputFilled('Tanggal'); // Mencatat bahwa input tanggal sudah diisi
-            checkAllInputs(); // Memeriksa apakah semua input sudah terisi
+            checkAllInputs(); // Memeriksa apakah semua input sudah terisi dan valid
         });
 
         // Menambahkan event listener untuk menghapus input tanggal jika format tidak lengkap saat kehilangan fokus
         dateInput.addEventListener('blur', function() {
-            if (dateInput.value.length < 10) {
+            if (dateInput.value.length !== 10) {
                 dateInput.value = '';
             } else {
                 const parts = dateInput.value.split('/');
@@ -370,13 +414,16 @@
          */
         function handleTimeInput(timeInput, inputName) {
             timeInput.addEventListener('input', function(event) {
-                let value = timeInput.value.replace(/[^\d:]/g, ''); // Menghapus karakter selain digit dan ':'
-                if (value.length > 2 && value[2] !== ':') {
-                    value = value.slice(0, 2) + ':' + value.slice(2);
+                let value = timeInput.value.replace(/\D/g, ''); // Menghapus karakter selain digit
+                if (value.length > 4) {
+                    value = value.slice(0, 4);
                 }
-                if (value.length > 5) {
-                    value = value.slice(0, 5);
+
+                // Menambahkan ':' setelah 2 digit
+                if (value.length > 2) {
+                    value = value.slice(0, 2) + ':' + value.slice(2, 4);
                 }
+
                 timeInput.value = value;
 
                 // Jika panjang nilai sudah mencapai format HH:MM, perbaiki waktu
@@ -384,16 +431,16 @@
                     const hours = Math.min(Math.max(0, parseInt(value.slice(0, 2))), 23);
                     const minutes = Math.min(Math.max(0, parseInt(value.slice(3, 5))), 59);
                     timeInput.value = ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2);
-                    adjustEndTime(); // Menyesuaikan waktu selesai
+                    validateEndTime(); // Validasi jam selesai
                 }
 
                 logInputFilled(inputName); // Mencatat bahwa input waktu sudah diisi
-                checkAllInputs(); // Memeriksa apakah semua input sudah terisi
+                checkAllInputs(); // Memeriksa apakah semua input sudah terisi dan valid
             });
 
             // Menambahkan event listener untuk menghapus input waktu jika format tidak lengkap saat kehilangan fokus
             timeInput.addEventListener('blur', function() {
-                if (timeInput.value.length < 5) {
+                if (timeInput.value.length !== 5) {
                     timeInput.value = '';
                 } else {
                     const parts = timeInput.value.split(':');
@@ -403,6 +450,25 @@
                 }
                 checkAllInputs();
             });
+
+            // Menambahkan event listener untuk menangani Backspace navigasi
+            timeInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Backspace' && timeInput.value.length === 0) {
+                    if (inputName === 'Selesai') {
+                        event.preventDefault();
+                        startTimeInput.focus({
+                            preventScroll: true
+                        });
+                        setCursorToEnd(startTimeInput);
+                    } else if (inputName === 'Mulai') {
+                        event.preventDefault();
+                        dateInput.focus({
+                            preventScroll: true
+                        });
+                        setCursorToEnd(dateInput);
+                    }
+                }
+            });
         }
 
         // Memanggil fungsi handleTimeInput untuk jamMulai dan jamSelesai
@@ -410,33 +476,30 @@
         handleTimeInput(endTimeInput, 'Selesai');
 
         /**
-         * Fungsi untuk memastikan jamSelesai selalu 1 menit lebih besar dari jamMulai
+         * Fungsi untuk memvalidasi bahwa jamSelesai minimal 1 menit lebih lambat dari jamMulai
          */
-        function adjustEndTime() {
+        function validateEndTime() {
             if (startTimeInput.value && endTimeInput.value) {
                 const startTime = parseTime(startTimeInput.value);
                 const endTime = parseTime(endTimeInput.value);
-                if (!startTime || !endTime) return;
-                if (endTime <= startTime) {
-                    const adjustedEndTime = new Date(startTime.getTime() + 60000); // Menambahkan 1 menit
-                    endTimeInput.value = formatTime(adjustedEndTime);
+                if (startTime && endTime) {
+                    const difference = (endTime - startTime) / 60000; // Difference in minutes
+                    if (difference < 1) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Waktu Tidak Valid',
+                            text: 'Jam Selesai harus minimal 1 menit setelah Jam Mulai.',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#2563EB'
+                        }).then(() => {
+                            // Atur Jam Selesai menjadi 1 menit setelah Jam Mulai
+                            const adjustedEndTime = new Date(startTime.getTime() + 60000); // Tambahkan 1 menit
+                            endTimeInput.value = formatTime(adjustedEndTime);
+                            checkAllInputs();
+                        });
+                    }
                 }
             }
-        }
-
-        /**
-         * Fungsi untuk parsing tanggal dari input
-         * @param {string} input - String tanggal dalam format DD/MM/YYYY
-         * @returns {Date|null} - Objek Date atau null jika parsing gagal
-         */
-        function parseDate(input) {
-            const parts = input.split('/');
-            if (parts.length !== 3) return null;
-            let day = parseInt(parts[0], 10);
-            let month = parseInt(parts[1], 10) - 1;
-            let year = parseInt(parts[2], 10);
-            if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
-            return new Date(year, month, day);
         }
 
         /**
@@ -478,102 +541,197 @@
             return `${hours}:${minutes}`;
         }
 
-        // Menangani input pada basic_competency
-        const basicCompetencyDiv = document.getElementById('kompetensiDasar');
+        /**
+         * Fungsi untuk menempatkan cursor di akhir teks input
+         * @param {HTMLElement} input - Input yang akan diatur cursor-nya
+         */
+        function setCursorToEnd(input) {
+            const length = input.value.length;
+            input.setSelectionRange(length, length);
+        }
 
-        basicCompetencyDiv.addEventListener('input', function() {
+        /**
+         * Menangani input pada basic_competency
+         */
+        basicCompetencyTextarea.addEventListener('input', function() {
             logInputFilled('Kompetensi Dasar'); // Mencatat bahwa input kompetensi dasar sudah diisi
-            checkAllInputs(); // Memeriksa apakah semua input sudah terisi
+            checkAllInputs(); // Memeriksa apakah semua input sudah terisi dan valid
+        });
+
+        // Menambahkan event listener untuk menangani placeholder saat kehilangan fokus
+        basicCompetencyTextarea.addEventListener('blur', function() {
+            if (basicCompetencyTextarea.value.trim() === '') {
+                basicCompetencyTextarea.value = '';
+            }
+            checkAllInputs();
         });
 
         // Menangani input pada class_name, school_name, subject
         inputs.class_name.addEventListener('input', function() {
             logInputFilled('Nama Kelas'); // Mencatat bahwa input nama kelas sudah diisi
-            checkAllInputs(); // Memeriksa apakah semua input sudah terisi
+            checkAllInputs(); // Memeriksa apakah semua input sudah terisi dan valid
         });
 
         inputs.school_name.addEventListener('input', function() {
             logInputFilled('Nama Sekolah'); // Mencatat bahwa input nama sekolah sudah diisi
-            checkAllInputs(); // Memeriksa apakah semua input sudah terisi
+            checkAllInputs(); // Memeriksa apakah semua input sudah terisi dan valid
         });
 
         inputs.subject.addEventListener('input', function() {
             logInputFilled('Mata Pelajaran'); // Mencatat bahwa input mata pelajaran sudah diisi
-            checkAllInputs(); // Memeriksa apakah semua input sudah terisi
+            checkAllInputs(); // Memeriksa apakah semua input sudah terisi dan valid
         });
 
         // Menangani submit form untuk mengirim nilai basic_competency
-        const form = document.querySelector('form');
+        const form = document.getElementById('buatKelasForm');
 
-        form.addEventListener('submit', function() {
-            // Menambahkan input tersembunyi untuk mengirim data kompetensiDasar
-            const hiddenInput = document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.name = 'basic_competency';
-            hiddenInput.value = basicCompetencyDiv.innerText.trim();
-            form.appendChild(hiddenInput);
+        form.addEventListener('submit', function(event) {
+            // Validasi bahwa jamSelesai minimal 1 menit lebih lambat dari jamMulai
+            const startTime = parseTime(startTimeInput.value);
+            const endTime = parseTime(endTimeInput.value);
+            if (startTime && endTime) {
+                const difference = (endTime - startTime) / 60000; // Difference in minutes
+                if (difference < 1) {
+                    event.preventDefault(); // Mencegah form disubmit
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Waktu Tidak Valid',
+                        text: 'Jam Selesai harus minimal 1 menit setelah Jam Mulai.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#2563EB'
+                    }).then(() => {
+                        // Atur Jam Selesai menjadi 1 menit setelah Jam Mulai
+                        const adjustedEndTime = new Date(startTime.getTime() + 60000); // Tambahkan 1 menit
+                        endTimeInput.value = formatTime(adjustedEndTime);
+                        checkAllInputs();
+                    });
+                } else {
+                    // Reset flag isDirty jika ada mekanisme tracking perubahan (bisa ditambahkan jika diperlukan)
+                    // Contoh:
+                    // isDirty = false;
+                }
+            }
         });
 
-        // Memeriksa input saat halaman pertama kali dimuat
-        checkAllInputs();
+        /**
+         * Fungsi untuk menambahkan event listener klik pada container untuk fokus input
+         * @param {HTMLElement} container - Container yang akan diklik
+         * @param {HTMLElement} input - Input yang akan difokuskan
+         */
+        function addFocusOnContainerClick(container, input) {
+            container.addEventListener('click', function(event) {
+                // Pastikan tidak fokus jika klik pada input atau tombol
+                if (event.target !== input && event.target.tagName.toLowerCase() !== 'button') {
+                    input.focus();
+                    setCursorToEnd(input);
+                }
+            });
+        }
+
+        /**
+         * Fungsi untuk menempatkan cursor di akhir teks div contenteditable (tidak digunakan di sini)
+         * @param {HTMLElement} div - Div contenteditable yang akan diatur cursor-nya
+         */
+        function setCursorToEndDiv(div) {
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.selectNodeContents(div);
+            range.collapse(false);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+
+        // Menambahkan fokus pada input saat container input-field-inner ditekan
+        addFocusOnContainerClick(tanggalContainer, dateInput);
+        addFocusOnContainerClick(jamMulaiContainer, startTimeInput);
+        addFocusOnContainerClick(jamSelesaiContainer, endTimeInput);
+        addFocusOnContainerClick(document.getElementById('namaKelasContainer'), inputs.class_name);
+        addFocusOnContainerClick(document.getElementById('namaSekolahContainer'), inputs.school_name);
+        addFocusOnContainerClick(document.getElementById('mataPelajaranContainer'), inputs.subject);
+        addFocusOnContainerClick(document.getElementById('kompetensiDasarContainer'), basicCompetencyTextarea);
+
+        /**
+         * Fungsi untuk fokus ke akhir input
+         * @param {HTMLElement} input - Input yang akan difokuskan
+         */
+        function focusToEnd(input) {
+            setCursorToEnd(input);
+        }
 
         // Menambahkan event listener pada tombol ikon untuk fokus pada input terkait
         dateButton.addEventListener('click', function() {
-            dateInput.focus();
+            dateInput.focus({
+                preventScroll: true
+            });
+            focusToEnd(dateInput);
         });
 
         startTimeButton.addEventListener('click', function() {
-            startTimeInput.focus();
+            startTimeInput.focus({
+                preventScroll: true
+            });
+            focusToEnd(startTimeInput);
         });
 
         endTimeButton.addEventListener('click', function() {
-            endTimeInput.focus();
+            endTimeInput.focus({
+                preventScroll: true
+            });
+            focusToEnd(endTimeInput);
         });
 
         // === Penambahan Kode untuk Mengatur Fokus Antar Input Tanggal, Jam Mulai, dan Jam Selesai ===
 
-        // Mendapatkan elemen input tanggal, jam mulai, dan jam selesai
-        const tanggalInput = document.getElementById('tanggal');
-        const jamMulaiInput = document.getElementById('jamMulai');
-        const jamSelesaiInput = document.getElementById('jamSelesai');
-
         // Ketika tanggal diisi penuh, fokus ke jam mulai
-        tanggalInput.addEventListener('input', function() {
-            if (tanggalInput.value.length === 10) { // Format DD/MM/YYYY
-                jamMulaiInput.focus();
+        dateInput.addEventListener('input', function() {
+            if (dateInput.value.length === 10) { // Format DD/MM/YYYY
+                startTimeInput.focus({
+                    preventScroll: true
+                });
+                setCursorToEnd(startTimeInput);
             }
         });
 
         // Ketika jam mulai diisi penuh, fokus ke jam selesai
-        jamMulaiInput.addEventListener('input', function() {
-            if (jamMulaiInput.value.length === 5) { // Format HH:MM
-                jamSelesaiInput.focus();
+        startTimeInput.addEventListener('input', function() {
+            if (startTimeInput.value.length === 5) { // Format HH:MM
+                endTimeInput.focus({
+                    preventScroll: true
+                });
+                setCursorToEnd(endTimeInput);
             }
         });
 
         // Ketika jam selesai dihapus dan ingin dihapus lagi, fokus kembali ke jam mulai
-        jamSelesaiInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Backspace' && jamSelesaiInput.value.length === 0) {
+        endTimeInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Backspace' && endTimeInput.value.length === 0) {
                 event.preventDefault();
-                jamMulaiInput.focus();
+                startTimeInput.focus({
+                    preventScroll: true
+                });
+                setCursorToEnd(startTimeInput);
             }
         });
 
         // Ketika jam mulai dihapus dan ingin dihapus lagi, fokus kembali ke tanggal
-        jamMulaiInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Backspace' && jamMulaiInput.value.length === 0) {
+        startTimeInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Backspace' && startTimeInput.value.length === 0) {
                 event.preventDefault();
-                tanggalInput.focus();
+                dateInput.focus({
+                    preventScroll: true
+                });
+                setCursorToEnd(dateInput);
             }
         });
 
         // === Akhir Penambahan Kode ===
-
     });
 
-    // Fungsi yang dijalankan saat window selesai dimuat
+    /**
+     * Fungsi yang dijalankan saat window selesai dimuat
+     */
     window.onload = function() {
-        // Daftar pasangan elemen target dan induknya
+        // Daftar pasangan elemen target dan induknya (tidak ada yang ditentukan saat ini)
         const targetPairs = [];
 
         // Daftar kelas atau atribut data yang akan dianimasikan secara langsung
@@ -727,7 +885,7 @@
             element.stopScroll = stopScroll;
         }
 
-        // Mengolah pasangan target dengan induknya
+        // Mengolah pasangan target dengan induknya (tidak ada pasangan yang ditentukan, bisa ditambahkan jika diperlukan)
         targetPairs.forEach(pair => {
             const {
                 targetClass,

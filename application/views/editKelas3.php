@@ -4,10 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title><?php echo $title; ?></title>
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
     <base href="<?= base_url(); ?>">
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/editkelas3.css" />
 </head>
 
 <body>
@@ -433,8 +431,8 @@
             document.getElementById('timeDisplay').innerText = timeString;
         }
 
-        // Memanggil fungsi updateDateTime setiap detik
-        setInterval(updateDateTime, 1000);
+        // Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+        setInterval(updateDateTime, 0);
 
         // Memastikan waktu saat ini ditampilkan saat memuat halaman
         updateDateTime();
@@ -450,17 +448,33 @@
         // Menambahkan event listener untuk menampilkan pop-up Tambah Observer
         document.getElementById('tambahObserver').addEventListener('click', function(event) {
             event.preventDefault(); // Mencegah aksi default
+
+            // Tampilkan pop-up Tambah Observer
             popupTambahObserver.classList.remove('popup-hidden');
             popupTambahObserver.classList.add('popup-visible');
             overlay.classList.remove('overlay-hidden');
             overlay.classList.add('overlay-visible');
+            document.body.style.overflow = 'hidden';
             document.body.classList.add('blur'); // Tambahkan efek blur ke latar belakang
 
             // Panggil renderStudentNumbers untuk memperbarui tampilan nomor siswa
             renderStudentNumbers();
-            // Panggil renderObservers untuk memperbarui daftar observer
-            renderObservers();
-            resetSelections();
+
+            // Tambahkan scroll ke tengah halaman setelah pop-up ditampilkan
+            setTimeout(function() {
+                // Pastikan elemen pop-up dapat difokuskan
+                popupTambahObserver.setAttribute('tabindex', '-1'); // Tambahkan tabindex jika belum ada
+                popupTambahObserver.focus({
+                    preventScroll: true
+                });
+
+                // Scroll elemen pop-up ke tengah halaman
+                popupTambahObserver.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center'
+                });
+            }, 500); // Sesuaikan delay sesuai animasi CSS
         });
 
         // Menambahkan event listener untuk menyimpan observer dan nomor siswa saat tombol simpanObserver diklik
@@ -476,6 +490,7 @@
             popupTambahObserver.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
             resetSelections(); // Reset pilihan
         });
@@ -488,6 +503,7 @@
                 popupTambahObserver.classList.add('popup-hidden');
                 overlay.classList.remove('overlay-visible');
                 overlay.classList.add('overlay-hidden');
+                document.body.style.overflow = 'auto';
                 document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
                 resetSelections(); // Reset pilihan
             }
@@ -627,6 +643,12 @@
             observerEmails.forEach(element => {
                 setupScrollAnimation(element);
             });
+
+            // Terapkan animasi scroll pada elemen bagas-nugroho yang sudah ada
+            const bagasNugrohoElements = document.querySelectorAll('.bagas-nugroho');
+            bagasNugrohoElements.forEach(element => {
+                setupScrollAnimation(element);
+            });
         }
 
         /**
@@ -696,6 +718,7 @@
             popupTambahObserver.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
             resetSelections(); // Reset pilihan
         });
@@ -708,6 +731,7 @@
             popupTambahObserver.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
             resetSelections(); // Reset pilihan
         });
@@ -840,7 +864,9 @@
                 hideObserverItems();
                 noDataMessage.style.display = "block";
             } else {
-                inputField.focus();
+                inputField.focus({
+                    preventScroll: true
+                });
             }
         });
 
@@ -1043,6 +1069,12 @@
                     textButtonIcon
                 );
 
+                // Terapkan animasi scroll pada elemen bagas-nugroho yang baru ditambahkan
+                const newBagasNugroho = itemObserverContainer.querySelector(`.item-observer[data-observer-id="${observerId}"] .bagas-nugroho`);
+                if (newBagasNugroho) {
+                    setupScrollAnimation(newBagasNugroho);
+                }
+
                 // Tambahkan nomor siswa ke Set tidakTersedia dan hidden input
                 selectedNomorSiswa.forEach(num => tidakTersedia.add(num));
                 nomorTidakTersediaInput.value = Array.from(tidakTersedia).join(",");
@@ -1081,6 +1113,7 @@
                 popupTambahObserver.classList.add('popup-hidden');
                 overlay.classList.remove('overlay-visible');
                 overlay.classList.add('overlay-hidden');
+                document.body.style.overflow = 'auto';
                 document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
 
                 // Aktifkan tombol simpanKelas karena form telah berubah
@@ -1270,6 +1303,12 @@
                 }
             });
         }
+
+        /**
+         * Fungsi untuk memperbarui jumlah siswa yang dipilih dan status tombol simpanKelas
+         */
+        // Fungsi ini sudah terintegrasi dalam updateButtonState dan fungsi lainnya
+
     });
 
     window.onload = function() {

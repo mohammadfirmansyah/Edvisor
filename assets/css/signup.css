@@ -164,7 +164,7 @@
     box-sizing: border-box;
     cursor: pointer;
     color: #fff;
-
+    transition: background-color 0.5s ease;
 }
 
 .button:hover {

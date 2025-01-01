@@ -79,6 +79,7 @@
     box-sizing: border-box;
     color: #fff;
     cursor: pointer;
+    transition: background-color 0.5s ease;
 }
 
 .button:hover {
@@ -155,6 +156,17 @@
     height: 2.75rem;
     overflow: hidden;
     color: #94a3b8;
+    transition: 0.2s ease-in-out;
+}
+
+.input-field-inner:hover {
+    border: 1px solid #3B82F6;
+    box-shadow: 0 0 0 1px #3B82F6 inset;
+}
+
+.input-field-inner:focus-within {
+    border: 1px solid #3B82F6;
+    box-shadow: 0 0 0 1px #c7d2fe;
 }
 
 .input-field {

@@ -150,10 +150,16 @@
     box-sizing: border-box;
     color: #fff;
     cursor: pointer;
+    transition: background-color 0.5s ease;
 }
 
 .button:hover {
     background-color: #1D4ED8;
+}
+
+.button:disabled {
+    background-color: #bfdbfe;
+    pointer-events: none;
 }
 
 .ingat-saya1 {
@@ -501,4 +507,9 @@
     font-size: 1rem;
     color: #000;
     font-family: Inter;
+}
+
+.validity-icon {
+    margin-left: 0.5rem;
+    font-size: 1rem;
 }

@@ -4,10 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title><?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
-    <base href="<?php echo base_url(); ?>">
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/kelasobserver1.css" />
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
+    <base href="<?= base_url(); ?>">
 </head>
 
 <body>
@@ -206,6 +204,7 @@
                 <a class="menu-2 link link-color-unset" id="menu3Container" href="pageKelasObserver3/<?php echo $encrypted_class_id; ?>">
                     <div class="penilaian-kegiatan-mengajar">Catatan Aktivitas Siswa</div>
                 </a>
+                <div class="timer" data-end-time="<?= $class_end_datetime->format('Y-m-d H:i:s'); ?>"></div>
             </div>
             <!-- Form Penilaian -->
             <div class="form">
@@ -295,7 +294,7 @@
                         <div class="text-area">
                             <div class="label">Catatan</div>
                             <div class="text-area-child">
-                                <textarea name="catatan" id="catatan"><?= isset($assessment) ? htmlspecialchars($assessment->notes, ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
+                                <textarea name="catatan" id="catatan"><?= isset($assessment->notes) ? htmlspecialchars($assessment->notes, ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
                             </div>
                         </div>
                         <div class="frame-div">
@@ -333,7 +332,7 @@
     </div>
 </body>
 
-<script>    
+<script>
     // Menampilkan pesan flashdata (sukses atau error) menggunakan SweetAlert2
     document.addEventListener("DOMContentLoaded", function() {
         // Mendapatkan elemen flashdata
@@ -388,11 +387,89 @@
         document.getElementById('timeDisplay').innerText = timeString;
     }
 
-    // Memanggil fungsi updateDateTime setiap detik
-    setInterval(updateDateTime, 1000);
+    // Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+    setInterval(updateDateTime, 0);
 
     // Memastikan waktu saat ini ditampilkan saat memuat halaman
     updateDateTime();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ambil elemen timer
+        const timerElement = document.querySelector('.timer');
+        // Ambil waktu akhir kelas dari data atribut
+        const endTimeString = timerElement.getAttribute('data-end-time');
+
+        // Konversi string waktu akhir kelas ke objek Date
+        const endTime = new Date(endTimeString);
+
+        // Interval untuk menghitung mundur
+        let countdownInterval = setInterval(updateTimer, 1000);
+
+        // Fungsi untuk memperbarui tampilan timer setiap detik
+        function updateTimer() {
+            const now = new Date();
+            const diff = endTime - now; // selisih dalam milidetik
+
+            if (diff <= 0) {
+                // Jika waktu habis, hentikan interval
+                clearInterval(countdownInterval);
+                timerElement.innerText = "00:00";
+
+                // Tampilkan SweetAlert2 dengan tombol "Simpan Formulir" saja
+                Swal.fire({
+                    title: 'Waktu telah habis',
+                    text: 'Silakan simpan formulir Anda.',
+                    icon: 'info',
+                    showCancelButton: false,
+                    confirmButtonText: 'Simpan Formulir',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    confirmButtonColor: '#2563EB'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Tekan tombol #saveForm untuk langsung men-submit form
+                        document.getElementById('saveForm').click();
+                        // Tidak ada logika tampilan sukses tambahan di sini.
+                        // Setelah ini, proses dan alur selanjutnya ditangani oleh server atau halaman target.
+                    }
+                });
+
+                return; // Keluar dari fungsi updateTimer karena waktu sudah habis
+            }
+
+            // Hitung sisa menit dan detik
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+
+            // Format tampilan mm:ss
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+            timerElement.innerText = `${formattedMinutes}:${formattedSeconds}`;
+
+            // Ubah warna teks sesuai sisa waktu
+            // Jika kurang 15 menit (900 detik) menjadi kuning
+            if (seconds <= 900 && seconds > 300) {
+                timerElement.style.color = '#F59E0B';
+                timerElement.classList.remove('heartbeat');
+            }
+
+            // Jika kurang 5 menit (300 detik) menjadi merah
+            if (seconds <= 300 && seconds > 60) {
+                timerElement.style.color = '#EF4444';
+                timerElement.classList.remove('heartbeat');
+            }
+
+            // Jika kurang 1 menit (60 detik) menjadi merah dan hitam (berdetak)
+            if (seconds <= 60) {
+                timerElement.style.color = '#EF4444';
+                timerElement.classList.add('heartbeat');
+            }
+        }
+
+        // Jalankan updateTimer pertama kali agar timer langsung diperbarui
+        updateTimer();
+    });
 
     document.addEventListener('DOMContentLoaded', function() {
         let isHovering = false;
@@ -436,10 +513,16 @@
         const deleteSignatureButton = document.getElementById('deleteSignature');
         const placeholderCanvas = document.getElementById('placeholderCanvas');
         const context = canvas.getContext('2d');
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = 'high';
         let isDrawing = false;
         let hasSignature = false;
         let drawingEnabled = true; // Flag untuk mengontrol apakah pengguna dapat menggambar
         let signatureChanged = false; // Variabel untuk menandai apakah tanda tangan telah diubah
+
+        const baseLineWidth = 2; // Ketebalan garis dasar
+        const strokes = []; // Menyimpan semua strokes
+        let currentStroke = []; // Menyimpan stroke saat ini
 
         /**
          * Fungsi untuk mengatur ukuran canvas sesuai dengan CSS dan DPR (Device Pixel Ratio)
@@ -454,19 +537,37 @@
             context.lineCap = 'round';
             context.lineJoin = 'round';
             context.strokeStyle = '#000';
-            context.lineWidth = 2;
+            context.lineWidth = baseLineWidth; // Tetapkan ketebalan garis tetap
 
             // Jika sudah ada tanda tangan, gambar kembali dari src_signature_file
             if (signatureImage.value) {
                 const img = new Image();
                 img.src = signatureImage.value;
+
                 img.onload = function() {
-                    // Hitung skala agar gambar sesuai dengan canvas
-                    const scale = Math.min(canvas.width / (window.devicePixelRatio || 1) / img.width, canvas.height / (window.devicePixelRatio || 1) / img.height);
+                    // Gambar ulang tanda tangan yang sudah diproses ke tengah canvas
+                    const canvasWidth = canvas.width / dpr; // 500
+                    const canvasHeight = canvas.height / dpr; // 500
+
+                    // Hitung skala agar gambar sesuai dengan canvas virtual dengan padding 5px
+                    const padding = 5; // Padding tetap 5px
+                    const availableWidth = canvasWidth - 2 * padding;
+                    const availableHeight = canvasHeight - 2 * padding;
+                    const scaleWidth = availableWidth / img.width;
+                    const scaleHeight = availableHeight / img.height;
+                    const scale = Math.min(scaleWidth, scaleHeight);
+
                     const scaledWidth = img.width * scale;
                     const scaledHeight = img.height * scale;
-                    const x = ((canvas.width / (window.devicePixelRatio || 1)) - scaledWidth) / 2;
-                    const y = ((canvas.height / (window.devicePixelRatio || 1)) - scaledHeight) / 2;
+
+                    const x = padding + (availableWidth - scaledWidth) / 2;
+                    const y = padding + (availableHeight - scaledHeight) / 2;
+
+                    // Atur lineWidth agar tetap konsisten 2px
+                    context.lineWidth = baseLineWidth; // Tetap 2px
+
+                    // Clear canvas sebelum menggambar ulang
+                    context.clearRect(0, 0, canvas.width, canvas.height);
                     context.drawImage(img, x, y, scaledWidth, scaledHeight);
                     hasSignature = true;
                     updateDeleteButtonState();
@@ -482,6 +583,12 @@
 
         // Panggil resizeCanvas saat halaman dimuat
         resizeCanvas();
+
+        // Menyesuaikan ukuran canvas saat seluruh halaman telah dimuat
+        window.addEventListener('load', function() {
+            resizeCanvas(); // Panggil resizeCanvas pertama kali
+            setTimeout(resizeCanvas, 100); // Panggil ulang setelah 100ms untuk memastikan ukuran yang akurat
+        });
 
         // Pastikan canvas tetap responsif saat ukuran jendela berubah
         window.addEventListener('resize', function() {
@@ -499,17 +606,53 @@
         });
 
         /**
+         * Fungsi untuk menggambar stroke dengan Bezier Curves untuk hasil yang lebih mulus
+         * @param {CanvasRenderingContext2D} ctx - Konteks canvas
+         * @param {Array} stroke - Array titik-titik stroke
+         */
+        function drawSmoothStroke(ctx, stroke) {
+            if (stroke.length < 2) {
+                return;
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(stroke[0].x, stroke[0].y);
+
+            for (let i = 1; i < stroke.length - 1; i++) {
+                const midPoint = {
+                    x: (stroke[i].x + stroke[i + 1].x) / 2,
+                    y: (stroke[i].y + stroke[i + 1].y) / 2
+                };
+                ctx.quadraticCurveTo(stroke[i].x, stroke[i].y, midPoint.x, midPoint.y);
+            }
+
+            // Garis terakhir
+            ctx.lineTo(stroke[stroke.length - 1].x, stroke[stroke.length - 1].y);
+            ctx.stroke();
+        }
+
+        /**
          * Fungsi untuk memulai menggambar
          * @param {Event} event - Event mouse down
          */
         function startDrawing(event) {
             if (!drawingEnabled) return; // Jika kanvas dinonaktifkan, tidak boleh menggambar
             isDrawing = true;
+            hasSignature = true; // Menandai bahwa mulai menggambar, menghilangkan placeholder
             signatureChanged = true; // Menandai tanda tangan telah diubah
             document.getElementById('signatureChanged').value = "1"; // Mengatur nilai input tersembunyi
-            const { x, y } = getMousePos(canvas, event);
+            const {
+                x,
+                y
+            } = getMousePos(canvas, event);
+            currentStroke = [{
+                x,
+                y
+            }];
             context.beginPath();
             context.moveTo(x, y);
+            context.lineWidth = 1;
+            hidePlaceholder(); // Pastikan placeholder disembunyikan saat mulai menggambar
         }
 
         /**
@@ -518,13 +661,17 @@
          */
         function draw(event) {
             if (!isDrawing || !drawingEnabled) return;
-            const { x, y } = getMousePos(canvas, event);
+            const {
+                x,
+                y
+            } = getMousePos(canvas, event);
+            currentStroke.push({
+                x,
+                y
+            });
             context.lineTo(x, y);
             context.stroke();
-            hasSignature = true;
-            updateSignatureImage();
-            updateDeleteButtonState();
-            hidePlaceholder();
+            // hasSignature sudah di-set ke true di startDrawing
         }
 
         /**
@@ -533,7 +680,11 @@
         function stopDrawing() {
             if (isDrawing) {
                 isDrawing = false;
-                updateSignatureImage();
+                if (currentStroke.length > 0) {
+                    strokes.push(currentStroke);
+                    currentStroke = [];
+                    updateSignatureImage();
+                }
             }
         }
 
@@ -541,7 +692,7 @@
          * Fungsi untuk memperbarui gambar tanda tangan ke dalam input (PNG)
          */
         async function updateSignatureImage() {
-            if (!isCanvasBlank()) {
+            if (strokes.length > 0) {
                 const processedDataUrl = await processSignature();
                 if (processedDataUrl) {
                     signatureImage.value = processedDataUrl;
@@ -560,88 +711,84 @@
         }
 
         /**
-         * Fungsi untuk memproses tanda tangan: cropping dan scaling
+         * Fungsi untuk memproses tanda tangan: cropping dan scaling dengan padding 5px
          * @returns {Promise<string>} - Data URL dari tanda tangan yang diproses
          */
         function processSignature() {
             return new Promise((resolve) => {
-                // Mengambil data dari canvas asli
-                const dataUrl = canvas.toDataURL('image/png');
-                const img = new Image();
-                img.src = dataUrl;
-
-                img.onload = function() {
-                    // Membuat canvas baru untuk cropping
-                    const tempCanvas = document.createElement('canvas');
-                    const tempContext = tempCanvas.getContext('2d');
-
-                    // Menggambar gambar pada tempCanvas
-                    tempCanvas.width = img.width;
-                    tempCanvas.height = img.height;
-                    tempContext.drawImage(img, 0, 0);
-
-                    // Mendapatkan data pixel dari tempCanvas
-                    const imageData = tempContext.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-                    const pixels = imageData.data;
-
-                    let minX = tempCanvas.width,
-                        minY = tempCanvas.height,
-                        maxX = 0,
-                        maxY = 0;
-
-                    // Menemukan batas tanda tangan
-                    for (let y = 0; y < tempCanvas.height; y++) {
-                        for (let x = 0; x < tempCanvas.width; x++) {
-                            const index = (y * tempCanvas.width + x) * 4;
-                            const alpha = pixels[index + 3];
-                            if (alpha > 0) { // Menemukan piksel yang tidak transparan
-                                if (x < minX) minX = x;
-                                if (x > maxX) maxX = x;
-                                if (y < minY) minY = y;
-                                if (y > maxY) maxY = y;
-                            }
-                        }
-                    }
-
-                    // Jika tidak ada tanda tangan, kembalikan canvas kosong
-                    if (maxX < minX || maxY < minY) {
-                        resolve('');
-                        return;
-                    }
-
-                    const croppedWidth = maxX - minX;
-                    const croppedHeight = maxY - minY;
-
-                    // Membuat canvas untuk tanda tangan yang di-crop
-                    const croppedCanvas = document.createElement('canvas');
-                    const croppedContext = croppedCanvas.getContext('2d');
-                    croppedCanvas.width = croppedWidth;
-                    croppedCanvas.height = croppedHeight;
-                    croppedContext.drawImage(tempCanvas, minX, minY, croppedWidth, croppedHeight, 0, 0, croppedWidth, croppedHeight);
-
-                    // Membuat canvas final berukuran 500x500
-                    const finalCanvas = document.createElement('canvas');
-                    const finalContext = finalCanvas.getContext('2d');
-                    finalCanvas.width = 500;
-                    finalCanvas.height = 500;
-
-                    // Menghitung skala agar tanda tangan memenuhi secara horizontal dan vertikal
-                    const scale = Math.min(finalCanvas.width / croppedWidth, finalCanvas.height / croppedHeight);
-                    const scaledWidth = croppedWidth * scale;
-                    const scaledHeight = croppedHeight * scale;
-
-                    // Menggambar tanda tangan yang di-crop dan di-scale di tengah canvas final
-                    const offsetX = (finalCanvas.width - scaledWidth) / 2;
-                    const offsetY = (finalCanvas.height - scaledHeight) / 2;
-                    finalContext.drawImage(croppedCanvas, 0, 0, croppedWidth, croppedHeight, offsetX, offsetY, scaledWidth, scaledHeight);
-
-                    // Mendapatkan data URL dari finalCanvas
-                    resolve(finalCanvas.toDataURL('image/png'));
-                };
-
-                img.onerror = function() {
+                if (strokes.length === 0) {
                     resolve('');
-                };
+                    return;
+                }
+
+                // Membuat canvas virtual dengan ukuran tetap 1000x1000 untuk resolusi lebih tinggi
+                const virtualCanvas = document.createElement('canvas');
+                const virtualContext = virtualCanvas.getContext('2d');
+                const virtualSize = 1000; // Ukuran ditingkatkan untuk resolusi lebih tinggi
+                const dpr = window.devicePixelRatio || 1;
+                virtualCanvas.width = virtualSize * dpr;
+                virtualCanvas.height = virtualSize * dpr;
+                virtualContext.scale(dpr, dpr);
+
+                // Hitung bounding box dari strokes
+                let minX = Infinity,
+                    minY = Infinity,
+                    maxX = -Infinity,
+                    maxY = -Infinity;
+                strokes.forEach(stroke => {
+                    stroke.forEach(point => {
+                        if (point.x < minX) minX = point.x;
+                        if (point.y < minY) minY = point.y;
+                        if (point.x > maxX) maxX = point.x;
+                        if (point.y > maxY) maxY = point.y;
+                    });
+                });
+
+                const croppedWidth = maxX - minX;
+                const croppedHeight = maxY - minY;
+
+                // Jika tidak ada tanda tangan, return kosong
+                if (croppedWidth === 0 || croppedHeight === 0) {
+                    resolve('');
+                    return;
+                }
+
+                // Tambahkan padding fixed 5px
+                const padding = 5; // Padding fixed 5px
+                const availableWidth = virtualSize - 2 * padding;
+                const availableHeight = virtualSize - 2 * padding;
+
+                // Hitung skala agar tanda tangan sesuai dengan virtual canvas dengan padding 5px
+                const scaleWidth = availableWidth / croppedWidth;
+                const scaleHeight = availableHeight / croppedHeight;
+                const scale = Math.min(scaleWidth, scaleHeight);
+
+                const scaledWidth = croppedWidth * scale;
+                const scaledHeight = croppedHeight * scale;
+
+                // Hitung posisi untuk menempatkan tanda tangan di tengah virtual canvas dengan padding 5px
+                const offsetX = padding + (availableWidth - scaledWidth) / 2 - (minX * scale);
+                const offsetY = padding + (availableHeight - scaledHeight) / 2 - (minY * scale);
+
+                // Atur properti menggambar
+                virtualContext.lineCap = 'round';
+                virtualContext.lineJoin = 'round';
+                virtualContext.strokeStyle = '#000';
+                virtualContext.lineWidth = baseLineWidth * scale; // Sesuaikan ketebalan garis
+
+                // Clear canvas virtual sebelum menggambar
+                virtualContext.clearRect(0, 0, virtualSize, virtualSize);
+
+                // Menggambar setiap stroke dengan smoothing
+                strokes.forEach(stroke => {
+                    drawSmoothStroke(virtualContext, stroke.map(point => ({
+                        x: point.x * scale + offsetX,
+                        y: point.y * scale + offsetY
+                    })));
+                });
+
+                // Mendapatkan data URL dari virtualCanvas dengan kualitas tinggi
+                resolve(virtualCanvas.toDataURL('image/png', 1.0)); // 1.0 untuk kualitas maksimal
             });
         }
 
@@ -650,12 +797,7 @@
          * @returns {boolean} - True jika canvas kosong, false jika tidak
          */
         function isCanvasBlank() {
-            const blankCanvas = document.createElement('canvas');
-            blankCanvas.width = canvas.width;
-            blankCanvas.height = canvas.height;
-            const blankContext = blankCanvas.getContext('2d');
-            // Jangan isi dengan warna apa pun agar blankCanvas transparan
-            return canvas.toDataURL() === blankCanvas.toDataURL();
+            return strokes.length === 0 && !hasSignature;
         }
 
         /**
@@ -708,6 +850,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     context.clearRect(0, 0, canvas.width, canvas.height);
+                    strokes.length = 0; // Mengosongkan semua strokes
                     hasSignature = false;
                     signatureImage.value = '';
                     signatureChanged = true; // Menandai tanda tangan telah diubah
@@ -856,7 +999,7 @@
             });
 
             /**
-             * Menambahkan event click untuk tombol download
+             * Menambahkan event click untuk tombol download dengan SweetAlert2 Loading
              */
             downloadButton.addEventListener('click', function(e) {
                 // Mencegah navigasi default jika perlu
@@ -867,7 +1010,17 @@
                 let fileName = downloadButton.getAttribute('data-filename');
 
                 if (filePath && filePath !== '') {
-                    // Mengecek apakah file ada di server
+                    // Menampilkan SweetAlert2 loading modal
+                    Swal.fire({
+                        title: 'Memuat...',
+                        text: 'Sedang memproses pengunduhan.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Mengunduh file menggunakan fetch dan blob
                     fetch(filePath)
                         .then(response => {
                             if (!response.ok) {
@@ -876,6 +1029,7 @@
                             return response.blob();
                         })
                         .then(blob => {
+                            Swal.close(); // Menutup loading modal
                             // Membuat URL blob untuk download
                             const url = window.URL.createObjectURL(blob);
                             const link = document.createElement('a');
@@ -887,21 +1041,24 @@
                             window.URL.revokeObjectURL(url);
                         })
                         .catch(error => {
-                            // Menampilkan SweetAlert jika terjadi error
+                            Swal.close(); // Menutup loading modal
+                            // Menampilkan SweetAlert2 error
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
                                 text: 'File tidak tersedia di situs.',
+                                footer: 'Silakan coba lagi.',
                                 confirmButtonText: 'OK',
                                 confirmButtonColor: '#2563EB'
                             });
                         });
                 } else {
-                    // Menampilkan SweetAlert jika file tidak tersedia
+                    // Menampilkan SweetAlert2 error jika filePath tidak valid
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'File tidak tersedia untuk diunduh.',
+                        footer: 'Silakan coba lagi.',
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#2563EB'
                     });
@@ -1071,7 +1228,10 @@
 
         // Mengolah pasangan target dengan induknya (tidak ada pasangan yang didefinisikan)
         targetPairs.forEach(pair => {
-            const { targetClass, parentClass } = pair;
+            const {
+                targetClass,
+                parentClass
+            } = pair;
             const parentElements = document.querySelectorAll(`.${parentClass}`);
 
             parentElements.forEach(parent => {
@@ -1134,7 +1294,9 @@
         // Menambahkan event listener untuk resize (opsional)
         window.addEventListener('resize', function() {
             elementsToAnimate.forEach(item => {
-                const { element } = item;
+                const {
+                    element
+                } = item;
 
                 // Batalkan animasi jika sedang berjalan
                 if (element.getAttribute('data-animating') === 'true') {

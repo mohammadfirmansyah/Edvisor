@@ -81,9 +81,9 @@ class Controller extends CI_Controller
       'formLogin',
       'pageSignup',
       'formSignup',
-      'pageLupaPassword',
-      'formLupaPassword',
-      'index'
+      'pageLupaKataSandi',
+      'formLupaKataSandi',
+      'index',
     ];
 
     // Memeriksa apakah pengguna sudah login
@@ -121,6 +121,16 @@ class Controller extends CI_Controller
   private function checkLogin()
   {
     if (!$this->session->userdata('user_id')) {
+
+      if ($this->input->is_ajax_request() || ($this->input->method(TRUE) === 'POST' && !$this->input->is_ajax_request())) {
+        echo json_encode([
+          'status'  => 'error',
+          'message' => 'Terjadi kesalahan pada sistem. Silakan coba lagi.' // Sebelumnya: Session invalid or expired.
+        ]);
+        $this->output->_display();
+        exit; // Hentikan eksekusi supaya tidak redirect ke halaman HTML
+      }
+
       // Cek apakah ada cookie "remember_me"
       $remember_token = get_cookie('remember_me');
       if ($remember_token) {
@@ -229,7 +239,12 @@ class Controller extends CI_Controller
           // Batas waktu inaktivitas (30 menit = 1.800 detik)
           $timeout = 1800;
 
+          log_message('debug', "CheckLogin: User_id: $user_id, Last Activity: " . $user->last_activity . ", Interval: $interval seconds");
+
           if ($interval > $timeout) {
+            // Menambahkan log error saat logout karena timeout
+            log_message('error', "User_id: $user_id dipaksa logout karena melebihi batas waktu inaktivitas. Last Activity: " . $user->last_activity . ", Interval: $interval seconds.");
+
             // Inaktivitas melebihi batas, logout pengguna
             $this->session->set_flashdata('session_timeout', 'Sesi Anda telah habis karena inaktivitas.');
             redirect('sidebarLogout');
@@ -249,7 +264,9 @@ class Controller extends CI_Controller
         $this->user = $user;
         $this->load->vars(['user' => $user]);
       } else {
-        // Pengguna tidak ditemukan, logout
+        // Pengguna tidak ditemukan, set flashdata dan logout
+        $this->session->set_flashdata('error', 'Pengguna tidak ditemukan.');
+        log_message('error', "User dengan ID: $user_id tidak ditemukan saat proses login.");
         redirect('sidebarLogout');
       }
     }
@@ -259,36 +276,88 @@ class Controller extends CI_Controller
   /**
    * Memperbarui Aktivitas Pengguna secara Real-time
    *
-   * Fungsi ini dipanggil melalui AJAX untuk memperbarui waktu aktivitas terakhir pengguna dan status sesi.
+   * Fungsi ini dipanggil melalui AJAX atau sendBeacon untuk memperbarui waktu aktivitas terakhir pengguna dan status sesi.
    */
   public function updateActivity()
   {
-    // Mendapatkan data POST
-    $status = $this->input->post('status');
+    // Nonaktifkan buffer output
+    if (function_exists('apache_setenv')) {
+      apache_setenv('no-gzip', '1');
+    }
+    @ini_set('zlib.output_compression', 'Off');
+    @ini_set('output_buffering', 'Off');
+    @ini_set('implicit_flush', 'On');
+    ob_implicit_flush(1);
 
-    if ($this->session->userdata('user_id')) {
-      $user_id = $this->session->userdata('user_id');
+    // Tetapkan header Content-Type sebagai application/json
+    header('Content-Type: application/json');
 
-      // Memperbarui waktu aktivitas terakhir dan status sesi
-      $update_data = [
-        'last_activity' => date('Y-m-d H:i:s'),
-        'status' => $status === 'active' ? 'active' : ($status === 'wait' ? 'wait' : 'inactive')
-        // Mengatur status berdasarkan input 'active', 'wait', atau lainnya menjadi 'inactive'
-      ];
-      $this->User->updateActivity($user_id, $update_data);
+    try {
+      // Cek jenis permintaan
+      $is_ajax = $this->input->is_ajax_request();
+      $is_send_beacon = $this->input->method(TRUE) === 'POST' && !$is_ajax;
 
-      // Memperbarui user_id dan status pada tabel ci_sessions menggunakan SessionModel
-      $session_update_data = [
-        'user_id' => $user_id,
-        'status' => $status === 'active' ? 'active' : ($status === 'wait' ? 'wait' : 'inactive')
-      ];
-      $this->SessionModel->updateSession(session_id(), $session_update_data);
+      // Logging jenis permintaan
+      if ($is_ajax) {
+        log_message('info', 'updateActivity called via AJAX.');
+      } elseif ($is_send_beacon) {
+        log_message('info', 'updateActivity called via sendBeacon.');
+      } else {
+        log_message('warning', 'updateActivity called with invalid request type.');
+      }
 
-      // Mengembalikan respon sukses
-      echo json_encode(['status' => 'success']);
-    } else {
-      // Jika sesi tidak valid, kembalikan pesan error
-      echo json_encode(['status' => 'error', 'message' => 'User not logged in.']);
+      if (!$is_ajax && !$is_send_beacon) {
+        throw new Exception('Invalid request type.');
+      }
+
+      // Mendapatkan data POST
+      $status = $this->input->post('status');
+
+      if ($this->session->userdata('user_id')) {
+        $user_id = $this->session->userdata('user_id');
+
+        // Validasi status
+        $valid_statuses = ['active', 'wait', 'inactive'];
+        $status = in_array($status, ['active', 'wait']) ? $status : 'inactive';
+
+        // Memperbarui waktu aktivitas terakhir dan status sesi
+        $update_data = [
+          'last_activity' => date('Y-m-d H:i:s'),
+          'status' => $status
+        ];
+        $this->User->updateActivity($user_id, $update_data);
+
+        // Memperbarui user_id dan status pada tabel ci_sessions menggunakan SessionModel
+        $session_update_data = [
+          'user_id' => $user_id,
+          'status' => $status
+        ];
+        $this->SessionModel->updateSession(session_id(), $session_update_data);
+
+        // Logging keberhasilan
+        log_message('info', "Heartbeat updated for user ID: $user_id with status: $status");
+
+        // Mengembalikan respon sukses
+        echo json_encode(['status' => 'success']);
+        $this->output->_display();
+        exit;
+      } else {
+        // Jika sesi tidak valid, kembalikan pesan error
+        log_message('warning', 'User not logged in.');
+        echo json_encode(['status' => 'error', 'message' => 'Terjadi kesalahan pada sistem. Silakan coba lagi.']);
+        $this->output->_display();
+        exit;
+      }
+    } catch (Exception $e) {
+      // Tangani exception dan kembalikan respons JSON error
+      log_message('error', 'updateActivity Exception: ' . $e->getMessage());
+      http_response_code(500);
+      echo json_encode([
+        'status' => 'error',
+        'message' => $e->getMessage()
+      ]);
+      $this->output->_display();
+      exit;
     }
   }
 
@@ -351,8 +420,16 @@ class Controller extends CI_Controller
 
     // Validasi input (contoh sederhana)
     if (empty($full_name) || empty($email_address)) {
-      $this->session->set_flashdata('error', 'Nama lengkap dan email tidak boleh kosong.');
-      redirect('sidebarProfile');
+      $error_message = 'Nama lengkap dan email tidak boleh kosong.';
+      if ($this->input->is_ajax_request()) {
+        // Respons JSON untuk permintaan AJAX
+        echo json_encode(['status' => 'error', 'message' => $error_message]);
+        $this->output->_display();
+        exit;
+      } else {
+        $this->session->set_flashdata('error', $error_message);
+        redirect('sidebarProfile');
+      }
     }
 
     // Mendapatkan waktu saat ini untuk 'updated_at'
@@ -401,8 +478,16 @@ class Controller extends CI_Controller
         // Gabungkan dengan data utama
         $data = array_merge($data, $data_update);
       } else {
-        $this->session->set_flashdata('error', 'Gagal menyimpan foto profil.');
-        redirect('sidebarProfile');
+        $error_message = 'Gagal menyimpan foto profil.';
+        if ($this->input->is_ajax_request()) {
+          // Respons JSON untuk permintaan AJAX
+          echo json_encode(['status' => 'error', 'message' => $error_message]);
+          $this->output->_display();
+          exit;
+        } else {
+          $this->session->set_flashdata('error', $error_message);
+          redirect('sidebarProfile');
+        }
       }
     } elseif (!empty($_FILES['profile_photo']['name'])) {
       // Jika tidak ada 'croppedImage', cek apakah ada file yang diupload
@@ -410,7 +495,7 @@ class Controller extends CI_Controller
       $config['allowed_types'] = 'gif|jpg|png';
       $config['file_name']     = $user_id . '_fotoProfil_' . $formatted_datetime;
       $config['overwrite']     = true;
-      $config['max_size']      = 1024; // 1MB
+      $config['max_size']      = 2048; // 2MB
 
       $this->load->library('upload', $config);
 
@@ -418,20 +503,26 @@ class Controller extends CI_Controller
         $upload_data = $this->upload->data();
         $data['src_profile_photo'] = $upload_dir . $upload_data['file_name'];
       } else {
-        $this->session->set_flashdata('error', $this->upload->display_errors());
-        redirect('sidebarProfile');
+        $error_message = $this->upload->display_errors();
+        if ($this->input->is_ajax_request()) {
+          // Respons JSON untuk permintaan AJAX
+          echo json_encode(['status' => 'error', 'message' => $error_message]);
+          $this->output->_display();
+          exit;
+        } else {
+          $this->session->set_flashdata('error', $error_message);
+          redirect('sidebarProfile');
+        }
       }
     }
 
     // Memperbarui data pengguna
     if ($this->User->updateUser($user_id, $data)) {
-      $this->session->set_flashdata('success', 'Data pengguna berhasil diperbarui.');
-
       // Setelah data berhasil diperbarui, hapus file lama
       if (isset($data['src_profile_photo'])) {
         $current_photo = $data['src_profile_photo'];
 
-        // Cari semua file yang cocok dengan pola email_fotoProfil_*
+        // Cari semua file yang cocok dengan pola id_fotoProfil_*
         $pattern = $upload_dir . $user_id . '_FotoProfil_*.*';
         $files = glob($pattern);
 
@@ -453,11 +544,29 @@ class Controller extends CI_Controller
           $this->load->vars(['user' => $user]);
         }
       }
-    } else {
-      $this->session->set_flashdata('error', 'Gagal memperbarui data pengguna.');
-    }
 
-    redirect('sidebarProfile');
+      $success_message = 'Data pengguna berhasil diperbarui.';
+      if ($this->input->is_ajax_request()) {
+        // Respons JSON untuk permintaan AJAX
+        echo json_encode(['status' => 'success', 'message' => $success_message]);
+        $this->output->_display();
+        exit;
+      } else {
+        $this->session->set_flashdata('success', $success_message);
+        redirect('sidebarProfile');
+      }
+    } else {
+      $error_message = 'Gagal memperbarui data pengguna.';
+      if ($this->input->is_ajax_request()) {
+        // Respons JSON untuk permintaan AJAX
+        echo json_encode(['status' => 'error', 'message' => $error_message]);
+        $this->output->_display();
+        exit;
+      } else {
+        $this->session->set_flashdata('error', $error_message);
+        redirect('sidebarProfile');
+      }
+    }
   }
 
   /**
@@ -607,7 +716,9 @@ class Controller extends CI_Controller
     $notice_message = $this->session->flashdata('notice');
     $deprecated_message = $this->session->flashdata('deprecated');
     $class_not_started = $this->session->flashdata('class_not_started');
+    $class_ended = $this->session->flashdata('class_ended');
     $error_long = $this->session->flashdata('error_long');
+    $force_assets_refresh = $this->session->flashdata('force_assets_refresh');
 
     // Menyiapkan data untuk dikirim ke view
     $data = array(
@@ -626,9 +737,11 @@ class Controller extends CI_Controller
       "notice_message"        => $notice_message,
       "deprecated_message"    => $deprecated_message,
       "class_not_started"     => $class_not_started,
+      "class_ended"           => $class_ended,
       "error_long"            => $error_long,
       "success_login"         => $success_login,
-      "already_logged_in"     => $already_logged_in
+      "already_logged_in"     => $already_logged_in,
+      "force_assets_refresh"  => $force_assets_refresh
     );
 
     // Memuat view 'Beranda' dengan data yang telah disiapkan
@@ -822,6 +935,7 @@ class Controller extends CI_Controller
           break;
         default:
           echo json_encode(['status' => 'error', 'message' => 'Jenis berkas tidak valid.']);
+          $this->output->_display();
           exit; // Menghentikan eksekusi
       }
 
@@ -830,6 +944,7 @@ class Controller extends CI_Controller
         if (!mkdir($upload_path, 0777, TRUE)) {
           // Jika gagal membuat direktori, kembalikan error
           echo json_encode(['status' => 'error', 'message' => 'Gagal membuat direktori upload.']);
+          $this->output->_display();
           exit; // Menghentikan eksekusi
         }
       }
@@ -883,6 +998,7 @@ class Controller extends CI_Controller
           'file_name' => $file_name,
           'original_name' => $original_file_name
         ]);
+        $this->output->_display();
         exit; // Menghentikan eksekusi
       } else {
         // Mengembalikan pesan error jika upload gagal
@@ -890,6 +1006,7 @@ class Controller extends CI_Controller
           'status' => 'error',
           'message' => $this->upload->display_errors('', '')
         ]);
+        $this->output->_display();
         exit; // Menghentikan eksekusi
       }
     } else {
@@ -898,6 +1015,7 @@ class Controller extends CI_Controller
         'status' => 'error',
         'message' => 'Tidak ada berkas yang diunggah.'
       ]);
+      $this->output->_display();
       exit; // Menghentikan eksekusi
     }
   }
@@ -987,8 +1105,12 @@ class Controller extends CI_Controller
       // Menyimpan data observer ke sesi
       $this->session->set_userdata('observers', $data['observers']);
       echo json_encode(['status' => 'success']);
+      $this->output->_display();
+      exit;
     } else {
       echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap.']);
+      $this->output->_display();
+      exit;
     }
   }
 
@@ -1122,11 +1244,11 @@ class Controller extends CI_Controller
       $this->session->unset_userdata('class_files');
       $this->session->unset_userdata('observers'); // Menghapus data observer dari sesi
 
-      // Menetapkan flashdata untuk SweetAlert2 di sidebarBeranda
+      // Menetapkan flashdata untuk SweetAlert2 di sidebarGuruModel
       $this->session->set_flashdata('success', 'SELAMAT! Kelas Anda Berhasil Dibuat.');
 
-      // Redirect ke halaman Beranda
-      redirect('sidebarBeranda');
+      // Redirect ke halaman sidebarGuruModel
+      redirect('sidebarGuruModel');
     } else {
       // Jika gagal membuat kelas, tetapkan flashdata error dan redirect kembali
       $this->session->set_flashdata('error', 'Gagal membuat kelas.');
@@ -1389,10 +1511,10 @@ class Controller extends CI_Controller
       // Menambahkan entri default jika tidak ada data
       if (empty($formatted_special_notes)) {
         $formatted_special_notes[] = array(
-          'note_id' => ' ',
-          'activity_type' => ' ',
-          'note_details' => ' ',
-          'updated_at' => ' '
+          'note_id' => '1',
+          'activity_type' => '[Belum Ada Catatan]',
+          'note_details' => 'Detail catatan akan muncul di sini.',
+          'updated_at' => '[Belum Ada Catatan]'
         );
       }
       $observer->special_notes = $formatted_special_notes; // Menambahkan catatan khusus ke observer
@@ -1807,7 +1929,6 @@ class Controller extends CI_Controller
     $new_filename = $filename;
 
     // Mengatur header untuk mengunduh file dengan benar
-    $this->load->helper('download');
     force_download($new_filename, file_get_contents(FCPATH . $file_path));
   }
 
@@ -2031,6 +2152,7 @@ class Controller extends CI_Controller
 
     // Mengirim data ke view
     $data = array(
+      'title'    => 'DOCX Viewer',
       'file_url' => $file_url,
       'formType' => $jenisForm
     );
@@ -2223,7 +2345,7 @@ class Controller extends CI_Controller
 
         // Menetapkan flashdata sukses
         $this->session->set_flashdata('success', 'Kelas berhasil dihapus.');
-        redirect('sidebarBeranda');
+        redirect('sidebarGuruModel');
       }
     } catch (Exception $e) {
       // Jika terjadi exception, rollback transaksi
@@ -2465,6 +2587,7 @@ class Controller extends CI_Controller
       $this->output
         ->set_content_type('application/json')
         ->set_output(json_encode($response));
+      $this->output->_display();
       exit;
     }
 
@@ -2474,6 +2597,7 @@ class Controller extends CI_Controller
       $this->output
         ->set_content_type('application/json')
         ->set_output(json_encode($response));
+      $this->output->_display();
       exit;
     }
 
@@ -2485,6 +2609,7 @@ class Controller extends CI_Controller
       $this->output
         ->set_content_type('application/json')
         ->set_output(json_encode($response));
+      $this->output->_display();
       exit;
     }
 
@@ -2496,6 +2621,7 @@ class Controller extends CI_Controller
       $this->output
         ->set_content_type('application/json')
         ->set_output(json_encode($response));
+      $this->output->_display();
       exit;
     }
 
@@ -2505,6 +2631,7 @@ class Controller extends CI_Controller
       $this->output
         ->set_content_type('application/json')
         ->set_output(json_encode($response));
+      $this->output->_display();
       exit;
     }
 
@@ -2543,6 +2670,7 @@ class Controller extends CI_Controller
           $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($response));
+          $this->output->_display();
           exit;
         }
       }
@@ -2637,14 +2765,16 @@ class Controller extends CI_Controller
           $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($response));
-          return;
+          $this->output->_display();
+          exit;
         } else {
           // Jika gagal memperbarui database
           $response = ['status' => 'error', 'message' => 'Gagal memperbarui berkas kelas.'];
           $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($response));
-          return;
+          $this->output->_display();
+          exit;
         }
       } else {
         // Jika upload gagal, kirim respon JSON error
@@ -2653,7 +2783,8 @@ class Controller extends CI_Controller
         $this->output
           ->set_content_type('application/json')
           ->set_output(json_encode($response));
-        return;
+        $this->output->_display();
+        exit;
       }
     } else {
       // Jika tidak ada berkas yang diupload, kirim respon JSON error
@@ -2661,6 +2792,7 @@ class Controller extends CI_Controller
       $this->output
         ->set_content_type('application/json')
         ->set_output(json_encode($response));
+      $this->output->_display();
       exit;
     }
   }
@@ -2936,7 +3068,7 @@ class Controller extends CI_Controller
     $this->ClassModel->updateClass($idKelas, $update_data);
 
     // Mengembalikan respon sukses dan redirect
-    $this->session->set_flashdata('success', 'Detail observer berhasil diperbarui.');
+    $this->session->set_flashdata('success', 'Data observer berhasil diperbarui dan notifikasi telah dikirimkan.');
     redirect('pageEditKelas_detailObserver/' . $encrypted_idKelas);
   }
 
@@ -3000,6 +3132,7 @@ class Controller extends CI_Controller
         'status' => 'error',
         'message' => 'Anda harus mengisi kode'
       ]);
+      $this->output->_display();
       exit;
     }
 
@@ -3013,6 +3146,7 @@ class Controller extends CI_Controller
           'status' => 'error',
           'message' => 'Anda tidak bisa menjadi observer pada kelas guru model Anda'
         ]);
+        $this->output->_display();
         exit;
       }
 
@@ -3023,6 +3157,7 @@ class Controller extends CI_Controller
           'status' => 'error',
           'message' => 'Anda sudah bergabung sebagai observer pada kelas ini'
         ]);
+        $this->output->_display();
         exit;
       }
 
@@ -3038,12 +3173,14 @@ class Controller extends CI_Controller
         'guru_model' => $guru_model_name,
         'assigned_students' => $assigned_students
       ]);
+      $this->output->_display();
       exit;
     } else {
       echo json_encode([
         'status' => 'error',
         'message' => 'Anda harus mengisi kode dengan benar'
       ]);
+      $this->output->_display();
       exit;
     }
   }
@@ -3069,6 +3206,7 @@ class Controller extends CI_Controller
         'status' => 'error',
         'message' => 'Kode kelas tidak ditemukan. Silakan coba lagi.'
       ]);
+      $this->output->_display();
       exit;
     }
 
@@ -3082,6 +3220,7 @@ class Controller extends CI_Controller
           'status' => 'error',
           'message' => 'Anda tidak bisa menjadi observer pada kelas guru model Anda.'
         ]);
+        $this->output->_display();
         exit;
       }
 
@@ -3092,6 +3231,7 @@ class Controller extends CI_Controller
           'status' => 'error',
           'message' => 'Anda sudah bergabung sebagai observer pada kelas ini.'
         ]);
+        $this->output->_display();
         exit;
       }
 
@@ -3188,12 +3328,14 @@ class Controller extends CI_Controller
         'message' => 'Anda berhasil bergabung sebagai observer pada kelas ini.',
         'redirect_url' => site_url('sidebarObserver')
       ]);
+      $this->output->_display();
       exit;
     } else {
       echo json_encode([
         'status' => 'error',
         'message' => 'Kode kelas tidak valid.'
       ]);
+      $this->output->_display();
       exit;
     }
   }
@@ -3243,14 +3385,22 @@ class Controller extends CI_Controller
       show_404();
     }
 
-    // Mendapatkan waktu mulai kelas
+    // Mendapatkan waktu mulai dan selesai kelas
     $class_start_datetime = new DateTime($class->date . ' ' . $class->start_time);
+    $class_end_datetime   = new DateTime($class->date . ' ' . $class->end_time);
     $current_datetime = new DateTime();
 
     // Jika kelas belum dimulai, tampilkan pesan error dan redirect
     if ($current_datetime < $class_start_datetime) {
       $this->session->set_flashdata('class_not_started', 'Kelas belum dimulai.');
-      redirect('sidebarBeranda'); // Redirect ke halaman beranda atau halaman sebelumnya
+      redirect('sidebarBeranda');
+      exit;
+    }
+
+    // Jika kelas sudah selesai, tampilkan pesan dan redirect
+    if ($current_datetime > $class_end_datetime) {
+      $this->session->set_flashdata('class_ended', 'Kelas sudah berakhir.');
+      redirect('sidebarBeranda');
       exit;
     }
 
@@ -3297,6 +3447,7 @@ class Controller extends CI_Controller
     $data = array(
       'title'              => 'Penilaian Kegiatan Mengajar',
       'class'              => $class,
+      'class_end_datetime' => $class_end_datetime,
       'user'               => $user,        // Mengirim data pengguna ke view
       'assessment'         => $assessment,
       'encrypted_class_id' => bin2hex($this->encryption->encrypt($idKelas))   // Mengirim ID kelas terenkripsi ke view
@@ -3455,11 +3606,20 @@ class Controller extends CI_Controller
       );
     }
 
-    // Menetapkan flashdata sukses untuk ditampilkan di halaman berikutnya
-    $this->session->set_flashdata('success', 'Formulir berhasil disimpan.');
+    // Mendapatkan data kelas untuk cek waktu akhir
+    $class = $this->ClassModel->getClassById($class_id);
+    $class_end_datetime = new DateTime($class->date . ' ' . $class->end_time);
+    $current_datetime = new DateTime();
 
-    // Redirect kembali ke halaman penilaian
-    redirect('pageKelasObserver1/' . bin2hex($this->encryption->encrypt($class_id)));
+    if ($current_datetime > $class_end_datetime) {
+      // Jika waktu kelas sudah selesai atau setelahnya
+      $this->session->set_flashdata('success', 'Formulir berhasil dikirim.');
+      redirect('sidebarBeranda');
+    } else {
+      // Jika masih dalam waktu kelas
+      $this->session->set_flashdata('success', 'Formulir berhasil disimpan.');
+      redirect('pageKelasObserver1/' . bin2hex($this->encryption->encrypt($class_id)));
+    }
   }
 
   /**
@@ -3507,14 +3667,22 @@ class Controller extends CI_Controller
       show_404();
     }
 
-    // Mendapatkan waktu mulai kelas
+    // Mendapatkan waktu mulai dan selesai kelas
     $class_start_datetime = new DateTime($class->date . ' ' . $class->start_time);
+    $class_end_datetime   = new DateTime($class->date . ' ' . $class->end_time);
     $current_datetime = new DateTime();
 
     // Jika kelas belum dimulai, tampilkan pesan error dan redirect
     if ($current_datetime < $class_start_datetime) {
       $this->session->set_flashdata('class_not_started', 'Kelas belum dimulai.');
-      redirect('sidebarBeranda'); // Redirect ke halaman beranda atau halaman sebelumnya
+      redirect('sidebarBeranda');
+      exit;
+    }
+
+    // Jika kelas sudah selesai, tampilkan pesan dan redirect
+    if ($current_datetime > $class_end_datetime) {
+      $this->session->set_flashdata('class_ended', 'Kelas sudah berakhir.');
+      redirect('sidebarBeranda');
       exit;
     }
 
@@ -3585,6 +3753,7 @@ class Controller extends CI_Controller
     $data = array(
       'title'                    => 'Lembar Pengamatan Siswa',
       'class'                    => $class,
+      'class_end_datetime'       => $class_end_datetime,
       'user'                     => $user,
       'student_numbers'          => $student_numbers,
       'observation_sheet'        => $observation_sheet,
@@ -3765,11 +3934,20 @@ class Controller extends CI_Controller
       );
     }
 
-    // Menetapkan flashdata sukses untuk ditampilkan di halaman berikutnya
-    $this->session->set_flashdata('success', 'Formulir berhasil disimpan.');
+    // Mendapatkan data kelas untuk cek waktu akhir
+    $class = $this->ClassModel->getClassById($class_id);
+    $class_end_datetime = new DateTime($class->date . ' ' . $class->end_time);
+    $current_datetime = new DateTime();
 
-    // Redirect kembali ke halaman pengamatan siswa
-    redirect('pageKelasObserver2/' . bin2hex($this->encryption->encrypt($class_id)));
+    if ($current_datetime > $class_end_datetime) {
+      // Jika waktu kelas sudah selesai atau setelahnya
+      $this->session->set_flashdata('success', 'Formulir berhasil dikirim.');
+      redirect('sidebarBeranda');
+    } else {
+      // Jika masih dalam waktu kelas
+      $this->session->set_flashdata('success', 'Formulir berhasil disimpan.');
+      redirect('pageKelasObserver2/' . bin2hex($this->encryption->encrypt($class_id)));
+    }
   }
 
   /**
@@ -3817,14 +3995,22 @@ class Controller extends CI_Controller
       show_404();
     }
 
-    // Mendapatkan waktu mulai kelas
+    // Mendapatkan waktu mulai dan selesai kelas
     $class_start_datetime = new DateTime($class->date . ' ' . $class->start_time);
+    $class_end_datetime   = new DateTime($class->date . ' ' . $class->end_time);
     $current_datetime = new DateTime();
 
     // Jika kelas belum dimulai, tampilkan pesan error dan redirect
     if ($current_datetime < $class_start_datetime) {
       $this->session->set_flashdata('class_not_started', 'Kelas belum dimulai.');
-      redirect('sidebarBeranda'); // Redirect ke halaman beranda atau halaman sebelumnya
+      redirect('sidebarBeranda');
+      exit;
+    }
+
+    // Jika kelas sudah selesai, tampilkan pesan dan redirect
+    if ($current_datetime > $class_end_datetime) {
+      $this->session->set_flashdata('class_ended', 'Kelas sudah berakhir.');
+      redirect('sidebarBeranda');
       exit;
     }
 
@@ -3871,6 +4057,7 @@ class Controller extends CI_Controller
     $data = array(
       'title'              => 'Catatan Aktivitas Siswa',
       'class'              => $class,
+      'class_end_datetime' => $class_end_datetime,
       'user'               => $user,          // Mengirim data pengguna ke view
       'activity_note'      => $activity_note,
       'encrypted_class_id' => bin2hex($this->encryption->encrypt($idKelas)) // Mengirim ID kelas terenkripsi ke view
@@ -4012,11 +4199,20 @@ class Controller extends CI_Controller
       );
     }
 
-    // Menetapkan flashdata sukses untuk ditampilkan di halaman berikutnya
-    $this->session->set_flashdata('success', 'Formulir berhasil disimpan.');
+    // Mendapatkan data kelas untuk cek waktu akhir
+    $class = $this->ClassModel->getClassById($class_id);
+    $class_end_datetime = new DateTime($class->date . ' ' . $class->end_time);
+    $current_datetime = new DateTime();
 
-    // Redirect kembali ke halaman catatan aktivitas siswa
-    redirect('pageKelasObserver3/' . bin2hex($this->encryption->encrypt($class_id)));
+    if ($current_datetime > $class_end_datetime) {
+      // Jika waktu kelas sudah selesai atau setelahnya
+      $this->session->set_flashdata('success', 'Formulir berhasil dikirim.');
+      redirect('sidebarBeranda');
+    } else {
+      // Jika masih dalam waktu kelas
+      $this->session->set_flashdata('success', 'Formulir berhasil disimpan.');
+      redirect('pageKelasObserver3/' . bin2hex($this->encryption->encrypt($class_id)));
+    }
   }
 
   /**
@@ -4370,6 +4566,7 @@ class Controller extends CI_Controller
     if (empty($email_address) || empty($password)) {
       $this->session->set_flashdata('error', 'Silakan isi semua bidang.');
       redirect('pageLogin');
+      return;
     }
 
     // Mendapatkan pengguna berdasarkan email
@@ -4383,6 +4580,7 @@ class Controller extends CI_Controller
           // Jika ada sesi aktif di browser lain atau status 'wait', blokir login
           $this->session->set_flashdata('login_error', 'Akun Anda sudah digunakan di browser lain.');
           redirect('pageLogin');
+          return;
         }
       }
 
@@ -4438,15 +4636,6 @@ class Controller extends CI_Controller
       // Memperbarui data pengguna di database
       $this->User->updateActivity($user->user_id, $update_data);
 
-      // Memperbarui user_id, status, browser, dan mode_private pada tabel ci_sessions menggunakan SessionModel
-      // mode_private bernilai TRUE/FALSE sesuai dengan $mode
-      $this->SessionModel->updateSession(session_id(), [
-        'user_id' => $user->user_id,
-        'status' => 'active',
-        'browser' => $browser,
-        'mode_private' => ($mode === 'private' ? 1 : 0)
-      ]);
-
       // Hapus sesi lama yang tidak aktif untuk user ini
       $this->SessionModel->deleteInactiveSessionsByUserId($user->user_id);
 
@@ -4468,6 +4657,9 @@ class Controller extends CI_Controller
 
       // Set Flashdata `success_login` sebelum redirect
       $this->session->set_flashdata('success_login', 'Anda berhasil login.');
+
+      // Menandakan setelah login berhasil, halaman selanjutnya harus mengambil aset terbaru
+      $this->session->set_flashdata('force_assets_refresh', TRUE);
 
       // Redirect ke beranda
       redirect('sidebarBeranda');
@@ -4557,10 +4749,10 @@ class Controller extends CI_Controller
    *
    * Menampilkan form untuk pengguna yang lupa password.
    */
-  public function pageLupaPassword()
+  public function pageLupaKataSandi()
   {
     $data["title"] = "Lupa Password";
-    $this->load->view('lupaPassword', $data);
+    $this->load->view('lupaKataSandi', $data);
   }
 
   /**
@@ -4568,7 +4760,7 @@ class Controller extends CI_Controller
    *
    * Mengirimkan password baru ke email pengguna dan memperbarui password di database.
    */
-  public function formLupaPassword()
+  public function formLupaKataSandi()
   {
     // Ambil data email dengan trim untuk menghapus spasi di awal dan akhir
     $email_address = trim($this->input->post('email_address'));
@@ -4576,7 +4768,7 @@ class Controller extends CI_Controller
     // Validasi input email
     if (empty($email_address) || !filter_var($email_address, FILTER_VALIDATE_EMAIL)) {
       $this->session->set_flashdata('error', 'Silakan masukkan alamat email yang valid.');
-      redirect('pageLupaPassword');
+      redirect('pageLupaKataSandi');
     }
 
     // Mendapatkan pengguna berdasarkan email
@@ -4594,7 +4786,7 @@ class Controller extends CI_Controller
           $minutes = floor($remaining / 60);
           $seconds = $remaining % 60;
           $this->session->set_flashdata('error', 'Silakan tunggu ' . $minutes . ' menit ' . $seconds . ' detik sebelum meminta reset password lagi.');
-          redirect('pageLupaPassword');
+          redirect('pageLupaKataSandi');
         }
       }
 
@@ -4668,16 +4860,16 @@ class Controller extends CI_Controller
         } else {
           // Jika update database gagal, set flashdata error
           $this->session->set_flashdata('error', 'Gagal memperbarui password. Silakan coba lagi.');
-          redirect('pageLupaPassword');
+          redirect('pageLupaKataSandi');
         }
       } else {
         // Jika pengiriman email gagal, jangan update 'last_password_reset'
         $this->session->set_flashdata('error', 'Gagal mengirim email. Silakan coba lagi.');
-        redirect('pageLupaPassword');
+        redirect('pageLupaKataSandi');
       }
     } else {
       $this->session->set_flashdata('error', 'Email tidak ditemukan.');
-      redirect('pageLupaPassword');
+      redirect('pageLupaKataSandi');
     }
   }
 

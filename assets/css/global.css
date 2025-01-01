@@ -6,8 +6,8 @@ body {
     /* Internet Explorer 10+ */
     scrollbar-width: none;
     /* Firefox */
-    scroll-behavior: smooth;
-    /* Smooth scrolling */
+    scroll-behavior: auto;
+    /* Biarkan JavaScript mengontrol */
 }
 
 html::-webkit-scrollbar,
@@ -17,7 +17,9 @@ body::-webkit-scrollbar {
 }
 
 body {
+    display: none;
     overflow: hidden;
+    position: absolute !important;
     transform-origin: top left;
     -webkit-transform-origin: top left;
     -webkit-overflow-scrolling: touch;
@@ -25,16 +27,11 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
-html,
-body {
-    scroll-behavior: smooth;
-    /* Optional: smooth scrolling */
-}
-
 .link {
     text-decoration: none !important;
     border: 0px !important;
-    cursor: pointer !important;;
+    cursor: pointer !important;
+    ;
 }
 
 .link-color-unset {
@@ -45,7 +42,7 @@ body {
     cursor: pointer;
 }
 
-.link-cursor-hovering:hover > * {
+.link-cursor-hovering:hover>* {
     text-decoration: underline;
 }
 

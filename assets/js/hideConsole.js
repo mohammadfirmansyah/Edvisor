@@ -1,18 +1,20 @@
-// Variabel boolean untuk mengaktifkan atau menonaktifkan penyembunyian console.log
+// Variabel boolean untuk mengaktifkan atau menonaktifkan penyembunyian console
 const hideLogs = true;
 
 /**
- * Fungsi untuk menyembunyikan atau menampilkan pesan console.log
+ * Fungsi untuk menyembunyikan atau menampilkan pesan dari metode console tertentu.
  * 
- * @param {boolean} enable - Parameter boolean yang menentukan apakah console.log akan disembunyikan.
- *                             Jika true, console.log akan dinonaktifkan. Jika false, console.log akan berfungsi normal.
+ * @param {boolean} enable - Parameter boolean yang menentukan apakah metode console akan disembunyikan.
+ *                             Jika true, metode console akan dinonaktifkan. Jika false, metode console akan berfungsi normal.
  */
-function hideConsoleLog(enable) {
+function hideConsole(enable) {
     if (enable) {
-        // Mengganti fungsi console.log dengan fungsi kosong untuk menyembunyikannya
+        // Mengganti fungsi console dengan fungsi kosong untuk menyembunyikannya
         console.log = function() {};
+        console.error = function() {};
+        console.warn = function() {}; 
     }
 }
 
-// Memanggil fungsi hideConsoleLog dengan nilai variabel hideLogs
-hideConsoleLog(hideLogs);
+// Memanggil fungsi hideConsole dengan nilai variabel hideLogs
+hideConsole(hideLogs);

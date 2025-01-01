@@ -1,5 +1,5 @@
 /**
- * heartbeat_new.js
+ * heartbeat.js
  *
  * Mengelola pengiriman heartbeat secara periodik dan deteksi inaktivitas pengguna.
  * Menggunakan Axios untuk permintaan HTTP, BroadcastChannel atau fallback localStorage untuk sinkronisasi antar tab,
@@ -10,13 +10,13 @@
 (function () {
     // Pastikan Axios tersedia
     if (typeof axios === 'undefined') {
-        console.error('Axios tidak ditemukan. Pastikan untuk menyertakan Axios sebelum heartbeat_new.js.');
+        console.error('Axios tidak ditemukan. Pastikan untuk menyertakan Axios sebelum heartbeat.js.');
         return;
     }
 
     // Pastikan SweetAlert2 (Swal) tersedia
     if (typeof Swal === 'undefined') {
-        console.error('SweetAlert2 tidak ditemukan. Pastikan untuk menyertakan SweetAlert2 sebelum heartbeat_new.js.');
+        console.error('SweetAlert2 tidak ditemukan. Pastikan untuk menyertakan SweetAlert2 sebelum heartbeat.js.');
         return;
     }
 
@@ -39,14 +39,14 @@
     localStorage.setItem('current_tab_id', tabId);
 
     // Timeout inaktivitas: 25 menit untuk peringatan, 30 menit untuk logout otomatis
-    const warningTimeout = 25 * 60 * 1000; 
+    const warningTimeout = 25 * 60 * 1000;
     const inactivityTimeout = 30 * 60 * 1000;
     let inactivityTimer;
     let warningTimer;
 
     let isDisconnected = false; // Menandakan apakah koneksi terputus
-    let disconnectTimer;
-    const disconnectTimeoutDuration = 10000; // Durasi timeout disconnect dalam milidetik (10 detik)
+    let reconnectDeadline = null; // Timestamp deadline reconnect
+    const disconnectTimeoutDuration = 30000; // Durasi timeout disconnect dalam milidetik (30 detik)
 
     let isUnloading = false; // Menandakan apakah halaman sedang dalam proses unload
     let isClosing = false; // Menandai apakah tab sedang akan ditutup atau direfresh
@@ -140,14 +140,42 @@
                                 console.log('Heartbeat aktif dikirim setelah 1 detik penutupan tab.');
                             }
                         } else if (isHeartbeatLeader) {
-                            sendHeartbeat('active');
+                            sendHeartbeatWithRetry('active').catch((error) => {
+                                console.error('Heartbeat gagal dikirim setelah penutupan tab:', error);
+                                // Tidak memanggil showReconnectDialog di sini karena akan ditangani oleh sendHeartbeatWithRetry
+                            });
                             console.log('Leader mengirim heartbeat active setelah 1 detik penutupan tab.');
                         }
                     }, 1000);
                 }
                 break;
+            case 'session_regenerated':
+                handleSessionRegeneration();
+                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * Menangani regenerasi sesi yang dikirim dari tab leader.
+     */
+    function handleSessionRegeneration() {
+        console.log('Menerima notifikasi regenerasi sesi. Memperbarui sesi.');
+        // Anda bisa menambahkan logika tambahan di sini, seperti memperbarui variabel sesi atau mereset state
+        // Misalnya, mengirim ulang heartbeat secara manual
+        if (isHeartbeatLeader) {
+            // Leader mungkin perlu memperbarui status sesi
+            sendHeartbeatWithRetry('active').then(() => {
+                console.log('Heartbeat berhasil dikirim setelah regenerasi sesi.');
+            }).catch((error) => {
+                console.error('Heartbeat gagal dikirim setelah regenerasi sesi:', error);
+                showReconnectDialog();
+            });
+        } else {
+            // Non-leader tab dapat memilih untuk melakukan reload untuk mendapatkan sesi terbaru
+            console.log('Non-leader tab memuat ulang halaman untuk mendapatkan sesi terbaru.');
+            window.location.reload();
         }
     }
 
@@ -171,70 +199,216 @@
         isDisconnected = true;
         broadcastMessage({ type: 'show_reconnect' });
 
-        setTimeout(() => {
-            Swal.fire({
-                title: 'Koneksi Terputus',
-                text: 'Tidak dapat terhubung ke server. Akan logout otomatis dalam 10 detik.',
-                icon: 'warning',
-                timer: disconnectTimeoutDuration,
-                timerProgressBar: true,
-                showCancelButton: true,
-                confirmButtonText: 'Reconnect',
-                cancelButtonText: 'Logout Sekarang',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    hideReconnectDialog();
-                    sendHeartbeat('active');
-                } else {
+        // Set reconnectDeadline hanya sekali ketika koneksi terputus
+        if (!reconnectDeadline) {
+            reconnectDeadline = Date.now() + disconnectTimeoutDuration;
+        }
+
+        showReconnectPopup();
+    }
+
+    /**
+     * Menampilkan popup reconnect dengan sisa waktu yang ditentukan menggunakan timer bawaan SweetAlert2.
+     */
+    function showReconnectPopup() {
+        const remainingTime = reconnectDeadline - Date.now();
+        if (remainingTime <= 0) {
+            window.location.href = 'sidebarLogout?reason=disconnect';
+            return;
+        }
+
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
+                .swal2-container {
+                    z-index: 9999 !important; /* Sesuaikan dengan kebutuhan Anda */
+                }
+                `;
+        document.head.appendChild(styleElement);
+
+        Swal.fire({
+            title: 'Koneksi Terputus',
+            text: 'Tidak dapat terhubung ke server. Silakan coba reconnect.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Reconnect',
+            cancelButtonText: 'Logout Sekarang',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            timer: remainingTime,
+            timerProgressBar: true,
+            didOpen: () => {
+                // Tidak perlu menampilkan timer via teks, gunakan bawaan SweetAlert2
+            },
+            willClose: (reason) => {
+                if (reason === 'timer') {
                     window.location.href = 'sidebarLogout?reason=disconnect';
                 }
-            });
-        }, 0);
-
-        disconnectTimer = setTimeout(function () {
-            window.location.href = 'sidebarLogout?reason=disconnect';
-        }, disconnectTimeoutDuration);
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                attemptReconnect();
+            } else {
+                window.location.href = 'sidebarLogout?reason=disconnect';
+            }
+        });
     }
 
     /**
      * Menyembunyikan dialog reconnect.
      */
     function hideReconnectDialog() {
+        if (!isDisconnected) return;
         isDisconnected = false;
+
+        // Reset reconnectDeadline
+        reconnectDeadline = null;
+
+        // Tutup popup SweetAlert2
         setTimeout(() => {
             Swal.close();
         }, 0);
-        clearTimeout(disconnectTimer);
         broadcastMessage({ type: 'hide_reconnect' });
+    }
+
+    /**
+     * Mencoba untuk reconnect dengan mengirim heartbeat.
+     * Menampilkan loading SweetAlert2 hingga heartbeat berhasil atau gagal.
+     * Jika reconnect gagal, popup reconnect akan ditampilkan kembali dengan sisa waktu yang telah berkurang.
+     */
+    async function attemptReconnect() {
+        Swal.fire({
+            title: 'Menyambungkan Ulang...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        try {
+            await sendHeartbeatWithRetry('active');
+            Swal.close();
+            hideReconnectDialog();
+        } catch (error) {
+            Swal.close();
+            console.error('Reconnect gagal:', error);
+            // Re-show reconnect popup dengan sisa waktu yang telah berkurang
+            showReconnectPopup();
+        }
     }
 
     /**
      * Mengirim heartbeat ke server dengan status tertentu.
      * @param {string} [status='active'] - Status heartbeat yang dikirim ('active' atau 'wait').
+     * @returns {Promise} - Promise yang diselesaikan saat heartbeat berhasil atau gagal.
      */
     function sendHeartbeat(status = 'active') {
-        axios.post('updateActivity', new URLSearchParams({ status: status }))
+        // Menambahkan 'return' agar bisa menggunakan then/catch di pemanggilannya.
+        return axios.post('updateActivity', new URLSearchParams({ status: status }), {
+            // Pastikan kredensial disertakan jika diperlukan
+            withCredentials: true,
+            // Tambahkan headers jika diperlukan, misalnya CSRF token
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 10000 // Tambahkan timeout untuk menghindari permintaan yang menggantung
+        })
             .then(function (response) {
-                console.log('Heartbeat dikirim:', response.data);
-                if (isHeartbeatLeader && status === 'active') {
-                    const leaderData = {
-                        tabId: tabId,
-                        timestamp: Date.now()
-                    };
-                    localStorage.setItem('heartbeat_leader', JSON.stringify(leaderData));
+                // Cek apakah response headers mengindikasikan JSON
+                const contentType = response.headers['content-type'];
+                if (!contentType || !contentType.includes('application/json')) {
+                    console.error('Respons tidak berformat JSON:', response);
+                    return Promise.reject(new Error('Invalid response format'));
                 }
-                if (isDisconnected) {
-                    hideReconnectDialog();
+
+                const data = response.data;
+
+                if (typeof data === 'object' && data !== null && data.status === 'success') {
+                    console.log('Heartbeat dikirim:', data);
+                    if (isHeartbeatLeader && status === 'active') {
+                        const leaderData = {
+                            tabId: tabId,
+                            timestamp: Date.now()
+                        };
+                        localStorage.setItem('heartbeat_leader', JSON.stringify(leaderData));
+                    }
+                    if (isDisconnected) {
+                        hideReconnectDialog();
+                    }
+                } else if (typeof data === 'object' && data !== null && data.status === 'error' && data.message === 'Terjadi kesalahan pada sistem. Silakan coba lagi.') {
+                    // Menangani kasus sesi tidak valid atau kedaluwarsa
+                    console.warn('Sesi tidak valid atau kedaluwarsa.');
+                    broadcastMessage({ type: 'session_regenerated' });
+                    return Promise.reject(new Error('Terjadi kesalahan pada sistem. Silakan coba lagi.'));
+                } else {
+                    // Respons bukan JSON atau status tidak sukses, tangani sebagai kegagalan
+                    console.error('Heartbeat gagal dikirim: Status tidak sukses.', data);
+                    return Promise.reject(new Error('Heartbeat gagal: Status tidak sukses'));
                 }
             })
             .catch(function (error) {
                 console.error('Gagal mengirim Heartbeat:', error);
-                if (!isUnloading) {
-                    showReconnectDialog();
+
+                // Cek apakah respons adalah JSON
+                if (error.response) {
+                    const contentType = error.response.headers['content-type'];
+                    if (contentType && contentType.includes('application/json')) {
+                        const data = error.response.data;
+                        console.error('Error dari server:', data);
+                    } else {
+                        console.error('Error non-JSON diterima:', error.response.data);
+                    }
+                } else if (error.request) {
+                    // Permintaan dibuat tetapi tidak ada respons yang diterima
+                    console.error('Tidak ada respons diterima:', error.request);
+                } else {
+                    // Terjadi kesalahan saat menyiapkan permintaan
+                    console.error('Kesalahan dalam setup permintaan:', error.message);
                 }
+
+                // Jika error adalah karena sesi invalid atau expired, broadcast regenerasi sesi
+                if (error.response && error.response.data && error.response.data.message === 'Terjadi kesalahan pada sistem. Silakan coba lagi.') {
+                    broadcastMessage({ type: 'session_regenerated' });
+                }
+
+                return Promise.reject(error);
             });
+    }
+
+    /**
+     * Mengirim heartbeat dengan mekanisme retry.
+     * Mencoba mengirim heartbeat hingga 10 kali dengan delay 0.5 detik antar retry.
+     * Jika semua retry gagal, tampilkan pop-up reconnect.
+     * @param {string} [status='active'] - Status heartbeat yang dikirim ('active' atau 'wait').
+     * @param {number} [maxRetries=10] - Jumlah maksimal retry.
+     * @param {number} [retryDelay=500] - Delay antar retry dalam milidetik.
+     * @returns {Promise} - Promise yang diselesaikan saat heartbeat berhasil atau semua retry gagal.
+     */
+    function sendHeartbeatWithRetry(status = 'active', maxRetries = 10, retryDelay = 500) {
+        return new Promise((resolve, reject) => {
+            let attempts = 0;
+
+            const attemptSend = () => {
+                sendHeartbeat(status)
+                    .then(resolve)
+                    .catch((error) => {
+                        attempts++;
+                        console.warn(`Heartbeat attempt ${attempts} gagal.`);
+
+                        if (attempts < maxRetries) {
+                            setTimeout(attemptSend, retryDelay);
+                        } else {
+                            // Setelah mencapai maksimal retry, tampilkan reconnect popup
+                            console.error(`Heartbeat gagal setelah ${maxRetries} kali percobaan.`);
+                            reject(error);
+                        }
+                    });
+            };
+
+            attemptSend();
+        });
     }
 
     /**
@@ -347,7 +521,7 @@
             sendWaitBeforeClose();
         }
 
-        // Jika halaman kembali visible namun isClosing sempat true, mungkin user membatalkan penutupan
+        // Jika halaman kembali visible namun isClosing sempat true, reset isClosing
         if (document.visibilityState === 'visible' && isClosing) {
             // User mungkin membatalkan penutupan tab, reset kondisi
             isClosing = false;
@@ -378,12 +552,12 @@
      */
     function manageHeartbeatAcrossTabs() {
         setupMessageListener();
-        // Cek setiap 5 detik apakah leader masih aktif
+        // Cek setiap 1 detik apakah leader masih aktif
         setInterval(function () {
             if (!isLeaderAlive()) {
                 tryToBecomeLeader();
             }
-        }, 5000);
+        }, 1000);
     }
 
     /**
@@ -397,6 +571,8 @@
 
     /**
      * Menetapkan tab ini sebagai leader untuk pengiriman heartbeat.
+     * 
+     * Perbaikan: Menambahkan mekanisme retry pada pengiriman heartbeat tanpa menampilkan popup reconnect.
      */
     function becomeHeartbeatLeader() {
         const currentLeader = localStorage.getItem('heartbeat_leader');
@@ -412,25 +588,37 @@
         const newLeaderData = { tabId: tabId, timestamp: Date.now() };
         localStorage.setItem('heartbeat_leader', JSON.stringify(newLeaderData));
 
-        setTimeout(() => {
-            if (isUnloading) return;
-            const latestLeader = localStorage.getItem('heartbeat_leader');
-            if (latestLeader) {
-                const parsedLeader = JSON.parse(latestLeader);
-                if (parsedLeader.tabId === tabId) {
-                    isHeartbeatLeader = true;
-                    broadcastMessage({ type: 'heartbeat_leader_present', tabId: tabId });
-                    sendHeartbeat('active');
-                    // Atur interval untuk mengirim heartbeat secara berkala
-                    heartbeatTimer = setInterval(function () {
-                        if (!isUnloading) {
-                            sendHeartbeat('active');
-                        }
-                    }, heartbeatInterval);
-                    console.log('Tab ini menjadi leader dan mengirim heartbeat active.');
-                }
+        if (isUnloading) return;
+
+        isHeartbeatLeader = true;
+        broadcastMessage({ type: 'heartbeat_leader_present', tabId: tabId });
+
+        // Mengirim heartbeat dan menangani kegagalan dengan retry
+        sendHeartbeatWithRetry('active')
+            .then(() => {
+                console.log('Heartbeat berhasil dikirim saat menjadi leader.');
+            })
+            .catch((error) => {
+                console.error('Heartbeat gagal dikirim saat menjadi leader:', error);
+                // Tidak memanggil showReconnectDialog di sini karena akan dipanggil setelah semua retry gagal
+                showReconnectDialog();
+            });
+
+        // Atur interval untuk mengirim heartbeat secara berkala dengan penanganan kegagalan
+        heartbeatTimer = setInterval(function () {
+            if (!isUnloading) {
+                sendHeartbeatWithRetry('active')
+                    .then(() => {
+                        console.log('Heartbeat berhasil dikirim selama interval.');
+                    })
+                    .catch((error) => {
+                        console.error('Heartbeat gagal dikirim selama interval:', error);
+                        // Tidak memanggil showReconnectDialog di sini karena akan dipanggil setelah semua retry gagal
+                        showReconnectDialog();
+                    });
             }
-        }, 100);
+        }, heartbeatInterval);
+        console.log('Tab ini menjadi leader dan mengirim heartbeat active.');
     }
 
     /**
@@ -507,28 +695,71 @@
     /**
      * Inisialisasi saat dokumen telah dimuat.
      * Mengatur timer inaktivitas, listener aktivitas, dan manajemen heartbeat antar tab.
-     * Juga mengirim heartbeat pertama setelah 1 detik halaman dibuka.
      */
     document.addEventListener('DOMContentLoaded', function () {
         resetInactivityTimer();
         setupActivityListeners();
         manageHeartbeatAcrossTabs();
-
-        // Heartbeat pertama setelah 1 detik halaman dibuka
-        setTimeout(function () {
-            if (!isLeaderAlive()) {
-                tryToBecomeLeader();
-                if (isHeartbeatLeader) {
-                    console.log('Heartbeat pertama (active) dikirim setelah 1 detik halaman dibuka.');
-                }
-            } else {
-                if (isHeartbeatLeader) {
-                    setTimeout(() => {
-                        sendHeartbeat('active');
-                        console.log('Tab ini adalah leader dan mengirim active heartbeat setelah 1 detik.');
-                    }, 0);
-                }
-            }
-        }, 1000);
     });
+
+    /**
+     * Menangani regenerasi sesi dengan memberitahu semua tab.
+     */
+    function handleSessionRegeneration() {
+        console.log('Regenerasi sesi terdeteksi. Memperbarui sesi di semua tab.');
+        // Broadcast pesan bahwa sesi telah diregenerasi
+        broadcastMessage({ type: 'session_regenerated' });
+
+        // Leader harus mengatur ulang sesi
+        if (isHeartbeatLeader) {
+            sendHeartbeatWithRetry('active')
+                .then(() => {
+                    console.log('Heartbeat berhasil dikirim setelah regenerasi sesi.');
+                })
+                .catch((error) => {
+                    console.error('Heartbeat gagal dikirim setelah regenerasi sesi:', error);
+                    showReconnectDialog();
+                });
+        }
+    }
+
+    /**
+     * Mendengarkan perubahan pada cookie sesi dan menangani regenerasi sesi.
+     */
+    function monitorSessionCookie() {
+        let lastSessionId = getSessionIdFromCookie();
+
+        setInterval(() => {
+            const currentSessionId = getSessionIdFromCookie();
+            if (currentSessionId !== lastSessionId) {
+                lastSessionId = currentSessionId;
+                console.log('Perubahan sesi terdeteksi.');
+                handleSessionRegeneration();
+            }
+        }, 1000); // Periksa setiap detik
+    }
+
+    /**
+     * Mendapatkan ID sesi dari cookie.
+     * @returns {string|null} - ID sesi atau null jika tidak ditemukan.
+     */
+    function getSessionIdFromCookie() {
+        const name = 'ci_session=';
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return null;
+    }
+
+    // Mulai memonitor perubahan sesi
+    monitorSessionCookie();
+
 })();

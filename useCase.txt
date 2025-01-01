@@ -1,0 +1,63 @@
+Aktor:
+1. Pengguna
+2. Guru Model (generalisasi dari Pengguna)
+3. Observer (generalisasi dari Pengguna)
+
+Use Cases untuk Pengguna:
+- Mendaftar akun
+- Mengirim kata sandi baru
+- Masuk akun
+    - Include:
+        - Melihat beranda
+            - Include:
+                - Melihat notifikasi
+                - Melihat jadwal terdekat
+                - Melihat aktivitas pengguna
+                - Melihat jumlah kelas
+    - Extend:
+        - Mengakses bantuan penggunaan aplikasi
+        - Melihat profil pengguna
+            - Extend:
+                - Memperbarui foto profil
+                - Memperbarui data profil pengguna
+                - Memperbarui kata sandi
+
+Use Cases untuk Guru Model:
+- Membuat kelas Guru Model
+    - Include:
+        - Menentukan detail lesson study
+        - Mengunggah berkas
+        - Menambahkan observer
+        - Menetapkan nomor siswa
+    - Extend:
+        - Membagikan kode kelas
+- Melihat daftar kelas Guru Model
+- Membuka kelas Guru Model
+    - Extend:
+        - Membagikan kode kelas
+        - Memperbarui data kelas Guru Model
+            - Extend:
+                - Memperbarui detail lesson study
+                - Memperbarui berkas
+                - Memperbarui observer
+                - Memperbarui nomor siswa
+        - Menghapus kelas Guru Model
+        - Melihat hasil rekaman
+        - Melihat hasil catatan
+        - Melihat hasil dokumentasi
+        - Mengunduh berkas untuk Guru Model
+        - Mengunduh hasil penilaian
+        - Melihat hasil penilaian Observer
+
+Use Cases untuk Observer:
+- Melihat daftar kelas Observer
+- Bergabung ke kelas Guru Model
+    - Include:
+        - Mengisi kode kelas
+        - Memilih nomor siswa
+- Membuka kelas Observer
+    - Extend:
+        - Melakukan observasi dan penilaian
+            - Include:
+                - Melihat hasil penilaian pribadi
+        - Mengunduh berkas untuk Observer

@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title><?php echo $title; ?></title>
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/observer.css" />
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
 </head>
 
 <body>
@@ -84,7 +82,7 @@
         <div class="frame-parent">
             <div class="daftar-kelas-saya-parent">
                 <div class="daftar-kelas-saya">Daftar Kelas Saya</div>
-                <div class="frame-group">
+                <div class="frame-group1">
                     <div class="search-parent">
                         <img oncontextmenu="return false;" class="notifications-active-icon1" alt="Icon Search"
                             src="assets/img/icon_search.svg">
@@ -458,8 +456,8 @@
             document.getElementById('timeDisplay').innerText = timeString;
         }
 
-        // Memanggil fungsi updateDateTime setiap detik
-        setInterval(updateDateTime, 1000);
+        // Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+        setInterval(updateDateTime, 0);
 
         // Memastikan waktu saat ini ditampilkan saat memuat halaman
         updateDateTime();
@@ -489,6 +487,16 @@
             });
         });
 
+        // Fokus input saat elemen dengan kelas 'search-parent' diklik
+        document.querySelectorAll('.search-parent').forEach(function(element) {
+            const input = element.querySelector('input');
+            if (input) {
+                element.addEventListener('click', function() {
+                    input.focus();
+                });
+            }
+        });
+
         // Mengatur popup dan overlay
         var popup = document.getElementById('modalGabungKelas');
         var observerFormPopup = document.getElementById('popUpFormulirObserverBaru');
@@ -505,6 +513,7 @@
         // Event listener untuk menampilkan popup Gabung Kelas
         document.getElementById('gabungKelas').addEventListener('click', function(event) {
             event.preventDefault(); // Mencegah aksi default
+
             // Tutup popup lain jika terbuka
             observerFormPopup.classList.remove('popup-visible');
             observerFormPopup.classList.add('popup-hidden');
@@ -514,10 +523,34 @@
             popup.classList.add('popup-visible');
             overlay.classList.remove('overlay-hidden');
             overlay.classList.add('overlay-visible');
+            document.body.style.overflow = 'hidden';
             document.body.classList.add('blur'); // Tambahkan efek blur pada latar belakang
+
+            // Scroll ke tengah halaman setelah popup ditampilkan
+            setTimeout(function() {
+                popup.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center'
+                });
+            }, 500); // Sesuaikan delay sesuai animasi CSS
+
+            // Fokus pada input kode kelas setelah scroll
             setTimeout(() => {
-                kodeKelasInput.focus();
-            }, 300); // Delay agar modal benar-benar terlihat sebelum fokus
+                kodeKelasInput.focus({
+                    preventScroll: true
+                });
+            }, 350); // Tambahkan delay agar modal benar-benar terlihat sebelum fokus
+        });
+
+        // Fokus input saat elemen dengan kelas 'input-field-inner' diklik
+        document.querySelectorAll('.input-field-inner').forEach(function(element) {
+            element.addEventListener('click', function() {
+                const input = this.querySelector('input');
+                if (input) {
+                    input.focus();
+                }
+            });
         });
 
         // Event listener untuk menutup popup Gabung Kelas
@@ -527,6 +560,7 @@
             popup.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
             // Reset input kode kelas
             kodeKelasInput.value = '';
@@ -541,6 +575,7 @@
             observerFormPopup.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
         });
 
@@ -599,6 +634,16 @@
                         observerFormPopup.classList.add('popup-visible');
                         overlay.classList.remove('overlay-hidden');
                         overlay.classList.add('overlay-visible');
+                        document.body.style.overflow = 'hidden';
+
+                        // Scroll ke tengah halaman setelah popup ditampilkan
+                        setTimeout(function() {
+                            observerFormPopup.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center',
+                                inline: 'center'
+                            });
+                        }, 500); // Sesuaikan delay sesuai animasi CSS
 
                         // Tampilkan nama guru model
                         namaGuruModelSpan.textContent = (typeof data.guru_model !== 'undefined' && data.guru_model !== null) ? data.guru_model : '';
@@ -778,6 +823,7 @@
             observerFormPopup.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
             // Reset pilihan siswa
             selectedNomorSiswa = [];
@@ -841,6 +887,7 @@
                         observerFormPopup.classList.add('popup-hidden');
                         overlay.classList.remove('overlay-visible');
                         overlay.classList.add('overlay-hidden');
+                        document.body.style.overflow = 'auto';
                         document.body.classList.remove('blur');
 
                         // Tampilkan pesan sukses dan redirect
@@ -1117,20 +1164,288 @@
         }
     });
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const searchInput = document.querySelector('.search-input');
+    // Fungsi yang dijalankan saat seluruh halaman telah dimuat
+    window.onload = function() {
+        // Daftar pasangan elemen target dan induknya (kosong karena tidak ada pasangan yang didefinisikan)
+        const targetPairs = [];
+
+        // Daftar kelas atau atribut data yang akan dianimasikan secara langsung
+        const directClassesToAnimate = [
+            "data-nama-kelas",
+            "data-mata-pelajaran",
+            "data-guru-model",
+            "tanggal-aktivitas-saya",
+            "nama-pengguna",
+            "email-pengguna"
+        ];
+
+        // Gabungan semua elemen yang perlu dianimasikan
+        const elementsToAnimate = [];
 
         /**
-         * Fungsi untuk mengatur fokus ke input pencarian setelah delay
+         * Fungsi untuk memeriksa apakah elemen mengalami overflow
+         * @param {HTMLElement} element - Elemen yang akan diperiksa
+         * @returns {Object} - Informasi tentang overflow
          */
-        function setFocus() {
-            setTimeout(() => {
-                searchInput.focus();
-            }, 300); // Delay agar input focus setelah modal tampil
+        function isElementOverflowing(element) {
+            const scrollWidth = element.scrollWidth;
+            const clientWidth = element.clientWidth;
+            const difference = scrollWidth - clientWidth;
+            const overflowing = scrollWidth > clientWidth + 1; // Toleransi 1px
+
+            return {
+                overflowing,
+                scrollWidth,
+                clientWidth,
+                difference
+            };
         }
 
-        setFocus();
-    });
+        /**
+         * Fungsi untuk menangani animasi scroll pada elemen tertentu
+         * @param {HTMLElement} element - Elemen yang akan dianimasikan
+         */
+        function setupScrollAnimation(element) {
+            const overflowInfo = isElementOverflowing(element);
+
+            if (!overflowInfo.overflowing) {
+                // Jika elemen tidak overflow, tidak perlu animasi
+                console.log(`Tidak perlu animasi untuk elemen:`, element);
+                console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Tidak melebihi toleransi 1px)`);
+                return;
+            } else {
+                // Jika elemen overflow, perlu animasi
+                console.log(`Animasi diperlukan untuk elemen:`, element);
+                console.log(`Alasan: scrollWidth (${overflowInfo.scrollWidth}px) - clientWidth (${overflowInfo.clientWidth}px) = ${overflowInfo.difference}px (Melebihi toleransi 1px)`);
+            }
+
+            // Menyimpan teks asli dalam data attribute untuk pemulihan nanti
+            const originalText = element.textContent.trim();
+            element.setAttribute('data-original-text', originalText);
+
+            // Menerapkan gaya default dengan ellipsis
+            element.style.overflow = "hidden";
+            element.style.textOverflow = "ellipsis";
+            element.style.whiteSpace = "nowrap";
+
+            /**
+             * Fungsi untuk memulai animasi scroll
+             */
+            function startScroll() {
+                if (element.getAttribute('data-animating') === 'true') return;
+
+                element.setAttribute('data-animating', 'true');
+
+                // Menghilangkan text-overflow: ellipsis saat animasi berjalan
+                element.style.textOverflow = "unset";
+                element.style.whiteSpace = "nowrap";
+                element.style.overflow = "hidden";
+
+                // Mengganti innerHTML dengan scroll-container dan scroll-text
+                element.innerHTML = `
+                <div class="scroll-container">
+                    <span class="scroll-text">${originalText}&nbsp;&nbsp;&nbsp;</span>
+                    <span class="scroll-text">${originalText}&nbsp;&nbsp;&nbsp;</span>
+                </div>
+            `;
+
+                const scrollContainer = element.querySelector(".scroll-container");
+                const scrollTexts = element.querySelectorAll(".scroll-text");
+
+                // Menghitung lebar total teks
+                const textWidth = scrollTexts[0].offsetWidth;
+                const totalWidth = textWidth * 2;
+
+                // Mengatur lebar scroll-container agar cukup untuk menampung teks
+                scrollContainer.style.width = `${totalWidth}px`;
+                scrollContainer.style.display = "flex";
+
+                // Variabel animasi
+                let position = 0; // Posisi awal scroll
+                const speed = 30; // Kecepatan animasi dalam piksel per detik
+
+                let lastTimestamp = null;
+                let animationId = null; // ID animasi
+
+                /**
+                 * Fungsi animasi menggunakan requestAnimationFrame
+                 * @param {DOMHighResTimeStamp} timestamp - Waktu saat ini
+                 */
+                function animate(timestamp) {
+                    if (!lastTimestamp) lastTimestamp = timestamp;
+                    const delta = timestamp - lastTimestamp;
+                    lastTimestamp = timestamp;
+
+                    // Menghitung pergeseran berdasarkan kecepatan
+                    position -= (speed * delta) / 1000; // Konversi delta ke detik
+
+                    if (Math.abs(position) >= textWidth) {
+                        // Reset posisi untuk loop infinite
+                        position += textWidth;
+                    }
+
+                    scrollContainer.style.transform = `translateX(${position}px)`;
+
+                    // Melanjutkan animasi frame berikutnya
+                    animationId = requestAnimationFrame(animate);
+                }
+
+                // Memulai animasi scroll
+                animationId = requestAnimationFrame(animate);
+
+                // Menyimpan ID animasi dalam data attribute untuk referensi nanti
+                element.setAttribute('data-animation-id', animationId);
+            }
+
+            /**
+             * Fungsi untuk menghentikan animasi scroll dan mengembalikan posisi awal
+             */
+            function stopScroll() {
+                if (element.getAttribute('data-animating') !== 'true') return;
+
+                const animationId = element.getAttribute('data-animation-id');
+                if (animationId) {
+                    cancelAnimationFrame(animationId); // Membatalkan animasi
+                }
+
+                // Mengembalikan innerHTML ke teks asli
+                const originalText = element.getAttribute('data-original-text');
+                element.innerHTML = originalText;
+
+                // Menerapkan kembali text-overflow: ellipsis
+                element.style.textOverflow = "ellipsis";
+                element.style.whiteSpace = "nowrap";
+                element.style.overflow = "hidden";
+
+                // Menghapus tanda bahwa elemen sedang dalam keadaan animasi
+                element.setAttribute('data-animating', 'false');
+            }
+
+            // Menyimpan fungsi startScroll dan stopScroll ke elemen untuk akses mudah
+            element.startScroll = startScroll;
+            element.stopScroll = stopScroll;
+        }
+
+        // Mengolah pasangan target dengan induknya (tidak ada pasangan yang didefinisikan)
+        targetPairs.forEach(pair => {
+            const {
+                targetClass,
+                parentClass
+            } = pair;
+            const parentElements = document.querySelectorAll(`.${parentClass}`);
+
+            parentElements.forEach(parent => {
+                const targetElements = parent.querySelectorAll(`.${targetClass}`);
+                if (targetElements.length === 0) {
+                    console.warn(`Tidak menemukan elemen target dengan kelas "${targetClass}" dalam induk:`, parent);
+                    return;
+                }
+
+                targetElements.forEach(target => {
+                    setupScrollAnimation(target);
+                    elementsToAnimate.push({
+                        element: target,
+                        type: 'parent'
+                    });
+                });
+
+                // Menambahkan event listener pada induk untuk hover
+                parent.addEventListener("mouseenter", function() {
+                    targetElements.forEach(target => {
+                        if (isElementOverflowing(target).overflowing) {
+                            target.startScroll();
+                        }
+                    });
+                });
+
+                parent.addEventListener("mouseleave", function() {
+                    targetElements.forEach(target => {
+                        target.stopScroll();
+                    });
+                });
+            });
+        });
+
+        // Mengolah elemen-elemen yang dianimasikan secara langsung berdasarkan kelas
+        directClassesToAnimate.forEach(className => {
+            // Menggunakan selector kelas
+            const elements = document.querySelectorAll(`.${className}`);
+
+            elements.forEach(element => {
+                setupScrollAnimation(element);
+                elementsToAnimate.push({
+                    element: element,
+                    type: 'direct'
+                });
+
+                const overflowInfo = isElementOverflowing(element);
+                if (overflowInfo.overflowing) {
+                    // Menambahkan event listener untuk memulai dan menghentikan animasi saat hover
+                    element.addEventListener("mouseenter", function() {
+                        element.startScroll();
+                    });
+
+                    element.addEventListener("mouseleave", function() {
+                        element.stopScroll();
+                    });
+                }
+            });
+        });
+
+        /**
+         * Event listener untuk resize window yang memastikan animasi tetap sesuai
+         */
+        window.addEventListener('resize', function() {
+            elementsToAnimate.forEach(item => {
+                const {
+                    element
+                } = item;
+
+                // Membatalkan animasi jika sedang berjalan
+                if (element.getAttribute('data-animating') === 'true') {
+                    const animationId = element.getAttribute('data-animation-id');
+                    if (animationId) {
+                        cancelAnimationFrame(animationId);
+                    }
+                    const originalText = element.getAttribute('data-original-text');
+                    element.innerHTML = originalText;
+                    element.style.textOverflow = "ellipsis";
+                    element.style.whiteSpace = "nowrap";
+                    element.style.overflow = "hidden";
+                    element.setAttribute('data-animating', 'false');
+                }
+
+                // Memeriksa kembali overflow dan menerapkan animasi jika perlu
+                setupScrollAnimation(element);
+
+                const overflowInfo = isElementOverflowing(element);
+                if (overflowInfo.overflowing) {
+                    if (item.type === 'parent') {
+                        // Menambahkan event listener pada induk jika tipe 'parent'
+                        const parent = element.parentElement;
+                        if (parent) {
+                            parent.addEventListener("mouseenter", function() {
+                                element.startScroll();
+                            });
+
+                            parent.addEventListener("mouseleave", function() {
+                                element.stopScroll();
+                            });
+                        }
+                    } else if (item.type === 'direct') {
+                        // Menambahkan event listener langsung pada elemen jika tipe 'direct'
+                        element.addEventListener("mouseenter", function() {
+                            element.startScroll();
+                        });
+
+                        element.addEventListener("mouseleave", function() {
+                            element.stopScroll();
+                        });
+                    }
+                }
+            });
+        });
+    };
 </script>
 
 </html>

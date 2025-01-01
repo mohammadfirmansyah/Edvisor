@@ -4,11 +4,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1, width=device-width">
-	<title><?php echo $title; ?></title>
-	<base href="<?php echo base_url(); ?>">
-	<link rel="icon" href="assets/img/favicon.png">
-	<link rel="stylesheet" href="assets/css/kelasgurumodel.css" />
-	<script src="assets/js/wavesurfer.js"></script>
+	<title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
+	<base href="<?= base_url(); ?>">
 </head>
 
 <body>
@@ -286,7 +283,7 @@
 					</div>
 					<div class="diperbarui-1002-27-container">
 						<span class="kode-kelas">Diperbarui </span>
-						<span class="mei-20231">[Belum Disimpan]</span>
+						<span class="mei-20231">[Belum Ada Data]</span>
 					</div>
 					<div class="download-button4" data-filepath="#" data-filename="PenilaianKegiatanMengajar.docx">
 						<!-- Tombol Download -->
@@ -326,7 +323,7 @@
 					</div>
 					<div class="diperbarui-1040-27-container">
 						<span class="kode-kelas">Diperbarui </span>
-						<span class="mei-20231">[Belum Disimpan]</span>
+						<span class="mei-20231">[Belum Ada Data]</span>
 					</div>
 					<div class="download-button4" data-filepath="#" data-filename="LembarPengamatanSiswa.docx">
 						<!-- Tombol Download -->
@@ -366,7 +363,7 @@
 					</div>
 					<div class="diperbarui-1040-27-container">
 						<span class="kode-kelas">Diperbarui </span>
-						<span class="mei-20231">[Belum Disimpan]</span>
+						<span class="mei-20231">[Belum Ada Data]</span>
 					</div>
 					<div class="download-button4" data-filepath="#" data-filename="CatatanAktivitasSiswa.docx">
 						<!-- Tombol Download -->
@@ -407,14 +404,13 @@
 				<div class="tipe-kegiatan-parent">
 					<div class="tipe-kegiatan">Tipe Kegiatan</div>
 					<div class="kegiatan-siswa">
-						<div class="siswa-izin-bertanya siswa-izin-bertanya1">Silakan pilih catatan.</div>
+						<div class="siswa-izin-bertanya siswa-izin-bertanya1"></div>
 					</div>
 				</div>
 				<div class="detail-catatan-parent">
 					<div class="detail-catatan">Detail Catatan</div>
 					<div class="detail-catatan1">
-						<div class="siswa-izin-bertanya siswa-izin-bertanya1">Silakan pilih catatan untuk melihat
-							detail.</div>
+						<div class="siswa-izin-bertanya siswa-izin-bertanya1"></div>
 					</div>
 				</div>
 			</div>
@@ -435,9 +431,9 @@
 						src="assets/img/icon_play.svg">
 					<!-- Pewaktu audio -->
 					<div class="div6 audioTime">
-						<span class="currentTime">00:00:00</span>
-						<span class="span"> / </span>
-						<span class="span duration">00:00:00</span>
+						<span class="currentTime"></span>
+						<span class="span"></span>
+						<span class="span duration"></span>
 					</div>
 				</div>
 				<!-- Tombol download audio -->
@@ -485,12 +481,12 @@
 	<div class="modal-overlay" id="modalOverlay"></div>
 	<div class="modal-content" id="modalContent">
 		<button class="close-button" id="closeButton">×</button>
-		<img oncontextmenu="return false;" src="" alt="Zoomed Image" id="modalImage">
+		<img oncontextmenu="return false;" src="" alt="Zoomed Image" id="modalImage" tabindex="0">
 	</div>
 
 	<!-- Tambahkan overlay dan iframe untuk preview -->
 	<div id="iframeOverlay" class="iframe-overlay" style="display: none;"></div>
-	<div class="iframe-container" style="display: none;">
+	<div class="iframe-container" style="display: none;" tabindex="0">
 		<button class="close-iframe" id="closeIFrame">×</button>
 		<iframe id="iframePreview" src="" frameborder="0"></iframe>
 	</div>
@@ -602,7 +598,7 @@
 			// Update Nomor Siswa yang Diamati
 			const nomorSiswaParent = document.querySelector('.nomor-siswa-parent');
 			nomorSiswaParent.innerHTML = '';
-			if (selectedObserver.observed_students && selectedObserver.observed_students.length > 0) {
+			if (selectedObserver.observed_students && Array.isArray(selectedObserver.observed_students) && selectedObserver.observed_students.length > 0) {
 				selectedObserver.observed_students.forEach(nomor => {
 					const nomorDiv = document.createElement('div');
 					nomorDiv.classList.add('nomor-siswa-item');
@@ -685,11 +681,34 @@
 			const downloadButton = element.querySelector('.download-button4');
 			const shareButton = element.querySelector('.share-button-icon4');
 
-			previewButton.setAttribute('data-preview-link', data.previewLink);
-			updatedAtElement.textContent = data.updatedAt ? formatDateTime(data.updatedAt) : '[Belum Disimpan]';
-			downloadButton.setAttribute('data-filepath', data.shareLink);
-			downloadButton.setAttribute('data-filename', data.filename);
-			shareButton.setAttribute('data-link', data.shareLink);
+			// Update preview link jika tersedia
+			if (data.previewLink && data.previewLink !== '#') {
+				previewButton.setAttribute('data-preview-link', data.previewLink);
+				previewButton.style.cursor = 'pointer';
+			} else {
+				previewButton.setAttribute('data-preview-link', '#');
+				previewButton.style.cursor = 'not-allowed';
+			}
+
+			// Update teks tanggal pembaruan
+			updatedAtElement.textContent = data.updatedAt ? formatDateTime(data.updatedAt) : '[Belum Ada Data]';
+
+			// Update tombol download
+			if (data.shareLink && data.shareLink !== '#') {
+				downloadButton.setAttribute('data-filepath', data.shareLink);
+				downloadButton.setAttribute('data-filename', data.filename);
+				downloadButton.style.display = 'block';
+			} else {
+				downloadButton.style.display = 'none';
+			}
+
+			// Update tombol share
+			if (data.shareLink && data.shareLink !== '#') {
+				shareButton.setAttribute('data-link', data.shareLink);
+				shareButton.style.display = 'block';
+			} else {
+				shareButton.style.display = 'none';
+			}
 		}
 
 		/**
@@ -721,6 +740,26 @@
 
 			daftarParent.innerHTML = ''; // Membersihkan konten sebelumnya
 
+			if (!Array.isArray(catatanData) || catatanData.length === 0) {
+				// Jika special_notes kosong atau bukan array, tambahkan data dummy
+				const listItem = document.createElement('div');
+				listItem.className = 'list-item-catatan-01'; // Aktif secara default
+				listItem.innerHTML = `
+                    <div class="keaktifan-siswa">
+                        <ol class="siswa-bertanya">
+                            <li>1. [Belum Ada Catatan]</li>
+                        </ol>
+                    </div>
+                `;
+				listItem.dataset.id = 'dummy';
+				daftarParent.appendChild(listItem);
+
+				// Update tipe kegiatan dan detail catatan dengan data dummy
+				kegiatanSiswa.textContent = '[Belum Ada Catatan]';
+				detailCatatan.textContent = '[Belum Ada Catatan]';
+				return;
+			}
+
 			catatanData.forEach((catatan, index) => {
 				const isActive = index === 0; // Item pertama aktif secara default
 				const listItem = document.createElement('div');
@@ -728,11 +767,11 @@
 				listItem.innerHTML = `
                     <div class="${isActive ? 'keaktifan-siswa' : 'siswa-izin-bertanya'}">
                         <ol class="siswa-bertanya">
-                            <li>${(index + 1).toString()}. ${catatan.activity_type}</li>
+                            <li>${(index + 1).toString()}. ${catatan.activity_type || '[Belum Ada Catatan]'}</li>
                         </ol>
                     </div>
                 `;
-				listItem.dataset.id = catatan.note_id;
+				listItem.dataset.id = catatan.note_id || 'dummy';
 				daftarParent.appendChild(listItem);
 
 				// Event listener untuk setiap item
@@ -746,16 +785,16 @@
 					listItem.querySelector('.siswa-izin-bertanya, .keaktifan-siswa').className = 'keaktifan-siswa';
 
 					// Update tipe kegiatan dan detail catatan
-					kegiatanSiswa.textContent = catatan.activity_type;
-					detailCatatan.textContent = catatan.note_details;
+					kegiatanSiswa.textContent = catatan.activity_type || '[Belum Ada Catatan]';
+					detailCatatan.textContent = catatan.note_details || '[Belum Ada Catatan]';
 				});
 			});
 
 			// Set item pertama sebagai aktif
 			if (catatanData.length > 0) {
 				const firstCatatan = catatanData[0];
-				kegiatanSiswa.textContent = firstCatatan.activity_type;
-				detailCatatan.textContent = firstCatatan.note_details;
+				kegiatanSiswa.textContent = firstCatatan.activity_type || '[Belum Ada Catatan]';
+				detailCatatan.textContent = firstCatatan.note_details || '[Belum Ada Catatan]';
 			} else {
 				kegiatanSiswa.textContent = 'Tidak ada catatan.';
 				detailCatatan.textContent = 'Tidak ada detail catatan.';
@@ -770,19 +809,24 @@
 			const imagesContainer = document.querySelector('.dokumentasi .images');
 			imagesContainer.innerHTML = ''; // Bersihkan konten sebelumnya
 
-			if (documentationFiles.length > 0) {
+			if (Array.isArray(documentationFiles) && documentationFiles.length > 0) {
 				documentationFiles.forEach(doc => {
-					if (doc.file_src !== ' ') { // Pastikan ada sumber file
+					if (doc.file_src && doc.file_src.trim() !== '') { // Pastikan ada sumber file
 						const imageDiv = document.createElement('div');
 						imageDiv.classList.add('image-container');
 						imageDiv.innerHTML = `
-                            <img oncontextmenu="return false;" class="thumbnail" src="${doc.file_src}" alt="${doc.file_name}">
+                            <img oncontextmenu="return false;" class="thumbnail" src="${doc.file_src}" alt="${doc.file_name || 'Dokumentasi'}">
                         `;
 						imagesContainer.appendChild(imageDiv);
 					}
 				});
+
+				// Jika setelah filtering tidak ada gambar, tampilkan pesan
+				if (imagesContainer.children.length === 0) {
+					imagesContainer.innerHTML = '<div class="no-data">[Belum Ada Dokumentasi]</div>';
+				}
 			} else {
-				imagesContainer.innerHTML = '<div>Tidak ada dokumentasi.</div>';
+				imagesContainer.innerHTML = '<div class="no-data">[Belum Ada Dokumentasi]</div>';
 			}
 		}
 
@@ -798,6 +842,44 @@
 			const audioPositions = rekamanDiv.querySelectorAll('.audioPosition');
 			const currentTimeEls = rekamanDiv.querySelectorAll('.currentTime');
 			const durationEls = rekamanDiv.querySelectorAll('.duration');
+			const downloadButton = rekamanDiv.querySelector('.download-button3');
+			const shareButton = rekamanDiv.querySelector('.share-button-icon3');
+			const spanEl = rekamanDiv.querySelector('.span');
+
+			// Cek apakah observer memiliki data audio
+			if (!observer.audio_src || observer.audio_src.trim() === '') {
+				// Jika ada WaveSurfer instance, stop playback dan destroy
+				if (rekamanDiv.waveSurferInstance) {
+					rekamanDiv.waveSurferInstance.stop(); // Hentikan playback
+					rekamanDiv.waveSurferInstance.destroy(); // Hancurkan instance
+					rekamanDiv.waveSurferInstance = null;
+				}
+
+				// Observer tidak memiliki data audio
+				currentTimeEls.forEach(el => {
+					el.textContent = '[Belum Ada Rekaman]';
+					el.style.color = '#94a3b8';
+				});
+				spanEl.textContent = ' ';
+				durationEls.forEach(el => el.textContent = ' ');
+
+				// Sembunyikan elemen audio lainnya
+				rekamanDiv.querySelector('.audioPosition').style.display = 'none';
+				rekamanDiv.querySelector('.audioWave').style.display = 'none';
+				rekamanDiv.querySelector('.playAudio').style.display = 'none';
+				rekamanDiv.querySelector('.download-button3').style.display = 'none';
+				rekamanDiv.querySelector('.share-button-icon3').style.display = 'none';
+				return;
+			} else {
+				// Observer memiliki data audio, tampilkan elemen audio
+				currentTimeEls.forEach(el => el.style.color = '#0f172a');
+				spanEl.textContent = ' / ';
+				rekamanDiv.querySelector('.audioPosition').style.display = 'block';
+				rekamanDiv.querySelector('.audioWave').style.display = 'block';
+				rekamanDiv.querySelector('.playAudio').style.display = 'block';
+				rekamanDiv.querySelector('.download-button3').style.display = 'block';
+				rekamanDiv.querySelector('.share-button-icon3').style.display = 'block';
+			}
 
 			// Pastikan hanya satu audio player di dalam rekaman div
 			if (playButtons.length === 0 || audioPositions.length === 0 || currentTimeEls.length === 0 || durationEls.length === 0) {
@@ -807,7 +889,8 @@
 
 			// Menghapus instance WaveSurfer sebelumnya jika ada
 			if (rekamanDiv.waveSurferInstance) {
-				rekamanDiv.waveSurferInstance.destroy();
+				rekamanDiv.waveSurferInstance.stop(); // Hentikan playback
+				rekamanDiv.waveSurferInstance.destroy(); // Hancurkan instance
 				rekamanDiv.waveSurferInstance = null;
 			}
 
@@ -820,7 +903,7 @@
 			currentTimeEls.forEach(el => el.textContent = '00:00:00');
 			durationEls.forEach(el => el.textContent = '00:00:00');
 
-			// **Tambahkan kode berikut untuk mereset tombol play/pause ke ikon "play"**
+			// Reset tombol play/pause ke ikon "play"
 			playButtons.forEach(button => {
 				button.src = 'assets/img/icon_play.svg';
 			});
@@ -854,7 +937,19 @@
 			wavesurfer.load(observer.audio_src);
 
 			// Variabel untuk menyimpan startTime
-			var startTime = null;
+			let startTime = null;
+
+			/**
+			 * Fungsi untuk memformat objek Date ke HH:MM:SS.
+			 * @param {Date} date - Objek Date yang akan diformat.
+			 * @returns {string} - Waktu dalam format HH:MM:SS.
+			 */
+			function formatDateTime(date) {
+				const hours = date.getHours().toString().padStart(2, '0');
+				const minutes = date.getMinutes().toString().padStart(2, '0');
+				const seconds = date.getSeconds().toString().padStart(2, '0');
+				return `${hours}:${minutes}:${seconds}`;
+			}
 
 			/**
 			 * Fungsi untuk memformat waktu ke HH:MM:SS.
@@ -862,10 +957,10 @@
 			 * @returns {string} - Waktu dalam format HH:MM:SS.
 			 */
 			function formatTime(totalSeconds) {
-				var sec_num = parseInt(totalSeconds, 10);
-				var hours = Math.floor(sec_num / 3600);
-				var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-				var seconds = sec_num - (hours * 3600) - (minutes * 60);
+				const sec_num = parseInt(totalSeconds, 10);
+				let hours = Math.floor(sec_num / 3600);
+				let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+				let seconds = sec_num - (hours * 3600) - (minutes * 60);
 
 				if (hours < 10) {
 					hours = "0" + hours;
@@ -884,46 +979,45 @@
 			 * @param {string} url - URL yang akan diambil header-nya.
 			 * @returns {Promise<string|null>} - Tanggal Last-Modified atau null jika gagal.
 			 */
-			function getLastModified(url) {
-				return fetch(url, {
+			async function getLastModified(url) {
+				try {
+					const response = await fetch(url, {
 						method: 'HEAD'
-					})
-					.then(response => {
-						if (response.ok) {
-							var lastModified = response.headers.get('Last-Modified');
-							return lastModified;
-						} else {
-							throw new Error('Tidak dapat mengambil header Last-Modified.');
-						}
-					})
-					.catch(error => {
-						console.error('Error:', error);
-						return null;
 					});
+					if (response.ok) {
+						const lastModified = response.headers.get('Last-Modified');
+						return lastModified;
+					} else {
+						throw new Error('Tidak dapat mengambil header Last-Modified.');
+					}
+				} catch (error) {
+					console.error('Error:', error);
+					return null;
+				}
 			}
 
 			// Mengupdate tanggal dan waktu last modified
 			wavesurfer.on('ready', async function() {
-				var duration = wavesurfer.getDuration(); // Durasi audio dalam detik
+				const duration = wavesurfer.getDuration(); // Durasi audio dalam detik
 
 				// Mendapatkan Last-Modified dari header HTTP
-				var lastModifiedHeader = await getLastModified(observer.audio_src);
+				const lastModifiedHeader = await getLastModified(observer.audio_src);
 				if (lastModifiedHeader) {
-					var lastModifiedDate = new Date(lastModifiedHeader);
+					const lastModifiedDate = new Date(lastModifiedHeader);
 					if (isNaN(lastModifiedDate)) {
 						console.error('Tanggal Last-Modified tidak valid.');
-						durationEls.forEach(el => el.textContent = '[Belum Disimpan]');
-						currentTimeEls.forEach(el => el.textContent = '[Belum Disimpan]');
+						durationEls.forEach(el => el.textContent = '[Belum Ada Rekaman]');
+						currentTimeEls.forEach(el => el.textContent = '[Belum Ada Rekaman]');
 						return;
 					}
 
 					// Menghitung estimasi waktu audio dimulai
-					var startTimeDate = new Date(lastModifiedDate.getTime() - duration * 1000);
+					const startTimeDate = new Date(lastModifiedDate.getTime() - duration * 1000);
 					startTime = startTimeDate;
 
 					// Memformat waktu ke HH:MM:SS
-					var formattedStartTime = formatTime(startTimeDate.getHours() * 3600 + startTimeDate.getMinutes() * 60 + startTimeDate.getSeconds());
-					var formattedLastModifiedTime = formatTime(lastModifiedDate.getHours() * 3600 + lastModifiedDate.getMinutes() * 60 + lastModifiedDate.getSeconds());
+					const formattedStartTime = formatDateTime(startTimeDate);
+					const formattedLastModifiedTime = formatDateTime(lastModifiedDate);
 
 					// Mengatur teks ke elemen HTML
 					currentTimeEls.forEach(el => el.textContent = formattedStartTime);
@@ -936,8 +1030,8 @@
 						slider.style.background = 'linear-gradient(to right, #3b82f6 0%, #d9d9d9 0%)';
 					});
 				} else {
-					durationEls.forEach(el => el.textContent = '[Belum Disimpan]');
-					currentTimeEls.forEach(el => el.textContent = '[Belum Disimpan]');
+					durationEls.forEach(el => el.textContent = '[Belum Ada Rekaman]');
+					currentTimeEls.forEach(el => el.textContent = '[Belum Ada Rekaman]');
 				}
 			});
 
@@ -968,8 +1062,8 @@
 			 */
 			function updateRangeBackground(value) {
 				audioPositions.forEach(slider => {
-					var percentage = (value / slider.max) * 100;
-					slider.style.background = 'linear-gradient(to right, #3b82f6 0%, #3b82f6 ' + percentage + '%, #d9d9d9 ' + percentage + '%, #d9d9d9 100%)';
+					const percentage = (value / slider.max) * 100;
+					slider.style.background = `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${percentage}%, #d9d9d9 ${percentage}%, #d9d9d9 100%)`;
 				});
 			}
 
@@ -977,11 +1071,11 @@
 			wavesurfer.on('audioprocess', function() {
 				if (!startTime) return; // Pastikan startTime sudah ditetapkan
 
-				var currentPlaybackTime = wavesurfer.getCurrentTime(); // Waktu playback dalam detik
-				var currentTimeDisplayDate = new Date(startTime.getTime() + currentPlaybackTime * 1000);
+				const currentPlaybackTime = wavesurfer.getCurrentTime(); // Waktu playback dalam detik
+				const currentTimeDisplayDate = new Date(startTime.getTime() + currentPlaybackTime * 1000);
 
 				// Memformat waktu ke HH:MM:SS
-				var formattedCurrentTime = formatTime(currentTimeDisplayDate.getHours() * 3600 + currentTimeDisplayDate.getMinutes() * 60 + currentTimeDisplayDate.getSeconds());
+				const formattedCurrentTime = formatDateTime(currentTimeDisplayDate);
 
 				// Mengatur teks ke elemen HTML
 				currentTimeEls.forEach(el => el.textContent = formattedCurrentTime);
@@ -999,11 +1093,11 @@
 			wavesurfer.on('seek', function() {
 				if (!startTime) return; // Pastikan startTime sudah ditetapkan
 
-				var currentPlaybackTime = wavesurfer.getCurrentTime(); // Waktu playback dalam detik
-				var currentTimeDisplayDate = new Date(startTime.getTime() + currentPlaybackTime * 1000);
+				const currentPlaybackTime = wavesurfer.getCurrentTime(); // Waktu playback dalam detik
+				const currentTimeDisplayDate = new Date(startTime.getTime() + currentPlaybackTime * 1000);
 
 				// Memformat waktu ke HH:MM:SS
-				var formattedCurrentTime = formatTime(currentTimeDisplayDate.getHours() * 3600 + currentPlaybackTime.getMinutes() * 60 + currentPlaybackTime.getSeconds());
+				const formattedCurrentTime = formatDateTime(currentTimeDisplayDate);
 
 				// Mengatur teks ke elemen HTML
 				currentTimeEls.forEach(el => el.textContent = formattedCurrentTime);
@@ -1029,7 +1123,7 @@
 
 				if (startTime) {
 					// Mengatur currentTimeEl kembali ke startTime
-					var formattedStartTime = formatTime(startTime.getHours() * 3600 + startTime.getMinutes() * 60 + startTime.getSeconds());
+					const formattedStartTime = formatDateTime(startTime);
 					currentTimeEls.forEach(el => el.textContent = formattedStartTime);
 				}
 			});
@@ -1037,12 +1131,12 @@
 			// Mengubah posisi audio saat progress bar digeser
 			audioPositions.forEach((slider) => {
 				slider.addEventListener('input', function() {
-					var value = parseFloat(slider.value);
+					const value = parseFloat(slider.value);
 					wavesurfer.seekTo(value / wavesurfer.getDuration());
 
 					if (startTime) {
-						var currentTimeDisplayDate = new Date(startTime.getTime() + value * 1000);
-						var formattedCurrentTime = formatTime(currentTimeDisplayDate.getHours() * 3600 + currentTimeDisplayDate.getMinutes() * 60 + currentTimeDisplayDate.getSeconds());
+						const currentTimeDisplayDate = new Date(startTime.getTime() + value * 1000);
+						const formattedCurrentTime = formatDateTime(currentTimeDisplayDate);
 						currentTimeEls.forEach(el => el.textContent = formattedCurrentTime);
 					}
 
@@ -1052,26 +1146,95 @@
 			});
 
 			// Event untuk tombol download audio
-			var downloadButton = rekamanDiv.querySelector('.download-button3');
-			if (downloadButton && observer.audio_share_link !== '#') {
+			if (downloadButton && observer.audio_share_link && observer.audio_share_link !== '#') {
 				downloadButton.setAttribute('data-filepath', observer.audio_share_link);
 				downloadButton.setAttribute('data-filename', 'RekamanSuara.' + observer.audio_src.split('.').pop());
-				downloadButton.addEventListener('click', function() {
-					var filepath = downloadButton.getAttribute('data-filepath');
-					window.location.href = filepath;
+				downloadButton.style.display = 'block'; // Pastikan tombol download terlihat
+
+				// Hapus event listener sebelumnya untuk mencegah duplikasi
+				const newDownloadButton = downloadButton.cloneNode(true);
+				downloadButton.parentNode.replaceChild(newDownloadButton, downloadButton);
+
+				// Menambahkan event listener baru
+				newDownloadButton.addEventListener('click', function(event) {
+					event.stopPropagation(); // Mencegah event bubbling
+
+					// Menampilkan SweetAlert2 loading modal
+					Swal.fire({
+						title: 'Memuat...',
+						text: 'Sedang memproses pengunduhan.',
+						allowOutsideClick: false,
+						didOpen: () => {
+							Swal.showLoading();
+						}
+					});
+
+					var filepath = newDownloadButton.getAttribute('data-filepath');
+					var filename = newDownloadButton.getAttribute('data-filename');
+
+					if (filepath && filepath !== '#') {
+						// Mengunduh file menggunakan fetch dan blob
+						fetch(filepath)
+							.then(response => {
+								if (!response.ok) {
+									throw new Error('Network response was not ok');
+								}
+								return response.blob();
+							})
+							.then(blob => {
+								Swal.close(); // Menutup loading modal
+								var url = window.URL.createObjectURL(blob);
+								var a = document.createElement('a');
+								a.href = url;
+								a.download = filename;
+								document.body.appendChild(a);
+								a.click();
+								a.remove();
+								window.URL.revokeObjectURL(url);
+							})
+							.catch(error => {
+								Swal.close(); // Menutup loading modal
+								console.error('There was a problem with the fetch operation:', error);
+								Swal.fire({
+									icon: 'error',
+									title: 'Error',
+									text: 'File tidak tersedia untuk diunduh.',
+									footer: 'Silakan coba lagi.',
+									confirmButtonText: 'OK',
+									confirmButtonColor: '#2563EB'
+								});
+							});
+					} else {
+						Swal.close(); // Menutup loading modal jika filepath tidak valid
+						Swal.fire({
+							icon: 'error',
+							title: 'Error',
+							text: 'File tidak tersedia untuk diunduh.',
+							footer: 'Silakan coba lagi.',
+							confirmButtonText: 'OK',
+							confirmButtonColor: '#2563EB'
+						});
+					}
 				});
+			} else {
+				downloadButton.style.display = 'none'; // Sembunyikan jika tidak ada
 			}
 
 			// Event untuk tombol share audio
-			var shareButton = rekamanDiv.querySelector('.share-button-icon3');
-			if (shareButton && observer.audio_share_link !== '#') {
+			if (shareButton && observer.audio_share_link && observer.audio_share_link !== '#') {
 				shareButton.setAttribute('data-link', observer.audio_share_link);
-				shareButton.addEventListener('click', function() {
-					var link = shareButton.getAttribute('data-link');
+				shareButton.style.display = 'block'; // Pastikan tombol share terlihat
+				// Hapus event listener sebelumnya untuk mencegah duplikasi
+				const newShareButton = shareButton.cloneNode(true);
+				shareButton.parentNode.replaceChild(newShareButton, shareButton);
+
+				newShareButton.addEventListener('click', function(event) {
+					event.stopPropagation(); // Mencegah event bubbling
+					const link = newShareButton.getAttribute('data-link');
 					copyToClipboard(link);
 					// Menampilkan pesan 'Tautan Berhasil Disalin'
-					var copyHover = shareButton.querySelector('.copyHover');
-					var copySuccess = shareButton.querySelector('.copySuccess');
+					const copyHover = newShareButton.querySelector('.copyHover');
+					const copySuccess = newShareButton.querySelector('.copySuccess');
 					if (copyHover && copySuccess) {
 						copyHover.style.display = 'none';
 						copySuccess.style.display = 'block';
@@ -1082,6 +1245,8 @@
 						}, 2000);
 					}
 				});
+			} else {
+				shareButton.style.display = 'none'; // Sembunyikan jika tidak ada
 			}
 
 			/**
@@ -1089,16 +1254,43 @@
 			 * @param {string} text - Teks yang akan disalin.
 			 */
 			function copyToClipboard(text) {
-				var textarea = document.createElement('textarea');
-				textarea.value = text;
-				document.body.appendChild(textarea);
-				textarea.select();
-				try {
-					document.execCommand('copy');
-				} catch (err) {
-					console.error('Fallback: Tidak dapat menyalin', err);
+				if (navigator.clipboard && navigator.clipboard.writeText) {
+					navigator.clipboard.writeText(text).catch(function(err) {
+						console.error('Tidak dapat menyalin teks: ', err);
+					});
+				} else {
+					// Fallback untuk browser yang tidak mendukung
+					// Simpan posisi scroll saat ini
+					const scrollY = window.scrollY || window.pageYOffset;
+					const scrollX = window.scrollX || window.pageXOffset;
+
+					var textarea = document.createElement('textarea');
+					textarea.value = text;
+					textarea.style.position = 'fixed';
+					textarea.style.top = '0';
+					textarea.style.left = '0';
+					textarea.style.width = '1px';
+					textarea.style.height = '1px';
+					textarea.style.padding = '0';
+					textarea.style.border = 'none';
+					textarea.style.outline = 'none';
+					textarea.style.boxShadow = 'none';
+					textarea.style.background = 'transparent';
+					document.body.appendChild(textarea);
+					textarea.focus({
+						preventScroll: true
+					});
+					textarea.select();
+					try {
+						document.execCommand('copy');
+					} catch (err) {
+						console.error('Fallback: Tidak dapat menyalin', err);
+					}
+					document.body.removeChild(textarea);
+
+					// Kembalikan posisi scroll
+					window.scrollTo(scrollX, scrollY);
 				}
-				document.body.removeChild(textarea);
 			}
 		}
 
@@ -1118,6 +1310,23 @@
 					iframeOverlay.style.opacity = '1'; // Untuk transisi overlay
 					iframeContainer.classList.add('show'); // Tambahkan kelas animasi masuk
 					iframeContainer.classList.remove('hide'); // Pastikan kelas keluar dihapus
+
+					// Menyimpan nilai overflow asli sebelum diubah
+					originalOverflow = document.body.style.overflow;
+
+					document.body.style.overflow = 'hidden';
+
+					// Atur fokus ke iframeContainer setelah overlay ditampilkan
+					setTimeout(function() {
+						iframeContainer.focus({
+							preventScroll: true
+						});
+						iframeContainer.scrollIntoView({
+							behavior: 'smooth',
+							block: 'center',
+							inline: 'center'
+						});
+					}, 500); // Sesuaikan delay sesuai animasi CSS
 
 				} else {
 					Swal.fire({
@@ -1142,12 +1351,13 @@
 			iframeContainer.classList.add('hide'); // Tambahkan kelas animasi keluar
 			iframeOverlay.style.opacity = '0'; // Untuk transisi overlay
 
+
 			// Tunggu sampai animasi selesai sebelum benar-benar menyembunyikan
 			setTimeout(function() {
 				iframeOverlay.style.display = 'none';
 				iframePreview.src = ''; // Reset src iframe
-				document.body.style.overflow = 'auto'; // Aktifkan scroll kembali
-			}, 300); // Durasi sama dengan animasi CSS
+				document.body.style.overflow = originalOverflow || '';
+			}, 500); // Durasi sama dengan animasi CSS
 		}
 
 		// Event listener untuk tombol close iframe
@@ -1188,8 +1398,8 @@
 		document.getElementById('timeDisplay').innerText = timeString;
 	}
 
-	// Memanggil fungsi updateDateTime setiap detik
-	setInterval(updateDateTime, 1000);
+	// Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+	setInterval(updateDateTime, 0);
 
 	// Memastikan waktu saat ini ditampilkan saat memuat halaman
 	updateDateTime();
@@ -1268,19 +1478,36 @@
 				});
 			} else {
 				// Fallback untuk browser yang tidak mendukung
+				// Simpan posisi scroll saat ini
+				const scrollY = window.scrollY || window.pageYOffset;
+				const scrollX = window.scrollX || window.pageXOffset;
+
 				var textarea = document.createElement('textarea');
 				textarea.value = textToCopy;
 				textarea.style.position = 'fixed';
+				textarea.style.top = '0';
+				textarea.style.left = '0';
+				textarea.style.width = '1px';
+				textarea.style.height = '1px';
+				textarea.style.padding = '0';
+				textarea.style.border = 'none';
+				textarea.style.outline = 'none';
+				textarea.style.boxShadow = 'none';
+				textarea.style.background = 'transparent';
 				document.body.appendChild(textarea);
-				textarea.focus();
+				textarea.focus({
+					preventScroll: true
+				});
 				textarea.select();
 				try {
 					document.execCommand('copy');
-					// Berhasil menyalin
 				} catch (err) {
 					console.error('Fallback: Tidak dapat menyalin', err);
 				}
 				document.body.removeChild(textarea);
+
+				// Kembalikan posisi scroll
+				window.scrollTo(scrollX, scrollY);
 			}
 
 			// Mengembalikan src gambar ke default
@@ -1472,18 +1699,63 @@
 	// Event Listener untuk tombol download dan share
 	document.addEventListener('DOMContentLoaded', function() {
 		// Menangani klik tombol download
-		var downloadButtons = document.querySelectorAll('[class^="download-button"]');
+		var downloadButtons = document.querySelectorAll('[class^="download-button"]:not(.download-button3)');
 		downloadButtons.forEach(function(button) {
 			button.addEventListener('click', function(event) {
+				event.preventDefault(); // Mencegah perilaku default
+
+				// Menampilkan SweetAlert2 loading modal
+				Swal.fire({
+					title: 'Memuat...',
+					text: 'Sedang memproses pengunduhan.',
+					allowOutsideClick: false,
+					didOpen: () => {
+						Swal.showLoading();
+					}
+				});
+
 				var filepath = button.getAttribute('data-filepath');
 				var filename = button.getAttribute('data-filename');
+
 				if (filepath && filepath !== '#') {
-					window.location.href = filepath;
+					// Mengunduh file menggunakan fetch dan blob
+					fetch(filepath)
+						.then(response => {
+							if (!response.ok) {
+								throw new Error('Network response was not ok');
+							}
+							return response.blob();
+						})
+						.then(blob => {
+							Swal.close(); // Menutup loading modal
+							var url = window.URL.createObjectURL(blob);
+							var a = document.createElement('a');
+							a.href = url;
+							a.download = filename;
+							document.body.appendChild(a);
+							a.click();
+							a.remove();
+							window.URL.revokeObjectURL(url);
+						})
+						.catch(error => {
+							Swal.close(); // Menutup loading modal
+							console.error('There was a problem with the fetch operation:', error);
+							Swal.fire({
+								icon: 'error',
+								title: 'Error',
+								text: 'File tidak tersedia untuk diunduh.',
+								footer: 'Silakan coba lagi.',
+								confirmButtonText: 'OK',
+								confirmButtonColor: '#2563EB'
+							});
+						});
 				} else {
+					Swal.close(); // Menutup loading modal jika filepath tidak valid
 					Swal.fire({
 						icon: 'error',
 						title: 'Error',
 						text: 'File tidak tersedia untuk diunduh.',
+						footer: 'Silakan coba lagi.',
 						confirmButtonText: 'OK',
 						confirmButtonColor: '#2563EB'
 					});
@@ -1515,6 +1787,7 @@
 						icon: 'error',
 						title: 'Error',
 						text: 'Tautan tidak tersedia untuk dibagikan.',
+						footer: 'Silakan coba lagi.',
 						confirmButtonText: 'OK',
 						confirmButtonColor: '#2563EB'
 					});
@@ -1526,9 +1799,20 @@
 		var unduhSemuaButton = document.querySelector('.unduh-semua');
 		if (unduhSemuaButton) {
 			unduhSemuaButton.addEventListener('click', function() {
+				// Menampilkan SweetAlert2 loading modal
+				Swal.fire({
+					title: 'Memuat...',
+					text: 'Sedang memproses pengunduhan.',
+					allowOutsideClick: false,
+					didOpen: () => {
+						Swal.showLoading();
+					}
+				});
+
 				// Mendapatkan observer IDs yang aktif
 				var activeObserver = document.querySelector('.item-observer.active');
 				if (!activeObserver) {
+					Swal.close(); // Menutup loading modal
 					Swal.fire({
 						icon: 'error',
 						title: 'Error',
@@ -1542,9 +1826,41 @@
 				// Mendapatkan ID observer
 				var observerId = activeObserver.getAttribute('data-user-id');
 
-				// Redirect ke fungsi downloadAllFormsZip di Controller
+				// Mendapatkan ID kelas
 				var classId = '<?= $encrypted_idKelas; ?>';
-				window.location.href = 'downloadAllFormsZip/' + classId + '/' + observerId;
+				var downloadUrl = 'downloadAllFormsZip/' + classId + '/' + observerId;
+
+				// Mengunduh file ZIP menggunakan fetch dan blob
+				fetch(downloadUrl)
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Network response was not ok');
+						}
+						return response.blob();
+					})
+					.then(blob => {
+						Swal.close(); // Menutup loading modal
+						var url = window.URL.createObjectURL(blob);
+						var a = document.createElement('a');
+						a.href = url;
+						a.download = 'AllForms.zip'; // Ganti nama file sesuai kebutuhan
+						document.body.appendChild(a);
+						a.click();
+						a.remove();
+						window.URL.revokeObjectURL(url);
+					})
+					.catch(error => {
+						Swal.close(); // Menutup loading modal
+						console.error('There was a problem with the fetch operation:', error);
+						Swal.fire({
+							icon: 'error',
+							title: 'Error',
+							text: 'File tidak tersedia untuk diunduh.',
+							footer: 'Silakan coba lagi.',
+							confirmButtonText: 'OK',
+							confirmButtonColor: '#2563EB'
+						});
+					});
 			});
 		}
 
@@ -1553,16 +1869,43 @@
 		 * @param {string} text - Teks yang akan disalin.
 		 */
 		function copyToClipboard(text) {
-			var textarea = document.createElement('textarea');
-			textarea.value = text;
-			document.body.appendChild(textarea);
-			textarea.select();
-			try {
-				document.execCommand('copy');
-			} catch (err) {
-				console.error('Fallback: Tidak dapat menyalin', err);
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				navigator.clipboard.writeText(text).catch(function(err) {
+					console.error('Tidak dapat menyalin teks: ', err);
+				});
+			} else {
+				// Fallback untuk browser yang tidak mendukung
+				// Simpan posisi scroll saat ini
+				const scrollY = window.scrollY || window.pageYOffset;
+				const scrollX = window.scrollX || window.pageXOffset;
+
+				var textarea = document.createElement('textarea');
+				textarea.value = text;
+				textarea.style.position = 'fixed';
+				textarea.style.top = '0';
+				textarea.style.left = '0';
+				textarea.style.width = '1px';
+				textarea.style.height = '1px';
+				textarea.style.padding = '0';
+				textarea.style.border = 'none';
+				textarea.style.outline = 'none';
+				textarea.style.boxShadow = 'none';
+				textarea.style.background = 'transparent';
+				document.body.appendChild(textarea);
+				textarea.focus({
+					preventScroll: true
+				});
+				textarea.select();
+				try {
+					document.execCommand('copy');
+				} catch (err) {
+					console.error('Fallback: Tidak dapat menyalin', err);
+				}
+				document.body.removeChild(textarea);
+
+				// Kembalikan posisi scroll
+				window.scrollTo(scrollX, scrollY);
 			}
-			document.body.removeChild(textarea);
 		}
 	});
 
@@ -1576,16 +1919,34 @@
 				const imgSrc = e.target.src;
 				const modalOverlay = document.getElementById('modalOverlay');
 				const modalImage = document.getElementById('modalImage');
+				const modalContent = document.getElementById('modalContent');
 
 				modalImage.src = imgSrc;
+
 				modalOverlay.classList.add('active');
 
 				// Reset animasi jika diperlukan
-				const modalContent = document.getElementById('modalContent');
 				modalContent.style.animation = 'none';
 				void modalContent.offsetWidth; // Trigger reflow
 				modalContent.style.animation = 'zoomIn 0.5s forwards';
 				modalContent.style.display = "block";
+
+				// Menyimpan nilai overflow asli sebelum diubah
+				originalOverflow = document.body.style.overflow;
+
+				document.body.style.overflow = 'hidden';
+
+				// Atur fokus ke modalImage setelah modal ditampilkan
+				setTimeout(function() {
+					modalImage.focus({
+						preventScroll: true
+					});
+					modalImage.scrollIntoView({
+						behavior: 'smooth',
+						block: 'center',
+						inline: 'center'
+					});
+				}, 500); // Sesuaikan delay sesuai animasi CSS
 			}
 		});
 
@@ -1593,10 +1954,12 @@
 		function closeModal() {
 			const modalOverlay = document.getElementById('modalOverlay');
 			const modalImage = document.getElementById('modalImage');
+			const modalContent = document.getElementById('modalContent');
+
 			modalOverlay.classList.remove('active');
 			modalImage.src = '';
 			modalContent.style.display = "none";
-			document.body.style.overflow = 'auto'; // Mengembalikan scroll
+			document.body.style.overflow = originalOverflow || '';
 		}
 
 		// Event listener untuk tombol close

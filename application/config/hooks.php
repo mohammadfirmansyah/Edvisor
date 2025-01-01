@@ -11,6 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
+// Hook untuk menyisipkan aset global
 $hook['display_override'] = array(
     'class'    => 'GlobalAssetsInjector',      // Nama kelas hook
     'function' => 'injectAssets',              // Nama metode yang akan dipanggil

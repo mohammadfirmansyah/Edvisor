@@ -49,26 +49,33 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-// Controller default
-$route['default_controller'] = 'Controller';
+// Controller default yang akan dijalankan saat tidak ada controller yang ditentukan dalam URL
+$route['default_controller'] = 'Controller';  // Menentukan controller default, biasanya Home atau Dashboard
 
-// Route untuk root URL (home)
-$route[''] = "Controller/index";
+// Route untuk root URL (home), yang mengarah ke method index() dari controller Controller
+$route[''] = "Controller/index";  // URL root ('') akan memanggil method index() di Controller
 
-// Route khusus untuk previewForm dengan tiga parameter
-$route['previewForm/(:any)/(:any)/(:any)'] = 'Controller/previewForm/$1/$2/$3';
+// Route khusus untuk previewForm yang memiliki tiga parameter dinamis
+$route['previewForm/(:any)/(:any)/(:any)'] = 'Controller/previewForm/$1/$2/$3';  
+// Menangkap tiga parameter dinamis untuk method previewForm()
 
-// Route untuk tiga segmen (controller/method/parameter)
-$route['(:any)/(:any)/(:any)'] = "Controller/$1/$2/$3";
+// Route untuk tiga segmen dalam URL, misalnya controller/method/parameter
+$route['(:any)/(:any)/(:any)'] = "Controller/$1/$2/$3"; 
+// Menangkap tiga segmen URL dan memetakan ke controller, method, dan parameter
 
-// Route untuk dua segmen (controller/method)
-$route['(:any)/(:any)'] = "Controller/$1/$2";
+// Route untuk dua segmen dalam URL, misalnya controller/method
+$route['(:any)/(:any)'] = "Controller/$1/$2"; 
+// Menangkap dua segmen URL dan memetakan ke controller dan method
 
-// Route untuk satu segmen (controller)
-$route['(:any)'] = "Controller/$1";
+// Route untuk satu segmen dalam URL, misalnya controller saja
+$route['(:any)'] = "Controller/$1"; 
+// Menangkap satu segmen URL dan memetakan ke controller
 
-// Route yang tidak terdefinisi akan menampilkan 404
-$route['404_override'] = 'Controller/show_404';
+// Jika tidak ada route yang cocok, maka akan menampilkan halaman 404
+$route['404_override'] = 'Controller/show_404';  
+// Menangani rute yang tidak terdefinisi, akan memanggil method show_404() dari controller
 
-// Mengatur translate_uri_dashes
-$route['translate_uri_dashes'] = FALSE;
+// Menentukan apakah dash (-) dalam URI harus diterjemahkan menjadi underscore (_)
+// Jika FALSE, dash tidak akan diganti menjadi underscore.
+$route['translate_uri_dashes'] = FALSE;  
+// Mengatur apakah dash pada URL akan diterjemahkan menjadi underscore dalam nama controller/method

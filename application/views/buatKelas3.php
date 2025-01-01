@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title><?php echo $title; ?></title>
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/buatkelas3.css" />
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
 </head>
 
 <body>
@@ -233,7 +231,7 @@
         <form id="classCompleteForm" action="formBuatKelasSender" method="post">
             <input type="hidden" name="class_code" value="<?php echo htmlspecialchars($class_code); ?>">
             <input type="hidden" name="observers_data" id="observersDataInput">
-            <button disabled type="button" class="button4 link" id="classComplete">
+            <button type="button" class="button4 link" id="classComplete">
                 <div class="button1">Selesai</div>
             </button>
         </form>
@@ -449,8 +447,8 @@
             document.getElementById('timeDisplay').innerText = timeString;
         }
 
-        // Memanggil fungsi updateDateTime setiap detik
-        setInterval(updateDateTime, 1000);
+        // Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+        setInterval(updateDateTime, 0);
 
         // Memastikan waktu saat ini ditampilkan saat memuat halaman
         updateDateTime();
@@ -466,16 +464,36 @@
         overlay.classList.add('overlay-hidden');
 
         // Menambahkan event listener untuk menampilkan pop-up Tambah Observer
+        // Menambahkan event listener untuk menampilkan pop-up Tambah Observer
         document.getElementById('tambahObserver').addEventListener('click', function(event) {
             event.preventDefault(); // Mencegah aksi default
+
+            // Tampilkan pop-up Tambah Observer
             popupTambahObserver.classList.remove('popup-hidden');
             popupTambahObserver.classList.add('popup-visible');
             overlay.classList.remove('overlay-hidden');
             overlay.classList.add('overlay-visible');
+            document.body.style.overflow = 'hidden';
             document.body.classList.add('blur'); // Tambahkan efek blur ke latar belakang
 
             // Panggil renderStudentNumbers untuk memperbarui tampilan nomor siswa
             renderStudentNumbers();
+
+            // Tambahkan scroll ke tengah halaman setelah pop-up ditampilkan
+            setTimeout(function() {
+                // Pastikan elemen pop-up dapat difokuskan
+                popupTambahObserver.setAttribute('tabindex', '-1'); // Tambahkan tabindex jika belum ada
+                popupTambahObserver.focus({
+                    preventScroll: true
+                });
+
+                // Scroll elemen pop-up ke tengah halaman
+                popupTambahObserver.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center'
+                });
+            }, 500); // Sesuaikan delay sesuai animasi CSS
         });
 
         // Menambahkan event listener untuk menyimpan observer dan nomor siswa saat tombol simpanObserver diklik
@@ -491,6 +509,7 @@
             popupTambahObserver.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
             resetSelections(); // Reset pilihan
         });
@@ -503,6 +522,7 @@
                 popupTambahObserver.classList.add('popup-hidden');
                 overlay.classList.remove('overlay-visible');
                 overlay.classList.add('overlay-hidden');
+                document.body.style.overflow = 'auto';
                 document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
                 resetSelections(); // Reset pilihan
             }
@@ -513,6 +533,7 @@
                 popupModalSuccess.classList.add('popup-hidden');
                 overlay.classList.remove('overlay-visible');
                 overlay.classList.add('overlay-hidden');
+                document.body.style.overflow = 'auto';
                 document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
             }
         });
@@ -533,9 +554,26 @@
             popupModalSuccess.classList.add('popup-visible');
             overlay.classList.remove('overlay-hidden');
             overlay.classList.add('overlay-visible');
+            document.body.style.overflow = 'hidden';
             document.body.classList.add('blur'); // Tambahkan efek blur ke latar belakang
             // Tambahkan animasi pada iconCopy
             iconCopy.classList.add("animate-icon");
+
+            // Tambahkan scroll ke tengah halaman setelah pop-up ditampilkan
+            setTimeout(function() {
+                // Pastikan elemen pop-up dapat difokuskan
+                popupModalSuccess.setAttribute('tabindex', '-1'); // Tambahkan tabindex jika belum ada
+                popupModalSuccess.focus({
+                    preventScroll: true
+                });
+
+                // Scroll elemen pop-up ke tengah halaman
+                popupModalSuccess.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center'
+                });
+            }, 500); // Sesuaikan delay sesuai animasi CSS
         });
 
         // Mendefinisikan elemen-elemen yang diperlukan
@@ -665,13 +703,18 @@
             });
             addObserverEventListeners(); // Tambahkan event listener setelah render
 
-            // Terapkan animasi scroll pada elemen nama-observer dan observeremail
+            // Terapkan animasi scroll pada elemen nama-observer, observeremail, dan bagas-nugroho
             const namaObservers = document.querySelectorAll('.nama-observer');
             const observerEmails = document.querySelectorAll('.observeremail');
+            const bagasNugrohoElements = document.querySelectorAll('.bagas-nugroho'); // Tambahkan seleksi untuk bagas-nugroho
+
             namaObservers.forEach(element => {
                 setupScrollAnimation(element);
             });
             observerEmails.forEach(element => {
+                setupScrollAnimation(element);
+            });
+            bagasNugrohoElements.forEach(element => { // Terapkan animasi scroll pada bagas-nugroho
                 setupScrollAnimation(element);
             });
         }
@@ -763,6 +806,20 @@
         });
 
         /**
+         * Fungsi untuk memperbarui status tombol simpan
+         */
+        function updateButtonState() {
+            if (observerSelected && selectedNomorSiswa.length > 0) {
+                simpanButton.disabled = false;
+                simpanButton.classList.remove("disabled");
+            } else {
+                simpanButton.disabled = true;
+                simpanButton.classList.add("disabled");
+            }
+            logNomorStatus();
+        }
+
+        /**
          * Event listener untuk fokus pada input saat frame-container diklik
          */
         frameContainer.addEventListener("click", function() {
@@ -778,7 +835,9 @@
                 hideObserverItems();
                 noDataMessage.style.display = "block";
             } else {
-                inputField.focus();
+                inputField.focus({
+                    preventScroll: true
+                });
             }
         });
 
@@ -981,6 +1040,12 @@
                     textButtonIcon
                 );
 
+                // Memanggil setupScrollAnimation pada elemen bagas-nugroho yang baru ditambahkan
+                const newObserverElement = itemObserverContainer.querySelector(`.item-observer[data-observer-id="${observerId}"] .bagas-nugroho`);
+                if (newObserverElement) {
+                    setupScrollAnimation(newObserverElement);
+                }
+
                 // Tambahkan nomor siswa ke Set tidakTersedia dan hidden input
                 selectedNomorSiswa.forEach(num => tidakTersedia.add(num));
                 nomorTidakTersediaInput.value = Array.from(tidakTersedia).join(",");
@@ -1018,7 +1083,8 @@
                 popupTambahObserver.classList.remove('popup-visible');
                 popupTambahObserver.classList.add('popup-hidden');
                 overlay.classList.remove('overlay-visible');
-                overlay.classList.add('overlay-visible');
+                overlay.classList.add('overlay-hidden'); // Perbaikan: Tambahkan 'overlay-hidden' alih-alih 'overlay-visible'
+                document.body.style.overflow = 'auto';
                 document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
 
                 // Periksa apakah ada observer yang disimpan, jika ya, aktifkan tombol simpanKelas
@@ -1199,6 +1265,7 @@
             popupTambahObserver.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
             resetSelections(); // Reset pilihan
             // Kirim data ke server untuk disimpan di sesi
@@ -1213,6 +1280,7 @@
             popupTambahObserver.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari latar belakang
             resetSelections(); // Reset pilihan
             // Kirim data ke server untuk disimpan di sesi
@@ -1392,39 +1460,6 @@
             document.getElementById('observersDataInput').value = JSON.stringify(savedObserversData);
             document.getElementById('classCompleteForm').submit();
         });
-
-        // Pastikan tombol simpanKelas aktif jika ada observer yang disimpan
-        if (savedObserversData.length > 0) {
-            simpanKelasButton.disabled = false;
-            simpanKelasButton.classList.remove("disabled");
-        }
-
-        /**
-         * Fungsi untuk mereset sorotan pada observer items
-         */
-        function resetHighlight() {
-            const observerItems = document.querySelectorAll(".item-observer4");
-            observerItems.forEach((item) => {
-                const observerNameElement = item.querySelector(".nama-observer");
-                const observerEmailElement = item.querySelector(".observeremail");
-                observerNameElement.innerHTML = observerNameElement.textContent; // Reset ke teks asli tanpa highlight
-                observerEmailElement.innerHTML = observerEmailElement.textContent; // Reset ke teks asli tanpa highlight
-
-                // Setup animasi scroll kembali setelah reset
-                setupScrollAnimation(observerNameElement);
-                setupScrollAnimation(observerEmailElement);
-            });
-        }
-
-        /**
-         * Fungsi untuk menyembunyikan semua observer items
-         */
-        function hideObserverItems() {
-            const observerItems = document.querySelectorAll(".item-observer4");
-            observerItems.forEach((item) => {
-                item.style.display = "none";
-            });
-        }
 
         // Pastikan tombol simpanKelas aktif jika ada observer yang disimpan
         if (savedObserversData.length > 0) {

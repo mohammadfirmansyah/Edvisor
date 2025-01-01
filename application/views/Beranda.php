@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title><?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/beranda.css" />
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
 </head>
 
 <body>
@@ -18,9 +16,10 @@
     $notice_message = isset($notice_message) ? $notice_message : '';
     $deprecated_message = isset($deprecated_message) ? $deprecated_message : '';
     $class_not_started = isset($class_not_started) ? $class_not_started : '';
+    $class_ended = isset($class_ended) ? $class_ended : '';
     $error_long = isset($error_long) ? $error_long : '';
     $success_login = isset($success_login) ? $success_login : '';
-    $already_logged_in = isset($already_logged_in) ? $already_logged_in : ''; // Menambahkan ini
+    $already_logged_in = isset($already_logged_in) ? $already_logged_in : '';
     ?>
     <!-- Menyimpan flashdata sebagai atribut data pada div dengan id 'flashdata' -->
     <div id="flashdata"
@@ -30,9 +29,10 @@
         data-notice="<?= htmlspecialchars($notice_message, ENT_QUOTES, 'UTF-8'); ?>"
         data-deprecated="<?= htmlspecialchars($deprecated_message, ENT_QUOTES, 'UTF-8'); ?>"
         data-class-not-started="<?= htmlspecialchars($class_not_started, ENT_QUOTES, 'UTF-8'); ?>"
+        data-class-ended="<?= htmlspecialchars($class_ended, ENT_QUOTES, 'UTF-8'); ?>"
         data-error-long="<?= htmlspecialchars($error_long, ENT_QUOTES, 'UTF-8'); ?>"
         data-success-login="<?= htmlspecialchars($success_login, ENT_QUOTES, 'UTF-8'); ?>"
-        data-already-logged-in="<?= htmlspecialchars($already_logged_in, ENT_QUOTES, 'UTF-8'); ?>"> <!-- Menambahkan ini -->
+        data-already-logged-in="<?= htmlspecialchars($already_logged_in, ENT_QUOTES, 'UTF-8'); ?>">
     </div>
 
     <div class="home content unselectable-text">
@@ -506,12 +506,13 @@
         var success = flashdata.getAttribute('data-success');
         var error = flashdata.getAttribute('data-error');
         var classNotStarted = flashdata.getAttribute('data-class-not-started');
+        var classEnded = flashdata.getAttribute('data-class-ended');
         var warning = flashdata.getAttribute('data-warning');
         var notice = flashdata.getAttribute('data-notice');
         var deprecated = flashdata.getAttribute('data-deprecated');
         var errorLong = flashdata.getAttribute('data-error-long');
         var successLogin = flashdata.getAttribute('data-success-login');
-        var alreadyLoggedIn = flashdata.getAttribute('data-already-logged-in'); // Menambahkan ini
+        var alreadyLoggedIn = flashdata.getAttribute('data-already-logged-in');
 
         // Array untuk menyimpan semua pesan notifikasi
         var messages = [];
@@ -536,7 +537,7 @@
                 title: 'Berhasil',
                 text: successLogin,
                 confirmButtonColor: '#2563EB',
-                timer: 2000, // 2 detik
+                timer: 4000, // 4 detik
                 timerProgressBar: true,
                 showConfirmButton: false
             });
@@ -568,6 +569,16 @@
                 icon: 'warning',
                 title: 'Akses Ditolak',
                 text: classNotStarted,
+                confirmButtonColor: '#2563EB'
+            });
+        }
+
+        // Menambahkan pesan class_ended ke array jika ada
+        if (classEnded) {
+            messages.push({
+                icon: 'warning',
+                title: 'Formulir Anda Sudah Dikirim',
+                text: classEnded,
                 confirmButtonColor: '#2563EB'
             });
         }
@@ -652,8 +663,18 @@
             showNext();
         }
 
-        // Memanggil fungsi untuk menampilkan pesan notifikasi
-        showMessagesSequentially(messages);
+        // Cek apakah terdapat pesan successLogin
+        var hasSuccessLogin = !!successLogin;
+
+        if (hasSuccessLogin) {
+            // Jika ada successLogin, tunggu event 'overlayClosed' sebelum menampilkan pesan
+            window.addEventListener('overlayClosed', function() {
+                showMessagesSequentially(messages);
+            });
+        } else {
+            // Jika tidak ada successLogin, tampilkan pesan segera
+            showMessagesSequentially(messages);
+        }
     });
 
     /**
@@ -682,8 +703,8 @@
         document.getElementById('timeDisplay').innerText = timeString;
     }
 
-    // Memanggil fungsi updateDateTime setiap detik untuk real-time update
-    setInterval(updateDateTime, 1000);
+    // Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+    setInterval(updateDateTime, 0);
 
     // Memastikan waktu saat ini ditampilkan saat memuat halaman
     updateDateTime();
@@ -704,7 +725,17 @@
             popup.classList.add('popup-visible');
             overlay.classList.remove('overlay-hidden');
             overlay.classList.add('overlay-visible');
+            document.body.style.overflow = 'hidden';
             document.body.classList.add('blur'); // Tambahkan efek blur pada background
+
+            // Tambahkan scroll ke tengah halaman setelah popup ditampilkan
+            setTimeout(function() {
+                popup.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center'
+                });
+            }, 500);
         });
 
         // Tambahkan event listener untuk menyembunyikan popup saat tombol 'Tutup' diklik
@@ -714,6 +745,7 @@
             popup.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari background
         });
 
@@ -723,6 +755,7 @@
             popup.classList.add('popup-hidden');
             overlay.classList.remove('overlay-visible');
             overlay.classList.add('overlay-hidden');
+            document.body.style.overflow = 'auto';
             document.body.classList.remove('blur'); // Hapus efek blur dari background
         });
 
@@ -761,6 +794,16 @@
                 }
             });
         });
+    });
+
+    // Fokus input saat elemen dengan kelas 'search-parent' diklik
+    document.querySelectorAll('.search-parent').forEach(function(element) {
+        const input = element.querySelector('input');
+        if (input) {
+            element.addEventListener('click', function() {
+                input.focus();
+            });
+        }
     });
 
     // Fungsi untuk menangani pengurutan tabel kelas
@@ -1077,22 +1120,6 @@
         }
 
         initializeNotifications();
-    });
-
-    // Fungsi untuk mengatur fokus pada input pencarian
-    document.addEventListener("DOMContentLoaded", function() {
-        const searchInput = document.querySelector('.search-input');
-
-        /**
-         * Fungsi untuk menetapkan fokus pada input pencarian dengan delay
-         */
-        function setFocus() {
-            setTimeout(() => {
-                searchInput.focus();
-            }, 300); // Tambahkan delay untuk memastikan modal sepenuhnya terlihat sebelum fokus
-        }
-
-        setFocus();
     });
 
     /**

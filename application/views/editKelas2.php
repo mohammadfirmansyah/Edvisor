@@ -6,8 +6,6 @@
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
     <base href="<?= base_url(); ?>">
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/editKelas2.css" />
 </head>
 
 <body>
@@ -241,8 +239,8 @@
         document.getElementById('timeDisplay').innerText = timeString;
     }
 
-    // Memanggil fungsi updateDateTime setiap detik
-    setInterval(updateDateTime, 1000);
+    // Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+    setInterval(updateDateTime, 0);
 
     // Memastikan waktu saat ini ditampilkan saat memuat halaman
     updateDateTime();
@@ -428,22 +426,22 @@
             element.statusIcon.style.visibility = "visible";
             element.statusIcon.src = "assets/img/icon_upload_cancel.svg"; // Menampilkan ikon batal
 
-            // Mulai animasi progress bar dari 1% hingga 80% dalam 3 detik
+            // Mulai animasi progress bar dari 1%
             let progress = 1;
             updateProgressBar(element.progressBar, progress);
             const progressInterval = setInterval(() => {
-                if (progress < 80) {
+                if (progress < 1) {
                     progress += 1;
                     updateProgressBar(element.progressBar, progress);
                 } else {
-                    clearInterval(progressInterval); // Menghentikan interval ketika mencapai 80%
+                    clearInterval(progressInterval);
                 }
-            }, 30); // Interval setiap 30ms (total 3 detik)
+            }, 0);
 
-            // Melanjutkan upload dari 81% hingga 100% setelah 3 detik
+            // Melanjutkan upload dari 1% hingga 100%
             setTimeout(() => {
                 uploadFile(file, element, progressInterval);
-            }, 3000);
+            }, 0);
 
             // Menyimpan referensi upload yang sedang berlangsung
             element.isUploading = true;
@@ -481,7 +479,7 @@
             xhr.upload.onprogress = function(event) {
                 if (event.lengthComputable) {
                     const percentComplete = Math.round((event.loaded / event.total) * 100); // Menghitung persentase yang telah diupload
-                    const newProgress = 80 + (percentComplete * 0.2); // Menghitung persentase progress bar
+                    const newProgress = 1 + (percentComplete * 0.99); // Menghitung persentase progress bar
                     updateProgressBar(element.progressBar, newProgress);
                 }
             };

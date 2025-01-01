@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title><?php echo $title; ?></title>
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/lupapassword.css" />
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
 </head>
 
 <body>
@@ -46,7 +44,7 @@
                 </div>
             </div>
             <!-- Formulir untuk meminta reset kata sandi -->
-            <form action="formLupaPassword" method="POST">
+            <form action="formLupaKataSandi" method="POST">
                 <div class="input-field">
                     <div class="label">Alamat E-mail</div>
                     <div class="input-field-inner">
@@ -124,8 +122,8 @@
         // Fungsi untuk mengatur fokus pada input email setelah jeda
         function setFocus() {
             setTimeout(() => {
-                emailInput.focus(); // Mengatur fokus pada elemen input email
-            }, 300); // Menambahkan jeda 300 milidetik untuk memastikan modal sepenuhnya terlihat sebelum fokus
+                emailInput.focus({ preventScroll: true }); // Mengatur fokus pada elemen input email
+            }, 0);
         }
 
         setFocus(); // Memanggil fungsi setFocus

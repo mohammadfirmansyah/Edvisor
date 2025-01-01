@@ -1,7 +1,7 @@
 <div align="center">
   <h1><b>Edvisor Berbasis Website</b></h1>
 
-  ![Edvisor Logo](assets/img/logo.png)
+  ![Logo Edvisor](assets/img/Header.png)
 
   <!-- <a href="https://github.com/mohammadfirmansyah/Edvisor/releases" target="_blank" style="text-decoration: none !important;"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Pre-release&style=for-the-badge&color=lightgray" alt="Pre-release"></a> -->
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest" target="_blank" style="text-decoration: none !important;"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?style=for-the-badge" alt="Release"></a>
@@ -85,56 +85,134 @@ Dengan mengikuti format penomoran versi ini, kami memastikan bahwa setiap rilis 
 
 <h3 id="fitur-yang-telah-diimplementasikan">✅ Fitur yang Telah Diimplementasikan</h3>
 
-1. **Pembuatan Kelas Lesson Study**  
-   Memungkinkan pengguna untuk membuat kelas khusus untuk *lesson study*.
-   
-2. **Penentuan Jadwal Lesson Study**  
-   Menetapkan jadwal pelaksanaan *lesson study* saat pembuatan kelas.
-   
-3. **Penambahan Observer**  
-   Menambahkan anggota *observer* saat membuat kelas.
-   
-4. **Penentuan Siswa yang Diamati**  
-   Memilih siswa yang akan diamati oleh *observer*.
-   
-5. **Daftar Kelas Guru Model**  
-   Menampilkan daftar kelas yang dibuat oleh guru model.
-   
-6. **Pengunggahan Berkas Kegiatan**  
-   Mengunggah dokumen yang diperlukan untuk kegiatan *lesson study*.
-   
-7. **Penayangan Hasil Rekaman**  
-   Melihat hasil rekaman kegiatan mengajar.
-   
-8. **Pembagian Kode Kelas**  
-   Membagikan kode kelas untuk bergabung ke kelas *lesson study*.
-   
-9. **Daftar Kelas Observer**  
-   Menampilkan daftar kelas yang diikuti oleh *observer*.
-   
-10. **Bergabung dengan Kelas Menggunakan Kode**  
-    Memungkinkan pengguna untuk bergabung ke kelas dengan memasukkan kode kelas.
-    
-11. **Pelaksanaan Observasi dan Penilaian**  
-    Mengisi formulir observasi dan penilaian kegiatan mengajar.
-    
-12. **Hasil Penilaian**  
-    Melihat hasil penilaian yang telah diisi oleh *observer*.
-    
-13. **Pengunduhan Berkas Kegiatan**  
-    Mengunduh dokumen yang diperlukan untuk kegiatan *lesson study*.
-    
-14. **Catatan dan Dokumentasi**  
-    Melihat hasil catatan serta dokumentasi kegiatan.
-    
-15. **Akses Bantuan Penggunaan Aplikasi**  
-    Menyediakan panduan penggunaan aplikasi.
-    
-16. **Profil Pengguna**  
-    Melihat dan mengubah profil pengguna.
-    
-17. **Kompatibilitas Akses Publik**  
-    Memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pribadi pengembang menggunakan <a href="https://localtunnel.github.io/www/" target="_blank">localTunnel</a> dan <a href="https://localtonet.com/" target="_blank">LocalToNet</a>.
+1. **Mendaftar Akun**  
+   Pengguna dapat membuat akun baru untuk mengakses semua fitur yang tersedia dalam aplikasi Edvisor.
+
+2. **Mengirim Kata Sandi Baru**  
+   Pengguna dapat meminta penggantian kata sandi melalui email, di mana sistem akan mengirimkan kata sandi baru yang telah digenerasikan.
+
+3. **Masuk Akun**  
+   Pengguna dapat masuk ke akun mereka menggunakan email dan kata sandi yang telah didaftarkan.
+
+4. **Melihat Beranda**  
+   Setelah masuk, pengguna diarahkan ke halaman beranda yang menampilkan informasi utama dan navigasi aplikasi.
+
+5. **Melihat Notifikasi**  
+   Pengguna dapat melihat notifikasi terkait aktivitas terbaru dan pembaruan dalam aplikasi.
+
+6. **Melihat Jadwal Terdekat**  
+   Menampilkan jadwal kegiatan atau lesson study yang akan datang bagi pengguna.
+
+7. **Melihat Aktivitas Pengguna**  
+   Pengguna dapat melihat kombinasi jadwal kelas Guru Model dan kelas Observer yang telah mereka ikuti.
+
+8. **Melihat Jumlah Kelas**  
+   Menampilkan jumlah kelas yang dimiliki oleh Guru Model dan Observer yang terdaftar.
+
+9. **Mengakses Bantuan Penggunaan Aplikasi**  
+   Pengguna dapat mengakses panduan dan bantuan penggunaan aplikasi untuk memaksimalkan pengalaman mereka.
+
+10. **Melihat Profil Pengguna**  
+    Pengguna dapat melihat informasi profil mereka, termasuk detail pribadi dan foto profil.
+
+11. **Memperbarui Foto Profil**  
+    Pengguna dapat mengubah foto profil mereka untuk mencerminkan identitas visual mereka.
+
+12. **Memperbarui Data Profil Pengguna**  
+    Pengguna dapat memperbarui informasi profil mereka seperti nama lengkap, email, dan nomor induk.
+
+13. **Memperbarui Kata Sandi**  
+    Pengguna dapat mengganti kata sandi mereka untuk meningkatkan keamanan akun.
+
+14. **Membuat Kelas Guru Model**  
+    Guru Model dapat membuat kelas baru dengan menentukan detail kelas, mengunggah berkas, menambahkan Observer, dan menetapkan nomor siswa.
+
+15. **Menentukan Detail Lesson Study**  
+    Guru Model dapat mengatur nama kelas, nama sekolah, mata pelajaran, kompetensi dasar, tanggal, jam mulai, dan jam selesai untuk setiap lesson study.
+
+16. **Mengunggah Berkas**  
+    Guru Model dapat mengunggah berkas data siswa, modul ajar, dan media pembelajaran yang dapat diakses oleh Observer.
+
+17. **Menambahkan Observer**  
+    Guru Model dapat menambahkan Observer ke dalam kelas mereka untuk melakukan observasi dan penilaian.
+
+18. **Menetapkan Nomor Siswa**  
+    Guru Model dapat menentukan nomor siswa yang akan diamati oleh Observer dalam kelas.
+
+19. **Membagikan Kode Kelas**  
+    Guru Model dapat membagikan kode kelas kepada Observer lain yang ingin bergabung ke kelas mereka.
+
+20. **Melihat Daftar Kelas Guru Model**  
+    Guru Model dapat melihat semua kelas yang telah mereka buat dan kelola.
+
+21. **Membuka Kelas Guru Model**  
+    Guru Model dapat membuka kelas yang telah dibuat untuk melihat hasil observasi dan aktivitas lainnya.
+
+22. **Memperbarui Data Kelas Guru Model**  
+    Guru Model dapat memperbarui informasi kelas, termasuk detail lesson study, berkas, Observer, dan nomor siswa.
+
+23. **Memperbarui Detail Lesson Study**  
+    Guru Model dapat mengubah detail kegiatan lesson study sesuai kebutuhan.
+
+24. **Memperbarui Berkas**  
+    Guru Model dapat mengganti atau memperbarui berkas yang telah diunggah sebelumnya untuk memastikan informasi terbaru.
+
+25. **Memperbarui Observer**  
+    Guru Model dapat menambahkan atau menghapus Observer dalam kelas mereka sesuai kebutuhan.
+
+26. **Memperbarui Nomor Siswa**  
+    Guru Model dapat mengubah nomor siswa yang telah ditetapkan untuk observasi.
+
+27. **Menghapus Kelas Guru Model**  
+    Guru Model memiliki kemampuan untuk menghapus kelas yang tidak lagi diperlukan.
+
+28. **Melihat Hasil Rekaman**  
+    Guru Model dapat melihat hasil rekaman kegiatan mengajar yang telah dilakukan oleh masing-masing Observer.
+
+29. **Melihat Hasil Catatan**  
+    Guru Model dapat melihat catatan yang telah dibuat oleh masing-masing Observer selama kegiatan lesson study.
+
+30. **Melihat Hasil Dokumentasi**  
+    Guru Model dapat mengakses dokumentasi kegiatan lesson study untuk referensi dan evaluasi lebih lanjut.
+
+31. **Mengunduh Berkas untuk Guru Model**  
+    Guru Model dapat mengunduh berkas yang telah diunggah untuk keperluan offline atau dokumentasi.
+
+32. **Mengunduh Hasil Penilaian**  
+    Guru Model dapat mengunduh hasil penilaian yang telah dilakukan oleh Observer.
+
+33. **Melihat Hasil Penilaian Observer**  
+    Guru Model dapat melihat hasil penilaian yang telah diisi oleh masing-masing Observer untuk setiap kelas.
+
+34. **Melihat Daftar Kelas Observer**  
+    Observer dapat melihat semua kelas yang mereka ikuti dan kelola.
+
+35. **Bergabung ke Kelas Guru Model**  
+    Observer dapat bergabung ke kelas Guru Model dengan memasukkan kode kelas yang diberikan.
+
+36. **Mengisi Kode Kelas**  
+    Observer dapat memasukkan kode kelas untuk proses bergabung ke dalam kelas yang diinginkan.
+
+37. **Memilih Nomor Siswa**  
+    Observer dapat memilih nomor siswa yang akan mereka amati dalam kelas yang telah bergabung.
+
+38. **Membuka Kelas Observer**  
+    Observer dapat membuka dan mengakses kelas yang telah mereka ikuti untuk melakukan observasi.
+
+39. **Melakukan Observasi dan Penilaian**  
+    Observer dapat melakukan observasi dan mengisi formulir penilaian terhadap kegiatan mengajar dalam kelas.
+
+40. **Melihat Hasil Penilaian Pribadi**  
+    Observer dapat melihat hasil penilaian yang telah mereka lakukan untuk setiap kelas.
+
+41. **Mengunduh Berkas untuk Observer**  
+    Observer dapat mengunduh berkas terkait kelas yang mereka ikuti untuk referensi dan dokumentasi.
+
+42. **Kompatibilitas Akses Publik**  
+    Memungkinkan akses publik ke aplikasi Edvisor yang berjalan di jaringan pribadi pengembang menggunakan [localTunnel](https://localtunnel.github.io/www/) dan [LocalToNet](https://localtonet.com/), memudahkan pengujian dan distribusi aplikasi dalam lingkungan jaringan pribadi.
+
+43. **Timer pada Halaman Penilaian Formulir**  
+    Menambahkan fitur timer yang secara otomatis menyimpan formulir penilaian dan menutup akses setelah waktu yang ditentukan, memastikan keteraturan dan keamanan dalam proses penilaian.
 
 <h3 id="fitur-yang-belum-diimplementasikan">🕒 Fitur yang Belum Diimplementasikan</h3>
 
@@ -542,6 +620,34 @@ Kontribusi untuk pengembangan Edvisor sangat kami hargai. Berikut adalah panduan
    
    Dengan perubahan ini, pesan `console.log` akan muncul pada console browser untuk memudahkan debugging.
 
+6. **Menambahkan Aset Baru**  
+   Untuk menambahkan aset baru ke dalam halaman view, tambahkan entri baru di direktori `Edvisor/application/config/assets.php`. Pastikan untuk mengikuti struktur yang sudah ada agar aset baru terintegrasi dengan baik dalam aplikasi.
+
+7. **Mengubah Versi Aset**  
+   Jika Anda telah mengubah data aset, sebelum merilisnya ke publik, Anda harus memperbarui nomor versi aset. Caranya:
+   - Buka direktori `Edvisor/application/hook/GlobalAssetsInjector.php`
+   - Ubah nilai variabel `$asset_version` sesuai format `MAJOR.MINOR.PATCH.BUILD`. Contohnya:
+
+     ```php
+     $asset_version = '1.2.3.4';
+     ```
+   
+   - Jika diperlukan, juga perbarui variabel `$release_year` untuk mencerminkan tahun rilis terbaru.
+
+   Pembaruan versi ini penting untuk memastikan bahwa pengguna mendapatkan versi aset yang terbaru dan menghindari masalah cache saat aset diperbarui.
+
+8. **Menambahkan Komentar pada Kode**  
+   Setelah menuliskan kode, jangan pernah lupa untuk menuliskan komentar. Komentar membantu Anda memahami tujuan dari kode yang telah ditambahkan ketika Anda melihat kembali di masa depan.  
+   
+   Contoh:
+   
+   ```javascript
+   // Mengaktifkan logging untuk proses debugging
+   const hideLogs = true;
+   ```
+   
+   Dengan menambahkan komentar seperti di atas, Anda dapat dengan mudah mengingat fungsi dan alasan di balik perubahan kode tersebut, sehingga memudahkan pemeliharaan dan pengembangan lebih lanjut.
+
 <h2 id="dokumentasi">📚 Dokumentasi</h2>
 
 ### User Flow dan Class Diagram
@@ -558,55 +664,71 @@ User Flow pada Edvisor menggambarkan alur interaksi pengguna dalam produk ini de
 
 1. **Memulai Interaksi:**
    - Pengguna membuka aplikasi Edvisor.
-   - Pengguna diberikan pilihan untuk **Mendaftar Akun** atau **Login**.
+   - Pengguna diberikan pilihan untuk **Mendaftar Akun**, **Login**, atau **Lupa Kata Sandi**.
 
-2. **Proses Pendaftaran atau Login:**
+2. **Proses Pendaftaran, Login, atau Reset Kata Sandi:**
    - **Mendaftar Akun:**
-     - Jika memilih **Mendaftar Akun**, pengguna akan melalui proses pendaftaran terlebih dahulu.
-     - Setelah pendaftaran berhasil, pengguna diarahkan untuk melakukan **Login**.
+     - Jika memilih **Mendaftar Akun**, pengguna akan melalui serangkaian langkah untuk mengisi data pendaftaran.
+     - Setelah pendaftaran berhasil, pengguna diarahkan kembali ke halaman **Login**.
    - **Login:**
-     - Jika pengguna sudah memiliki akun, mereka dapat langsung memilih opsi **Login**.
-     - Setelah berhasil login, pengguna diarahkan ke **Halaman Akses Beranda**.
+     - Pengguna yang sudah memiliki akun dapat langsung memilih opsi **Login**.
+     - Setelah berhasil login, pengguna diarahkan ke **Halaman Beranda**.
+   - **Lupa Kata Sandi:**
+     - Jika memilih **Lupa Kata Sandi**, pengguna dapat meminta penggantian kata sandi.
+     - Sistem akan mengirimkan kata sandi baru melalui email pengguna.
 
 3. **Akses Beranda:**
    - Di **Halaman Beranda**, pengguna memiliki beberapa opsi:
      - Memilih peran sebagai **Guru Model**.
      - Memilih peran sebagai **Observer**.
-     - Memilih opsi **Bantuan** untuk mendapatkan panduan lebih lanjut.
+     - Mengakses **Navigasi Utilitas** seperti **Bantuan** dan **Profil**.
    - **Opsi Bantuan:**
-     - Jika memilih **Bantuan**, pengguna akan menerima panduan yang diperlukan.
+     - Jika memilih **Bantuan**, pengguna akan menerima panduan penggunaan aplikasi.
      - Setelah menerima panduan, proses berakhir.
 
 4. **Pemilihan Peran:**
    - Pengguna memilih untuk menjadi **Guru Model** atau **Observer**.
-   
+
    - **Sebagai Guru Model:**
      1. **Membuat Kelas Guru Model:**
-        - Mengisi detail kelas.
-        - Mengunggah berkas yang relevan.
-        - Memilih **Observer** yang akan berpartisipasi.
-        - Menentukan nomor siswa untuk kelas tersebut.
-        - Menyimpan formulir yang telah diisi.
+        - Mengisi detail kelas, termasuk nama kelas, nama sekolah, mata pelajaran, kompetensi dasar, tanggal, jam mulai, dan jam selesai.
+        - Mengunggah berkas data siswa, modul ajar, dan media pembelajaran.
+        - Menambahkan **Observer** yang akan berpartisipasi dalam kelas.
+        - Menetapkan nomor siswa yang akan diamati.
+        - Menyimpan formulir yang telah diisi dan menyalin kode kelas.
         - Setelah menyimpan, pengguna kembali ke **Halaman Beranda**.
-     2. **Lihat Hasil Observasi:**
-        - Memilih kelas yang diinginkan.
+     2. **Melihat Hasil Observasi:**
+        - Memilih kelas yang diinginkan dari daftar kelas yang telah dibuat.
         - Melihat hasil observasi yang dilakukan oleh **Observer**.
         - Mengunduh formulir observasi jika diperlukan.
         - Proses ini berakhir setelah hasil observasi dilihat.
-   
+
    - **Sebagai Observer:**
-     1. **Gabung Kelas Guru Model:**
+     1. **Bergabung dengan Kelas Guru Model:**
         - Memasukkan **kode kelas** yang diberikan oleh **Guru Model**.
-        - Memilih nomor siswa yang sesuai.
+        - Memilih nomor siswa yang akan diamati dalam kelas tersebut.
         - Menyimpan formulir tersebut.
         - Setelah menyimpan, pengguna kembali ke **Halaman Beranda**.
-     2. **Observasi Kelas:**
-        - Memilih kelas yang ingin diobservasi.
+     2. **Melakukan Observasi Kelas:**
+        - Memilih kelas yang ingin diobservasi dari daftar kelas yang telah diikuti.
         - Mengisi formulir pengamatan yang relevan.
         - Menyimpan formulir pengamatan.
-        - Proses ini berakhir setelah formulir disimpan.
+        - Menambahkan tanda tangan digital jika diperlukan.
+        - Proses observasi ini berakhir setelah formulir disimpan.
 
-Dengan alur ini, Edvisor memastikan bahwa kedua peran utama dapat berinteraksi secara efektif dalam mendukung pelaksanaan *lesson study*.
+5. **Mengakses Navigasi Utilitas:**
+   - Selain memilih peran utama, pengguna dapat memilih untuk mengakses **Profil**.
+     - **Profil:**
+       - Pengguna dapat memperbarui kata sandi, data profil, atau foto profil mereka.
+       - Setiap pembaruan ditandai dengan simbol **Process** dan diakhiri dengan simbol **Terminator** setelah pembaruan selesai dilakukan.
+   - Jika memilih **Bantuan**, pengguna akan menerima panduan penggunaan aplikasi dan proses akan berakhir.
+
+6. **Fitur Tambahan:**
+   - **Timer pada Halaman Penilaian Formulir:**
+     - Saat mengisi formulir penilaian, pengguna akan melihat timer yang menghitung waktu yang tersisa.
+     - Setelah timer selesai, formulir akan secara otomatis disimpan dan akses formulir akan ditutup, memastikan keteraturan dan keamanan dalam proses penilaian.
+
+Dengan alur ini, Edvisor memastikan bahwa kedua peran utama dapat berinteraksi secara efektif dalam mendukung pelaksanaan *lesson study*, serta memberikan kemudahan dalam navigasi dan pengelolaan data pengguna.
 
 #### Class Diagram
 
@@ -617,15 +739,15 @@ Dengan alur ini, Edvisor memastikan bahwa kedua peran utama dapat berinteraksi s
 Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbagai entitas dalam sistem. Berikut adalah penjelasan detail mengenai hubungan antar kelas:
 
 1. **Users dan ci_sessions**
-   - **Hubungan:** Users "1" --> "0..*" ci_sessions : has sessions
+   - **Hubungan:** Users "1" --> "0..*" ci_sessions : has
    - **Alasan:** Setiap pengguna (**Users**) dapat memiliki banyak sesi (**ci_sessions**). Ini memungkinkan sistem untuk melacak dan mengelola sesi pengguna secara individual, seperti login dan aktivitas pengguna.
 
 2. **Users dan Classes**
-   - **Hubungan:** Users "1" --> "0..*" Classes : creates classes
-   - **Alasan:** Seorang pengguna (**Users**) yang berperan sebagai Guru Model dapat membuat banyak kelas (**Classes**). Kolom `creator_user_id` dalam tabel **Classes** merupakan foreign key yang merujuk ke `user_id` di tabel **Users**, yang menunjukkan siapa yang membuat kelas tersebut.
+   - **Hubungan:** Users "1" --> "0..*" Classes : creates
+   - **Alasan:** Seorang pengguna (**Users**) yang berperan sebagai Guru Model dapat membuat banyak kelas (**Classes**). Kolom `creator_user_id` dalam tabel **Classes** merujuk ke `user_id` di tabel **Users**, menunjukkan siapa yang membuat kelas tersebut.
 
 3. **Classes dan ClassObservers**
-   - **Hubungan:** Classes "1" --> "0..*" ClassObservers : has observers
+   - **Hubungan:** Classes "1" --> "0..*" ClassObservers : has
    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak pengamat (**ClassObservers**). Ini memungkinkan kelas tersebut untuk diikuti atau diamati oleh berbagai pengguna yang berperan sebagai pengamat.
 
 4. **Users dan ClassObservers**
@@ -633,15 +755,15 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
    - **Alasan:** Seorang pengguna (**Users**) dapat menjadi pengamat (**ClassObservers**) untuk banyak kelas (**Classes**). Ini memungkinkan satu pengguna untuk mengamati berbagai kelas yang berbeda.
 
 5. **Classes dan Notifications**
-   - **Hubungan:** Classes "1" --> "0..*" Notifications : triggers notifications
-   - **Alasan:** Setiap kelas (**Classes**) dapat memicu banyak notifikasi (**Notifications**). Notifikasi ini dapat berkaitan dengan berbagai aktivitas atau perubahan dalam kelas, seperti penambahan pengamat baru atau pembaruan materi pengajaran.
+   - **Hubungan:** Classes "1" --> "0..*" Notifications : triggers 
+   - **Alasan:** Setiap kelas (**Classes**) dapat memicu banyak notifikasi (**Notifications**). Notifikasi ini berkaitan dengan berbagai aktivitas atau perubahan dalam kelas, seperti penambahan pengamat baru atau pembaruan materi pengajaran.
 
 6. **Users dan Notifications**
-   - **Hubungan:** Users "1" --> "0..*" Notifications : sends & receives notifications
+   - **Hubungan:** Users "1" --> "0..*" Notifications : sends & receives
    - **Alasan:** Seorang pengguna (**Users**) dapat mengirim dan menerima banyak notifikasi (**Notifications**). Kolom `sender_id` dan `receiver_id` dalam tabel **Notifications** masing-masing merujuk ke `user_id` di tabel **Users**, menunjukkan siapa yang mengirim dan menerima notifikasi tersebut.
 
 7. **ClassObservers dan ObservedStudents**
-   - **Hubungan:** ClassObservers "1" --> "0..*" ObservedStudents : observes students
+   - **Hubungan:** ClassObservers "1" --> "0..*" ObservedStudents : observes 
    - **Alasan:** Setiap entri dalam **ClassObservers** (kombinasi antara kelas dan pengamat) dapat memiliki banyak siswa yang diamati (**ObservedStudents**). Ini menghubungkan pengamat dengan siswa yang mereka amati dalam kelas tertentu, memungkinkan pencatatan pengamatan secara terperinci.
 
 8. **Classes dan TeachingActivityAssessment**
@@ -666,7 +788,7 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
 
 13. **Classes dan StudentActivityNotes**
     - **Hubungan:** Classes "1" --> "0..*" StudentActivityNotes : has
-    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak catatan aktivitas siswa (**StudentActivityNotes**). Catatan ini dapat mencakup berbagai aktivitas atau observasi yang dilakukan selama kelas berlangsung.
+    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak catatan aktivitas siswa (**StudentActivityNotes**). Catatan ini mencakup berbagai aktivitas atau observasi yang dilakukan selama kelas berlangsung.
 
 14. **ClassObservers dan StudentActivityNotes**
     - **Hubungan:** ClassObservers "1" --> "1" StudentActivityNotes : notes
@@ -674,15 +796,15 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
 
 15. **Classes dan ClassVoiceRecordings**
     - **Hubungan:** Classes "1" --> "0..*" ClassVoiceRecordings : has
-    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak rekaman suara (**ClassVoiceRecordings**). Rekaman ini dapat digunakan untuk mendokumentasikan aktivitas atau diskusi selama kelas.
+    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak rekaman suara (**ClassVoiceRecordings**). Rekaman ini digunakan untuk mendokumentasikan aktivitas atau diskusi selama kelas.
 
 16. **ClassObservers dan ClassVoiceRecordings**
-    - **Hubungan:** ClassObservers "1" --> "1" ClassVoiceRecordings : notes
+    - **Hubungan:** ClassObservers "1" --> "1" ClassVoiceRecordings : record
     - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat membuat satu rekaman suara (**ClassVoiceRecordings**) untuk kelas yang diamatinya.
 
 17. **Classes dan SpecialNotes**
     - **Hubungan:** Classes "1" --> "0..*" SpecialNotes : has
-    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak catatan khusus (**SpecialNotes**). Catatan ini dapat mencakup hal-hal spesifik atau kejadian unik yang terjadi selama kelas berlangsung.
+    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak catatan khusus (**SpecialNotes**). Catatan ini mencakup hal-hal spesifik atau kejadian unik yang terjadi selama kelas berlangsung.
 
 18. **ClassObservers dan SpecialNotes**
     - **Hubungan:** ClassObservers "1" --> "0..*" SpecialNotes : notes
@@ -690,7 +812,7 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
 
 19. **Classes dan ClassDocumentationFiles**
     - **Hubungan:** Classes "1" --> "0..*" ClassDocumentationFiles : documents
-    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak file dokumentasi (**ClassDocumentationFiles**). File-file ini dapat berisi materi pengajaran, dokumentasi kegiatan, atau materi lainnya yang relevan dengan kelas.
+    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak file dokumentasi (**ClassDocumentationFiles**). File-file ini berisi materi pengajaran, dokumentasi kegiatan, atau materi lainnya yang relevan dengan kelas.
 
 20. **ClassObservers dan ClassDocumentationFiles**
     - **Hubungan:** ClassObservers "1" --> "0..*" ClassDocumentationFiles : documents
@@ -703,22 +825,28 @@ Dengan pemahaman struktur dan hubungan antar kelas ini, pengembang dapat lebih m
 Berikut adalah beberapa screenshot yang menggambarkan antarmuka dan fitur Edvisor:
 
 1. **Login**  
-   ![Login](screenshot/Login.jpeg)
+   ![Login](screenshot/Login.png)
 
 2. **Beranda**  
-   ![Beranda](screenshot/Beranda.jpeg)
+   ![Beranda](screenshot/Beranda.png)
 
-3. **Kelas Guru Model**  
-   ![Kelas Guru Model](screenshot/Kelas%20Guru%20Model.jpeg)
+3. **Profil**  
+   ![Profil](screenshot/Profil.png)
 
-4. **Dokumentasi**  
-   ![Dokumentasi](screenshot/Dokumentasi.jpeg)
+4. **Buat Kelas**  
+   ![Buat Kelas](screenshot/Buat%20Kelas.png)
 
-5. **Preview Formulir**  
-   ![Preview Formulir](screenshot/Preview%20Formulir.jpeg)
+5. **Kode Kelas**  
+   ![Kode Kelas](screenshot/Kode%20Kelas.png)
 
-6. **Formulir**  
-   ![Formulir](screenshot/Formulir.jpeg)
+6. **Melihat Hasil Penilaian**  
+   ![Melihat Hasil Penilaian](screenshot/Melihat%20Hasil%20Penilaian.png)
+
+7. **Formulir Penilaian**  
+   ![Formulir Penilaian](screenshot/Formulir%20Penilaian.png)
+
+8. **Bantuan**  
+   ![Bantuan](screenshot/Bantuan.png)
 
 <h2 id="kredit">🎓 Kredit</h2>
 
@@ -731,7 +859,7 @@ Berikut adalah beberapa screenshot yang menggambarkan antarmuka dan fitur Edviso
 - **Nama:** Mohammad Firman Syah  
 - **Program Studi:** Pendidikan Teknologi Informasi  
 - **NIM:** 205150600111011  
-- **Dirilis:** 2024
+- **Dirilis:** 2025
 
 ### Desain Antarmuka
 

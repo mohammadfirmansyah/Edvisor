@@ -55,10 +55,16 @@
     font-style: normal;
     font-weight: 600;
     line-height: 1.5rem;
+    transition: background-color 0.5s ease;
 }
 
 .button:hover {
     background-color: #1D4ED8;
+}
+
+.button:disabled {
+    pointer-events: none;
+    background-color: #bfdbfe;
 }
 
 .label {
@@ -181,11 +187,92 @@
     width: 5.5rem;
     height: 5.5rem;
     border-radius: 50%;
-    transition: box-shadow 0.5s ease;
+    border: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
-.iconsolidcamera:hover~.group-child {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.profile-photo-container {
+    position: absolute;
+    top: 0;
+    left: calc(50% - 44px);
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 50%;
+    border: 0;
+    box-sizing: border-box;
+    overflow: hidden; /* Pastikan elemen anak tidak melampaui kontainer */
+}
+
+.progress-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    transform: scaleY(0); /* Mulai dari skala 0 */
+    transform-origin: bottom; /* Transformasi dimulai dari bawah */
+    transition: transform 2s ease-in-out; /* Transisi animasi */
+    pointer-events: none;
+}
+
+.progress-overlay.active {
+    transform: scaleY(1); /* Skala penuh saat aktif */
+}
+
+.progress-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(255, 255, 255, 1), rgba(0, 0, 255, 0));
+    /* Gradient biru untuk efek air */
+}
+
+.iconsolidcamera.hovered .icon-camera {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.iconsolidcamera.hovered .icon-upload {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Animasi Spinning Rainbow Border */
+@keyframes spinRainbow {
+    0% {
+        box-shadow: 0px 0px 0px 4px blue;
+    }
+
+    16.66% {
+        box-shadow: 0px 0px 0px 4px violet;
+    }
+
+    33.33% {
+        box-shadow: 0px 0px 0px 4px red;
+    }
+
+    50% {
+        box-shadow: 0px 0px 0px 4px orange;
+    }
+
+    66.66% {
+        box-shadow: 0px 0px 0px 4px yellow;
+    }
+
+    83.33% {
+        box-shadow: 0px 0px 0px 4px green;
+    }
+
+    100% {
+        box-shadow: 0px 0px 0px 4px blue;
+    }
+}
+
+.rainbow-border {
+    animation: spinRainbow 2s linear infinite;
 }
 
 .iconsolidcamera {
@@ -202,10 +289,26 @@
 }
 
 .iconsolidcamera img {
+    transition: opacity 0.3s ease;
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
+}
+
+.iconsolidcamera .icon-upload {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.iconsolidcamera.hovered .icon-camera {
+    opacity: 0;
+}
+
+.iconsolidcamera.hovered .icon-upload {
+    opacity: 1;
 }
 
 @keyframes bounceUp {
@@ -296,15 +399,16 @@
     font-style: normal;
     font-weight: 600;
     line-height: 1.5rem;
+    transition: background-color 0.5s ease;
+}
+
+.button2:hover {
+    background-color: #1D4ED8;
 }
 
 .button2:disabled {
     pointer-events: none;
     background-color: #bfdbfe;
-}
-
-.button2:hover {
-    background-color: #1D4ED8;
 }
 
 .kata-sandi-child {
@@ -764,4 +868,10 @@
     left: 1.625rem;
     width: 30rem;
     height: 1.25rem;
+}
+
+/* Gaya untuk simbol validitas */
+.validity-icon {
+    margin-left: 5px;
+    font-weight: bold;
 }

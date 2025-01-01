@@ -4,9 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1, width=device-width">
-	<title><?php echo $title; ?></title>
-	<link rel="icon" href="assets/img/favicon.png">
-	<link rel="stylesheet" href="assets/css/bantuan.css" />
+	<title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
 </head>
 
 <body>
@@ -222,8 +220,8 @@
 		document.getElementById('timeDisplay').innerText = timeString;
 	}
 
-	// Memanggil fungsi updateDateTime setiap 500 milidetik untuk memperbarui waktu secara real-time
-	setInterval(updateDateTime, 500);
+	// Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+    setInterval(updateDateTime, 0);
 
 	// Memastikan waktu saat ini ditampilkan saat memuat halaman
 	updateDateTime();

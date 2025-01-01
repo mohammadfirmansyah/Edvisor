@@ -124,6 +124,7 @@
     box-sizing: border-box;
     font-size: 1rem;
     color: #fff;
+    transition: background-color 0.5s ease;
 }
 
 .button:hover {
@@ -769,6 +770,7 @@
     padding: 0.75rem 2rem;
     box-sizing: border-box;
     color: #fff;
+    transition: background-color 0.5s ease;
 }
 
 .button2:hover {
@@ -1393,6 +1395,11 @@
     z-index: 1;
 }
 
+.pop-up-tambah-observer-parent:focus{
+    border: 0 !important;
+    outline: 0 !important;
+}
+
 .selamat-kelas-anda {
     position: absolute;
     top: 1.813rem;
@@ -1467,6 +1474,7 @@
     box-sizing: border-box;
     font-size: 1rem;
     color: #fff;
+    transition: background-color 0.5s ease;
 }
 
 .button4:hover {

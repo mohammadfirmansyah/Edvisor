@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOCX Viewer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
     <base href="<?php echo base_url(); ?>">
-    <link rel="stylesheet" href="assets/css/previewform.css"/>
-    <script src="assets/js/jszip.js"></script>
-    <script src="assets/js/docx-preview.js"></script>
 </head>
 
 <body>
     <!-- Kontainer utama tempat dokumen DOCX akan dirender -->
-    <div id="container">
-        <p>Loading document...</p>
-    </div>
+    <div id="container"></div>
 </body>
-<script>   
+<script>
+    // Menampilkan animasi loading SweetAlert2 dengan teks bahasa Indonesia
+    Swal.fire({
+        title: 'Memuat dokumen...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
     // URL file .docx yang akan ditampilkan
     // Ganti dengan URL file DOCX Anda atau gunakan variabel server-side untuk dinamis
-    const fileUrl = "<?= $file_url; ?>"; 
+    const fileUrl = "<?= $file_url; ?>";
 
     /**
      * Mengambil file DOCX dari URL yang diberikan menggunakan Fetch API
@@ -30,10 +34,10 @@
             // Memeriksa apakah respons berhasil (status HTTP 200-299)
             if (!response.ok) {
                 // Jika tidak berhasil, melemparkan error
-                throw new Error("Failed to fetch the document");
+                throw new Error("Gagal mengambil dokumen");
             }
             // Mengonversi respons menjadi Blob untuk diproses lebih lanjut
-            return response.blob(); 
+            return response.blob();
         })
         .then(blob => {
             /**
@@ -42,14 +46,32 @@
              * @param {HTMLElement} document.getElementById("container") - Elemen tempat dokumen akan dirender
              */
             docx.renderAsync(blob, document.getElementById("container"))
-                .then(() => console.log("docx: finished rendering")) // Log ketika rendering selesai
-                .catch(err => console.error("Error during rendering:", err)); // Menangani error selama rendering
+                .then(() => {
+                    console.log("docx: selesai merender");
+                    // Menutup animasi loading setelah rendering selesai
+                    Swal.close();
+                })
+                .catch(err => {
+                    console.error("Error selama rendering:", err);
+                    // Menutup animasi loading dan menampilkan pesan error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Merender Dokumen',
+                        text: 'Terjadi kesalahan saat merender dokumen.'
+                    });
+                });
         })
         .catch(err => {
             // Menangani error saat pengambilan dokumen
-            console.error("Error fetching document:", err);
-            // Menampilkan pesan error kepada pengguna
-            document.getElementById("container").innerHTML = "<p>Failed to load document.</p>";
+            console.error("Error saat mengambil dokumen:", err);
+            // Menutup animasi loading dan menampilkan pesan error
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Memuat Dokumen',
+                text: 'Tidak dapat memuat dokumen.'
+            });
+            // Menampilkan pesan error kepada pengguna di kontainer
+            document.getElementById("container").innerHTML = "<p>Gagal memuat dokumen.</p>";
         });
 </script>
 

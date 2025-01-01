@@ -127,7 +127,15 @@ class SessionModel extends CI_Model
         $this->db->where('id', $session_id);
 
         // Melakukan update data
-        return $this->db->update($this->table, $data);
+        $result = $this->db->update($this->table, $data);
+
+        if ($result) {
+            log_message('info', "SessionModel: Session dengan ID {$session_id} telah diperbarui dengan data: " . json_encode($data));
+        } else {
+            log_message('error', "SessionModel: Gagal memperbarui session dengan ID {$session_id}.");
+        }
+
+        return $result;
     }
 
     /**

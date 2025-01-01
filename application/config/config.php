@@ -408,7 +408,7 @@ $config['sess_cookie_name'] = 'ci_session'; // Nama cookie sesi
 $config['sess_expiration'] = 0; // Sesi tidak akan kedaluwarsa secara otomatis
 $config['sess_save_path'] = 'ci_sessions'; // Nama tabel untuk menyimpan sesi di database
 $config['sess_match_ip'] = FALSE; // Tidak memeriksa kecocokan IP
-$config['sess_time_to_update'] = 1800; // Regenerasi session ID setiap 30 menit
+$config['sess_time_to_update'] = 30; // Regenerasi session ID setiap 30 detik
 $config['sess_regenerate_destroy'] = TRUE; // Hapus sesi lama saat regenerasi
 $config['sess_samesite'] = 'Lax'; // SameSite attribute untuk cookie
 

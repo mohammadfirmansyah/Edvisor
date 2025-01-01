@@ -368,10 +368,10 @@ class ClassModel extends CI_Model
         $classes_with_status = [];
 
         foreach ($created_classes as $class) {
-            // Menggabungkan tanggal dan waktu selesai untuk membandingkan dengan waktu saat ini
-            $class_end_datetime = $class->date . ' ' . $class->end_time;
+            // Menggabungkan tanggal dan waktu mulai untuk membandingkan dengan waktu saat ini
+            $class_start_datetime = $class->date . ' ' . $class->start_time;
 
-            if (strtotime($current_datetime) < strtotime($class_end_datetime)) {
+            if (strtotime($current_datetime) < strtotime($class_start_datetime)) {
                 // Jika waktu pelaksanaan belum terjadi
                 $status = 'Akan Datang';
             } else {

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS Users (
     registration_number VARCHAR(50), -- Nomor registrasi pengguna
     status ENUM('active', 'wait', 'inactive') DEFAULT 'inactive', -- Status pengguna (aktif/menunggu/inaktif)
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- Waktu pembuatan data pengguna
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP -- Waktu terakhir data pengguna diperbarui
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Waktu terakhir data pengguna diperbarui
 ) ENGINE=InnoDB;
 
 -- Menambahkan indeks pada kolom last_activity untuk mempercepat query
@@ -244,10 +244,10 @@ BEGIN
         AND u.last_activity IS NOT NULL
         AND TIMESTAMPDIFF(SECOND, u.last_activity, NOW()) > 60;
 END //
-
+    
 -- Menghapus event 'cleanup_ci_sessions' jika sudah ada dan membuat event baru
 DROP EVENT IF EXISTS `cleanup_ci_sessions` //
-
+    
 CREATE EVENT `cleanup_ci_sessions`
 ON SCHEDULE EVERY 10 SECOND -- Mengatur jadwal setiap 10 detik
 STARTS CURRENT_TIMESTAMP
@@ -257,6 +257,74 @@ BEGIN
     DELETE FROM ci_sessions
     WHERE status = 'inactive';
 END //
-
+    
 -- Mengembalikan delimiter ke default
+DELIMITER ;
+
+-- Trigger untuk memperbarui 'user_id', 'status', 'browser', dan 'mode_private' sebelum INSERT ke 'ci_sessions'
+DELIMITER //
+    
+DROP TRIGGER IF EXISTS trg_ci_sessions_insert //
+    
+CREATE TRIGGER trg_ci_sessions_insert
+BEFORE INSERT ON ci_sessions
+FOR EACH ROW
+BEGIN
+    DECLARE user_id_var INT;
+
+    -- Mencari user_id dari Users yang memiliki current_session_id sama dengan sesi yang baru disisipkan
+    SELECT user_id INTO user_id_var FROM Users WHERE current_session_id = NEW.id LIMIT 1;
+
+    IF user_id_var IS NOT NULL THEN
+        -- Mengatur nilai yang akan disisipkan
+        SET NEW.user_id = user_id_var;
+        SET NEW.status = 'active';
+        SET NEW.browser = (SELECT last_browser FROM Users WHERE user_id = user_id_var);
+        SET NEW.mode_private = CASE 
+                                    WHEN (SELECT last_mode FROM Users WHERE user_id = user_id_var) = 'private' THEN 1 
+                                    ELSE 0 
+                                END;
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+-- Trigger untuk memperbarui 'ci_sessions' setelah UPDATE pada 'Users'
+DELIMITER //
+    
+DROP TRIGGER IF EXISTS trg_users_update //
+    
+CREATE TRIGGER trg_users_update
+AFTER UPDATE ON Users
+FOR EACH ROW
+BEGIN
+    -- Memeriksa apakah 'current_session_id' telah diubah
+    IF OLD.current_session_id <> NEW.current_session_id THEN
+        -- Jika 'current_session_id' baru tidak NULL, perbarui ci_sessions
+        IF NEW.current_session_id IS NOT NULL THEN
+            UPDATE ci_sessions
+            SET 
+                user_id = NEW.user_id,
+                status = 'active',
+                browser = NEW.last_browser,
+                mode_private = CASE 
+                                   WHEN NEW.last_mode = 'private' THEN 1 
+                                   ELSE 0 
+                               END
+            WHERE id = NEW.current_session_id;
+        END IF;
+
+        -- Jika 'current_session_id' lama tidak NULL, set 'user_id' menjadi NULL dan status 'inactive'
+        IF OLD.current_session_id IS NOT NULL THEN
+            UPDATE ci_sessions
+            SET 
+                user_id = NULL,
+                status = 'inactive'
+            WHERE id = OLD.current_session_id;
+        END IF;
+    END IF;
+END;
+//
+
 DELIMITER ;

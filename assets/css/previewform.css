@@ -3,6 +3,8 @@ body {
     margin: 0;
     padding: 0;
     overflow: scroll !important;
+    width: fit-content !important;
+    height: fit-content !important;
 }
 
 #container {
@@ -16,6 +18,8 @@ body {
     /* Firefox: Sembunyikan scrollbar */
     -ms-overflow-style: none;
     /* IE/Edge: Sembunyikan scrollbar */
+    width: 90rem;
+    height: 64rem;
 }
 
 /* Chrome, Safari, Opera */
@@ -24,9 +28,16 @@ body {
 }
 
 .docx-wrapper {
-    background-color: #dbeafe !important;
+    padding: 2rem !important;
+    background-color: #DBEAFE !important;
 }
 
 .docx {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.0) !important;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 15px !important;
+}
+
+div:where(.swal2-container) {
+    height: 100% !important;
+    width: 100% !important;
 }

@@ -83,7 +83,7 @@
     gap: 0.25rem;
 }
 
-.frame-group {
+.frame-group1 {
     position: absolute;
     left: 50%;
     transform: translate(-50%);
@@ -116,6 +116,7 @@
     gap: 0.5rem;
     color: #fff;
     cursor: pointer;
+    transition: background-color 0.5s ease;
 }
 
 .button:hover {
@@ -709,6 +710,7 @@
     font-size: 1rem;
     color: #fff;
     cursor: pointer;
+    transition: background-color 0.5s ease;
 }
 
 .button2:disabled {
@@ -1259,6 +1261,7 @@ body.blur .content> :not(#modalGabungKelas) {
     padding: 0.75rem 2rem;
     box-sizing: border-box;
     color: #fff;
+    transition: background-color 0.5s ease;
 }
 
 .button3:hover {

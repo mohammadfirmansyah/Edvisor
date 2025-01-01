@@ -111,19 +111,25 @@ class User extends CI_Model
         return $this->db->update($this->table, $data);
     }
 
-    /**
-     * Memperbarui data aktivitas pengguna
+   /**
+     * Memperbarui aktivitas pengguna
      *
-     * @param int $user_id ID pengguna yang akan diperbarui
+     * @param int $user_id ID pengguna
      * @param array $data Data yang akan diperbarui
      * @return bool Hasil update data
      */
     public function updateActivity($user_id, $data)
     {
-        // Menambahkan kondisi WHERE untuk user_id
         $this->db->where('user_id', $user_id);
-        // Melakukan update data
-        return $this->db->update($this->table, $data);
+        $result = $this->db->update($this->table, $data);
+
+        if ($result) {
+            log_message('info', "User: User_id: {$user_id} aktivitas diperbarui dengan data: " . json_encode($data));
+        } else {
+            log_message('error', "User: Gagal memperbarui aktivitas untuk User_id: {$user_id}.");
+        }
+
+        return $result;
     }
 
     /**
@@ -149,6 +155,9 @@ class User extends CI_Model
 
                 // Batas waktu inaktivitas 1800 detik (30 menit)
                 if ($interval > 1800) {
+                    // Menambahkan log info saat pengguna dinonaktifkan karena timeout
+                    log_message('info', "Model: User_id: {$user->user_id} dinonaktifkan karena melebihi batas waktu inaktivitas. Last Activity: {$user->last_activity}, Interval: {$interval} seconds.");
+
                     // Update status menjadi 'inactive' dan hapus session_id
                     $update_data = [
                         'status' => 'inactive',

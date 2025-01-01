@@ -4,9 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, width=device-width">
-    <title><?php echo $title; ?></title>
-    <link rel="icon" href="assets/img/favicon.png">
-    <link rel="stylesheet" href="assets/css/buatkelas2.css" />
+    <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></title>
 </head>
 
 <body>
@@ -253,8 +251,8 @@
         document.getElementById('timeDisplay').innerText = timeString;
     }
 
-    // Memanggil fungsi updateDateTime setiap detik
-    setInterval(updateDateTime, 1000);
+    // Memanggil fungsi updateDateTime secara terus-menerus tanpa jeda
+    setInterval(updateDateTime, 0);
 
     // Memastikan waktu saat ini ditampilkan saat memuat halaman
     updateDateTime();
@@ -442,22 +440,22 @@
             element.statusIcon.style.visibility = "visible";
             element.statusIcon.src = "assets/img/icon_upload_cancel.svg"; // Menampilkan ikon batal
 
-            // Mulai animasi progress bar dari 1% hingga 80% dalam 3 detik
+            // Mulai animasi progress bar dari 1%
             let progress = 1;
             updateProgressBar(element.progressBar, progress);
             const progressInterval = setInterval(() => {
-                if (progress < 80) {
+                if (progress < 1) {
                     progress += 1;
                     updateProgressBar(element.progressBar, progress);
                 } else {
                     clearInterval(progressInterval);
                 }
-            }, 30); // 3 detik total
+            }, 0);
 
-            // Melanjutkan upload dari 81% hingga 100% setelah 3 detik
+            // Melanjutkan upload dari 1% hingga 100%
             setTimeout(() => {
                 uploadFile(file, element, progressInterval);
-            }, 3000);
+            }, 0);
 
             // Menyimpan referensi upload yang sedang berlangsung
             element.isUploading = true;
@@ -496,7 +494,7 @@
             xhr.upload.onprogress = function(event) {
                 if (event.lengthComputable) {
                     const percentComplete = Math.round((event.loaded / event.total) * 100);
-                    const newProgress = 80 + (percentComplete * 0.2);
+                    const newProgress = 1 + (percentComplete * 0.99);
                     updateProgressBar(element.progressBar, newProgress);
                 }
             };
@@ -603,8 +601,48 @@
         }
 
         // Event klik pada tombol "Unduh Format Data Siswa"
-        document.getElementById('unduhFormatDataSiswa').addEventListener('click', function() {
-            window.location.href = "assets/media/formatDataSiswa/FormatDataSiswa_beta.xlsx";
+        document.getElementById('unduhFormatDataSiswa').addEventListener('click', async function() {
+            try {
+                // Tampilkan loading indicator
+                Swal.fire({
+                    title: 'Memuat...',
+                    text: 'Sedang memproses pengunduhan.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Mengunduh file menggunakan fetch
+                const response = await fetch("assets/media/formatDataSiswa/FormatDataSiswa_beta.xlsx");
+
+                if (!response.ok) {
+                    throw new Error('Gagal mengunduh file. Status: ' + response.status);
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'FormatDataSiswa_beta.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                // Tampilkan pesan error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Mengunduh',
+                    text: error.message,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#2563EB'
+                });
+            } finally {
+                // Tutup loading indicator
+                Swal.close();
+            }
         });
 
         // Event klik pada tombol "Selanjutnya"
