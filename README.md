@@ -16,14 +16,12 @@
          alt="Latest Status">
   </a>
 
-  <!-- Latest Update (placeholder, warna lightgrey) -->
+  <!-- Latest Update (placeholder) -->
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest">
     <img src="https://img.shields.io/badge/Latest%20Update-2025--01--03-blue?style=for-the-badge&color=lightgrey"
          alt="Latest Update">
   </a>
 </p>
-
-
 </div>
 
 <h2 id="daftar-isi">📋 Daftar Isi</h2>

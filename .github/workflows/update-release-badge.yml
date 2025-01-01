@@ -9,12 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        # Melakukan checkout repository agar kita dapat mengubah file README.md
         uses: actions/checkout@v2
 
       - name: Install dependencies (jq dan locales)
-        # 1. Menginstal jq untuk parsing JSON.
-        # 2. Menginstal locales, lalu generate "id_ID.UTF-8" agar date bisa diformat menggunakan bahasa Indonesia.
         run: |
           sudo apt-get update
           sudo apt-get install -y jq locales
@@ -23,49 +20,20 @@ jobs:
       - name: Get Latest Release Tag & Date
         id: get_release
         run: |
-          # -------------------------------------------------------------
-          # Mendapatkan tag rilis terbaru dari payload event
-          # -------------------------------------------------------------
           latest_release=$(jq -r .release.tag_name < "$GITHUB_EVENT_PATH")
           echo "release=$latest_release" >> $GITHUB_OUTPUT
 
-          # -------------------------------------------------------------
-          # Mendapatkan tanggal rilis terbaru (published_at) dalam format ISO 8601
-          # Contoh: 2025-01-02T07:53:21Z
-          # -------------------------------------------------------------
           release_date_raw=$(jq -r .release.published_at < "$GITHUB_EVENT_PATH")
-
-          # -------------------------------------------------------------
-          # Memformat tanggal ke "DD MMMM YYYY" (contoh: 02 Januari 2025)
-          # Menggunakan locale "id_ID.UTF-8" supaya nama bulan muncul dalam bahasa Indonesia.
-          # -------------------------------------------------------------
           export LC_ALL=id_ID.UTF-8
           export LANG=id_ID.UTF-8
           export LANGUAGE=id_ID:en
-
           release_date_formatted=$(date -d "$release_date_raw" +"%d %B %Y")
-
           echo "release_date=$release_date_formatted" >> $GITHUB_OUTPUT
 
       - name: Determine Latest Status
         id: get_latest_status
         run: |
-          # -------------------------------------------------------------
-          # Menentukan status (STABLE, ALPHA, BETA, HOTFIX, RC, dsb.)
-          # berdasarkan format versi:
-          #
-          #   MAJOR.MINOR.PATCH(-LABEL.ITERASI)?
-          #
-          # Contoh:
-          # 1.2.1-hotfix.1 -> HOTFIX
-          # 1.2.1-beta.2   -> BETA
-          # 1.3.0          -> STABLE
-          # -------------------------------------------------------------
           release=${{ steps.get_release.outputs.release }}
-
-          # Regex berikut:
-          # - Awal: MAJOR.MINOR.PATCH
-          # - Opsional: -LABEL.ITERASI
           regex="^[0-9]+\.[0-9]+\.[0-9]+(?:-([^.]+)\.[0-9]+)?$"
           if [[ $release =~ $regex ]]; then
             label="${BASH_REMATCH[1]}"
@@ -77,55 +45,31 @@ jobs:
           else
             latest_status="STABLE"
           fi
-
           echo "latest_status=$latest_status" >> $GITHUB_OUTPUT
 
       - name: Update README Badges
         run: |
-          # -------------------------------------------------------------
-          # Mengambil variabel dari step sebelumnya
-          # -------------------------------------------------------------
           release=${{ steps.get_release.outputs.release }}
           release_date=${{ steps.get_release.outputs.release_date }}
           latest_status=${{ steps.get_latest_status.outputs.latest_status }}
 
-          # -------------------------------------------------------------
-          # Pilihan warna badge Latest Status:
-          # - ALPHA -> red
-          # - BETA  -> orange
-          # - Lainnya (STABLE, HOTFIX, RC, dsb.) -> green
-          #   (Badge warna "success" di Shields.io)
-          # -------------------------------------------------------------
           color="success"
           [[ "$latest_status" == "ALPHA" ]] && color="critical"
           [[ "$latest_status" == "BETA" ]] && color="important"
 
-          # -------------------------------------------------------------
-          # Update "Latest Release" Badge
-          # - Mencari placeholder:
-          #   https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational
-          # -------------------------------------------------------------
+          # Latest Release
           release_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$release?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational"
           sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational|$release_badge_url|g" README.md
 
-          # -------------------------------------------------------------
-          # Update "LATEST STATUS" Badge
-          # - Mencari placeholder:
-          #   https://img.shields.io/badge/LATEST%20STATUS-.*-blue?style=for-the-badge
-          # -------------------------------------------------------------
+          # Latest Status
           latest_status_badge_url="https://img.shields.io/badge/LATEST%20STATUS-$latest_status-$color?style=for-the-badge"
           sed -i "s|https://img.shields.io/badge/LATEST%20STATUS-.*-blue?style=for-the-badge|$latest_status_badge_url|g" README.md
 
-          # -------------------------------------------------------------
-          # Update "Latest Update" Badge
-          # - Mencari placeholder:
-          #   https://img.shields.io/badge/Latest%20Update-.*-blue?style=for-the-badge&color=lightgrey
-          # -------------------------------------------------------------
+          # Latest Update
           latest_update_badge_url="https://img.shields.io/badge/Latest%20Update-$release_date-blue?style=for-the-badge&color=lightgrey"
           sed -i "s|https://img.shields.io/badge/Latest%20Update-.*-blue?style=for-the-badge&color=lightgrey|$latest_update_badge_url|g" README.md
 
       - name: Commit Changes
-        # Melakukan commit perubahan pada README.md dan push ke branch terkait.
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
