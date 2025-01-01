@@ -29,8 +29,8 @@ Harap baca Perjanjian Lisensi Perangkat Lunak ("Perjanjian") ini dengan seksama 
    - Setelah penghentian, Anda harus segera menghentikan penggunaan perangkat lunak ini dan menghapus semua salinan yang ada.
 
 7. **Hukum yang Berlaku**
-   - Perjanjian ini diatur dan ditafsirkan sesuai dengan hukum yang berlaku di Indonesia.
-   - Setiap sengketa yang timbul dari atau terkait dengan Perjanjian ini akan diselesaikan di pengadilan yang berwenang di Pengadilan Negeri Malang.
+   - Perjanjian ini diatur dan ditafsirkan sesuai dengan hukum yang berlaku di **Indonesia**.
+   - Setiap sengketa yang timbul dari atau terkait dengan Perjanjian ini akan diselesaikan di pengadilan yang berwenang di **Pengadilan Negeri Jakarta Pusat**.
 
 8. **Perubahan Perjanjian**
    - Pemilik berhak untuk mengubah ketentuan-ketentuan dalam Perjanjian ini sewaktu-waktu tanpa pemberitahuan sebelumnya.
