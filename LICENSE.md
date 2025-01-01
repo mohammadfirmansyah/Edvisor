@@ -1,11 +1,11 @@
-© 2025 Mohammad Firman Syah. Semua hak dilindungi undang-undang.
+© 2025 Mohammad Firman Syah dan Tim. Semua hak dilindungi undang-undang.
 
 **PERJANJIAN LISENSI PERANGKAT LUNAK**
 
 Harap baca Perjanjian Lisensi Perangkat Lunak ("Perjanjian") ini dengan seksama sebelum menggunakan perangkat lunak ini. Dengan mengakses atau menggunakan perangkat lunak ini, Anda setuju untuk terikat oleh ketentuan-ketentuan dalam Perjanjian ini.
 
 1. **Hak Cipta dan Kepemilikan**
-   - Perangkat lunak ini adalah milik eksklusif Mohammad Firman Syah dan dilindungi oleh undang-undang hak cipta serta peraturan internasional lainnya.
+   - Perangkat lunak ini adalah milik eksklusif Mohammad Firman Syah dan Tim serta dilindungi oleh undang-undang hak cipta serta peraturan internasional lainnya.
    - Tidak ada hak, judul, atau kepentingan dalam perangkat lunak ini yang dialihkan kepada Anda berdasarkan Perjanjian ini.
 
 2. **Lisensi Terbatas**
@@ -29,8 +29,8 @@ Harap baca Perjanjian Lisensi Perangkat Lunak ("Perjanjian") ini dengan seksama 
    - Setelah penghentian, Anda harus segera menghentikan penggunaan perangkat lunak ini dan menghapus semua salinan yang ada.
 
 7. **Hukum yang Berlaku**
-   - Perjanjian ini diatur dan ditafsirkan sesuai dengan hukum yang berlaku di [Negara/Provinsi Anda].
-   - Setiap sengketa yang timbul dari atau terkait dengan Perjanjian ini akan diselesaikan di pengadilan yang berwenang di [Lokasi Pengadilan].
+   - Perjanjian ini diatur dan ditafsirkan sesuai dengan hukum yang berlaku di Indonesia.
+   - Setiap sengketa yang timbul dari atau terkait dengan Perjanjian ini akan diselesaikan di pengadilan yang berwenang di Pengadilan Negeri Malang.
 
 8. **Perubahan Perjanjian**
    - Pemilik berhak untuk mengubah ketentuan-ketentuan dalam Perjanjian ini sewaktu-waktu tanpa pemberitahuan sebelumnya.
