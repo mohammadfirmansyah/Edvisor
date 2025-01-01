@@ -4,14 +4,20 @@
   ![Logo Edvisor](assets/img/Header.png)
 
 <p>
-  <!-- Latest Release Badge (mencakup pre-release dan release) -->
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
+  <!-- Latest Release -->
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest">
+    <img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release">
+  </a>
 
-  <!-- Latest Status Badge (placeholder) -->
-  <img src="https://img.shields.io/badge/LATEST%20STATUS-STABLE-blue?style=for-the-badge" alt="Latest Status">
+  <!-- Latest Status (placeholder) -->
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest">
+    <img src="https://img.shields.io/badge/LATEST%20STATUS-STABLE-blue?style=for-the-badge" alt="Latest Status">
+  </a>
 
-  <!-- Latest Update Badge (placeholder) -->
-  <img src="https://img.shields.io/badge/Latest%20Update-2025--01--02-blue?style=for-the-badge&color=lightgrey" alt="Latest Update">
+  <!-- Latest Update (placeholder) -->
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest">
+    <img src="https://img.shields.io/badge/Latest%20Update-2025--01--03-blue?style=for-the-badge&color=lightgrey" alt="Latest Update">
+  </a>
 </p>
 </div>
 
