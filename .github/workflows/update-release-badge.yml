@@ -53,7 +53,9 @@ jobs:
           # -------------------------------------------------------------
           # Menentukan status (STABLE, ALPHA, BETA, HOTFIX, RC, dsb.)
           # berdasarkan format versi:
+          #
           #   MAJOR.MINOR.PATCH(-LABEL.ITERASI)?
+          #
           # Contoh:
           # 1.2.1-hotfix.1 -> HOTFIX
           # 1.2.1-beta.2   -> BETA
@@ -61,6 +63,9 @@ jobs:
           # -------------------------------------------------------------
           release=${{ steps.get_release.outputs.release }}
 
+          # Regex berikut:
+          # - Awal: MAJOR.MINOR.PATCH
+          # - Opsional: -LABEL.ITERASI
           regex="^[0-9]+\.[0-9]+\.[0-9]+(?:-([^.]+)\.[0-9]+)?$"
           if [[ $release =~ $regex ]]; then
             label="${BASH_REMATCH[1]}"
@@ -88,7 +93,8 @@ jobs:
           # Pilihan warna badge Latest Status:
           # - ALPHA -> red
           # - BETA  -> orange
-          # - Lainnya -> green
+          # - Lainnya (STABLE, HOTFIX, RC, dsb.) -> green
+          #   (Badge warna "success" di Shields.io)
           # -------------------------------------------------------------
           color="success"
           [[ "$latest_status" == "ALPHA" ]] && color="critical"
@@ -96,14 +102,15 @@ jobs:
 
           # -------------------------------------------------------------
           # Update "Latest Release" Badge
-          # - Mencari placeholder yang memuat &color=informational
+          # - Mencari placeholder:
+          #   https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational
           # -------------------------------------------------------------
           release_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$release?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational"
           sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational|$release_badge_url|g" README.md
 
           # -------------------------------------------------------------
           # Update "LATEST STATUS" Badge
-          # - Cari placeholder:
+          # - Mencari placeholder:
           #   https://img.shields.io/badge/LATEST%20STATUS-.*-blue?style=for-the-badge
           # -------------------------------------------------------------
           latest_status_badge_url="https://img.shields.io/badge/LATEST%20STATUS-$latest_status-$color?style=for-the-badge"
@@ -111,12 +118,14 @@ jobs:
 
           # -------------------------------------------------------------
           # Update "Latest Update" Badge
-          # - Mencari placeholder dengan &color=lightgrey
+          # - Mencari placeholder:
+          #   https://img.shields.io/badge/Latest%20Update-.*-blue?style=for-the-badge&color=lightgrey
           # -------------------------------------------------------------
           latest_update_badge_url="https://img.shields.io/badge/Latest%20Update-$release_date-blue?style=for-the-badge&color=lightgrey"
           sed -i "s|https://img.shields.io/badge/Latest%20Update-.*-blue?style=for-the-badge&color=lightgrey|$latest_update_badge_url|g" README.md
 
       - name: Commit Changes
+        # Melakukan commit perubahan pada README.md dan push ke branch terkait.
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
