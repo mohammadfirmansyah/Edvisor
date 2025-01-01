@@ -7,6 +7,7 @@ on:
 jobs:
   update-badges:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -20,9 +21,11 @@ jobs:
       - name: Get Latest Release Tag & Date
         id: get_release
         run: |
+          # Mendapatkan tag release terbaru
           latest_release=$(jq -r .release.tag_name < "$GITHUB_EVENT_PATH")
           echo "release=$latest_release" >> $GITHUB_OUTPUT
 
+          # Mendapatkan published_at lalu memformat jadi "DD MMMM YYYY"
           release_date_raw=$(jq -r .release.published_at < "$GITHUB_EVENT_PATH")
           export LC_ALL=id_ID.UTF-8
           export LANG=id_ID.UTF-8
@@ -33,8 +36,10 @@ jobs:
       - name: Determine Latest Status
         id: get_latest_status
         run: |
+          # Regex mengekstrak label (ALPHA, BETA, dsb.) dari tag
           release=${{ steps.get_release.outputs.release }}
           regex="^[0-9]+\.[0-9]+\.[0-9]+(?:-([^.]+)\.[0-9]+)?$"
+
           if [[ $release =~ $regex ]]; then
             label="${BASH_REMATCH[1]}"
             if [[ -z "$label" ]]; then
@@ -45,29 +50,38 @@ jobs:
           else
             latest_status="STABLE"
           fi
+
           echo "latest_status=$latest_status" >> $GITHUB_OUTPUT
 
       - name: Update README Badges
         run: |
+          # Ambil data dari step sebelumnya
           release=${{ steps.get_release.outputs.release }}
           release_date=${{ steps.get_release.outputs.release_date }}
           latest_status=${{ steps.get_latest_status.outputs.latest_status }}
 
-          color="success"
-          [[ "$latest_status" == "ALPHA" ]] && color="critical"
-          [[ "$latest_status" == "BETA" ]] && color="important"
+          # Warna Status
+          color="success"    # hijau
+          [[ "$latest_status" == "ALPHA" ]] && color="critical"   # merah
+          [[ "$latest_status" == "BETA" ]] && color="important"   # oranye
 
-          # Latest Release
+          # 1. Latest Release
+          # Mencari:   ?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational
+          # -> Pastikan di README.md cocok
           release_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$release?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational"
           sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational|$release_badge_url|g" README.md
 
-          # Latest Status
+          # 2. Latest Status
+          # Mencari:   https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge
+          # -> Ada dua dash: STATUS--blue
           latest_status_badge_url="https://img.shields.io/badge/LATEST%20STATUS-$latest_status-$color?style=for-the-badge"
-          sed -i "s|https://img.shields.io/badge/LATEST%20STATUS-.*-blue?style=for-the-badge|$latest_status_badge_url|g" README.md
+          sed -i "s|https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge|$latest_status_badge_url|g" README.md
 
-          # Latest Update
+          # 3. Latest Update
+          # Mencari:   https://img.shields.io/badge/Latest%20Update--blue?style=for-the-badge&color=lightgrey
+          # -> Ada dua dash: Update--blue
           latest_update_badge_url="https://img.shields.io/badge/Latest%20Update-$release_date-blue?style=for-the-badge&color=lightgrey"
-          sed -i "s|https://img.shields.io/badge/Latest%20Update-.*-blue?style=for-the-badge&color=lightgrey|$latest_update_badge_url|g" README.md
+          sed -i "s|https://img.shields.io/badge/Latest%20Update--blue?style=for-the-badge&color=lightgrey|$latest_update_badge_url|g" README.md
 
       - name: Commit Changes
         run: |
