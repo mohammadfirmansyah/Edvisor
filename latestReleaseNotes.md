@@ -1,12 +1,11 @@
 ## 📢 Release Notes
 
-### v1.2.1-hotfix.2
+### v1.2.1-hotfix.3
 
 **Perbaikan yang Telah Dilakukan:**
 
-1. **Perbaikan Format Pesan Error di SweetAlert2**
-   - **Konsistensi dan Bahasa yang Lebih Sopan**  
-     Memperbaiki format pesan error saat SweetAlert2 tampil agar menjadi lebih konsisten dan menggunakan bahasa Indonesia yang lebih sopan. Perubahan ini bertujuan untuk memberikan pengalaman pengguna yang lebih baik dan komunikasi yang lebih jelas saat terjadi kesalahan.
+1. **Petunjuk Penundaan Login Ulang**
+   - Kini, jika pengguna terputus secara otomatis oleh sistem, aplikasi akan menampilkan pesan yang menyarankan agar pengguna menunggu satu menit sebelum mencoba login kembali. Hal ini bertujuan untuk mencegah kesalahan login berulang sekaligus menjaga stabilitas dan keamanan sistem.
 
 <details>
   <summary><h3 id="instalasi-menggunakan-localhost">Instalasi menggunakan localhost</h3></summary>

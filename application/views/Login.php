@@ -102,7 +102,7 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             // Mengambil elemen flashdata
             var flashdata = document.getElementById('flashdata');
             var success = flashdata.getAttribute('data-success'); // Mendapatkan data-success
@@ -193,8 +193,9 @@
                             <h4 style="margin-bottom: 8px;">Petunjuk:</h4>
                             <ul style="padding-left: 20px; margin: 0;">
                                 <li>Anda hanya diperbolehkan masuk menggunakan satu browser.</li>
-                                <li>Silakan logout akun Anda pada browser yang lain.</li>
-                                <li>Jika Anda sudah menutup aplikasi tanpa melakukan logout, tunggu selama <strong>1 menit</strong> sebelum sistem secara otomatis mengeluarkan Anda.</li>
+                                <li>Silakan logout dari browser lain.</li>
+                                <li>Jika Anda menutup aplikasi tanpa melakukan logout, tunggu selama <strong>1 menit</strong> hingga sistem secara otomatis mengeluarkan Anda.</li>
+                                <li>Jika Anda dikeluarkan otomatis oleh sistem karena kesalahan, tunggu selama <strong>1 menit</strong> sebelum mencoba login kembali.</li>
                             </ul>
                         </div>
                     `,
@@ -228,7 +229,7 @@
                         footer: currentMsg.footer || '', // Tambahkan footer jika ada
                         confirmButtonText: 'OK',
                         confirmButtonColor: currentMsg.confirmButtonColor
-                    }).then(function () {
+                    }).then(function() {
                         showNext();
                     });
                 }
@@ -292,7 +293,7 @@
             }
 
             // Menambahkan event listener pada input email untuk validasi saat mengetik
-            emailInput.addEventListener('input', function () {
+            emailInput.addEventListener('input', function() {
                 validateForm(); // Memvalidasi form
                 // Update ikon validitas
                 var isValid = validateEmail(emailInput.value);
@@ -300,14 +301,14 @@
             });
 
             // Menambahkan event listener pada input password untuk validasi saat mengetik
-            passwordInput.addEventListener('input', function () {
+            passwordInput.addEventListener('input', function() {
                 clearTimeout(typingTimeout); // Membersihkan timeout sebelumnya
                 validateForm(); // Memvalidasi form
             });
 
             // Menambahkan event listener klik pada ikon toggle password
-            document.querySelectorAll('[data-password-id]').forEach(function (icon) {
-                icon.addEventListener('click', function (e) {
+            document.querySelectorAll('[data-password-id]').forEach(function(icon) {
+                icon.addEventListener('click', function(e) {
                     e.stopPropagation(); // Mencegah event bubbling ke wrapper
                     var passwordId = this.getAttribute('data-password-id');
                     togglePassword(passwordId, this);
@@ -337,8 +338,8 @@
             /**
              * Menambahkan fungsionalitas fokus otomatis pada input saat klik pada input-field-inner
              */
-            document.querySelectorAll('.input-field-inner').forEach(function (wrapper) {
-                wrapper.addEventListener('click', function (e) {
+            document.querySelectorAll('.input-field-inner').forEach(function(wrapper) {
+                wrapper.addEventListener('click', function(e) {
                     // Prevent triggering if the click is inside the input
                     if (e.target.tagName.toLowerCase() === 'input' || e.target.classList.contains('kata-sandi-child')) {
                         return;
@@ -349,7 +350,7 @@
                         input.focus();
                         if (input.value) {
                             // Gunakan setTimeout untuk memastikan setSelectionRange dipanggil setelah fokus diterapkan
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 var len = input.value.length;
                                 input.setSelectionRange(len, len);
                             }, 0);
@@ -363,7 +364,7 @@
              */
             var rememberMeCheckbox = document.querySelector('.checkbox-input');
             if (rememberMeCheckbox) {
-                rememberMeCheckbox.addEventListener('change', function () {
+                rememberMeCheckbox.addEventListener('change', function() {
                     // Anda dapat menambahkan logika tambahan di sini jika diperlukan
                     console.log('Checkbox "Ingat Saya" berubah:', rememberMeCheckbox.checked);
                 });
@@ -395,7 +396,7 @@
         // Memeriksa apakah elemen tersebut ada di dalam DOM
         if (psA1TtmLqiU1Image) {
             // Menambahkan event listener untuk klik pada gambar Play Store
-            psA1TtmLqiU1Image.addEventListener("click", function () {
+            psA1TtmLqiU1Image.addEventListener("click", function() {
                 // Membuka tautan Play Store dalam tab baru
                 window.open("https://play.google.com/store/apps/details?id=feri.com.lesson");
             });
