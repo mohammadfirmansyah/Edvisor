@@ -362,7 +362,7 @@
                     <div class="text-area">
                         <div class="label">Secara umum, pengalaman berharga apa yang dapat Anda peroleh dari kegiatan pengamatan terhadap siswa-siswa tersebut dalam kegiatan pembelajaran ini?</div>
                         <div class="text-area-child">
-                            <textarea name="note" id="note"><?= isset($observation_sheet->notes) ? htmlspecialchars($observation_sheet->notes, ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
+                            <textarea name="notes" id="note"><?= isset($observation_sheet->notes) ? htmlspecialchars($observation_sheet->notes, ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
                         </div>
                     </div>
                     <!-- Tanda Tangan -->

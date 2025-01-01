@@ -1,88 +1,11 @@
 ## 📢 Release Notes
 
-### v1.2.0 Stable
+### v1.2.1-hotfix.1
 
 **Perbaikan yang Telah Dilakukan:**
 
-1. **Peningkatan Kualitas dan Stabilitas Aplikasi**
-   - **Kualitas Hidup & Stabilitas Menyeluruh**  
-     Meningkatkan stabilitas pada semua tugas penting dalam aplikasi serta memastikan performa yang lebih andal dan konsisten. Termasuk mencegah penumpukan sesi login untuk menghindari inkonsistensi data dan memperbaiki logika heartbeat untuk menjaga koneksi pengguna dengan server.
-   - **Pemeriksaan Versi Aset Setelah Login**  
-     Aplikasi kini secara otomatis mengecek dan mengunduh versi aset terbaru setelah pengguna berhasil login, memastikan semua aset yang terdaftar di sistem selalu up-to-date untuk meningkatkan stabilitas selama pemeliharaan.
-   - **Trigger pada Struktur Database**  
-     Menambahkan trigger pada struktur database untuk meningkatkan stabilitas aplikasi dengan memastikan konsistensi data secara otomatis saat terjadi perubahan.
-   - **Pemuatan Font dari Aset Lokal**  
-     Mengubah metode pemuatan font dari CDN menjadi dimuat langsung dari aset lokal, mengurangi ketergantungan pada sumber eksternal dan meningkatkan kecepatan pemuatan.
-
-2. **Penambahan Fitur Baru**
-   - **Timer pada Halaman Penilaian Formulir**  
-     Menambahkan fitur timer yang secara otomatis menyimpan formulir dan menutup akses setelah waktu habis, memastikan keamanan dan keteraturan dalam proses penilaian.
-
-3. **Optimasi Navigasi dan Redirect**
-   - **Redirect Konsisten pada Sidebar Guru Model**  
-     Memperbaiki alur redirect setelah membuat atau menghapus kelas guru model agar kembali ke sidebar guru model, meningkatkan konsistensi navigasi dalam aplikasi.
-
-4. **Optimasi Metode Pengunduhan dan Penyimpanan Aset**
-   - **Metode Download Berkas & Formulir yang Ditingkatkan**  
-     Mengubah metode pengunduhan berkas dan formulir kelas Guru Model dengan menggunakan `fetch` dan `blob` untuk meningkatkan stabilitas dan keandalan proses pengunduhan.
-   - **Penyimpanan Aset Menggunakan IndexedDB**  
-     Beralih dari penyimpanan aset dalam cache ke IndexedDB, memastikan konsistensi dan stabilitas aset di seluruh halaman aplikasi. Selain itu, aplikasi kini secara otomatis memeriksa dan mengunduh versi aset terbaru saat halaman dibuka.
-   - **Metode Penyimpanan Aset Menggunakan Hook**  
-     Mengubah metode penyimpanan aset menggunakan hook untuk memastikan aset diperbarui dengan lebih konsisten selama proses pemeliharaan.
-
-5. **Peningkatan Animasi dan Tampilan**
-   - **Animasi Loading yang Lebih Responsif**  
-     Menambahkan animasi loading saat berpindah halaman, mempersiapkan file sebelum diunduh, serta validasi aset dari server dengan teks log untuk pengalaman pengguna yang lebih mulus.
-   - **Animasi Progress Bar pada Unggah Foto Profil**  
-     Menambahkan animasi progress bar dan efek saat meng-hover tombol unggah foto profil, serta loading saat menyimpan data profil pengguna.
-   - **Optimasi Tampilan pada Perangkat Mobile**  
-     Memperbaiki tampilan website pada perangkat mobile agar layout lebih konsisten dan stabil, termasuk scroll otomatis ke tengah setelah rotasi dengan delay 0,5 detik dan penempatan popup di tengah layar.
-   - **Progres Bar Unggah Berkas yang Lebih Mulus**  
-     Memperbaiki progres bar unggah berkas agar tampil dengan lebih mulus dan stabil.
-
-6. **Perbaikan Logika dan Keamanan**
-   - **Perbaikan Logika Heartbeat**  
-     Memperbaiki logika heartbeat untuk menjaga koneksi pengguna dengan server, mencegah penumpukan sesi login yang dapat menyebabkan inkonsistensi data.
-   - **Retry Heartbeat Otomatis**  
-     Menambahkan kemampuan untuk mengirimkan heartbeat secara otomatis jika gagal (retry) dengan interval 0,5 detik dan maksimal 10 kali percobaan sebelum menampilkan pesan reconnect, guna meningkatkan stabilitas aplikasi.
-   - **Regenerasi Session ID yang Lebih Cepat**  
-     Memperpendek waktu regenerasi session ID menjadi setiap 30 detik untuk meningkatkan keamanan aplikasi.
-   - **Konsistensi Pengiriman JSON**  
-     Menambahkan `$this->output->_display();` dan `exit;` di akhir pengiriman JSON untuk menjaga konsistensi dan kestabilan data.
-
-7. **Perbaikan Konsistensi dan Validasi**
-   - **Pesan Teks "Belum Ada Data"**  
-     Menampilkan pesan ini ketika data Rekaman Suara, Catatan Khusus, dan Dokumentasi kosong, memberikan informasi yang lebih jelas kepada pengguna.
-   - **Perbaikan Error pada Sidebar Guru Model**  
-     Memperbaiki error terkait seleksi kondisi ketika observer tidak memiliki foto profil, memastikan sidebar guru model berfungsi dengan baik.
-   - **Validasi Input yang Ditingkatkan**  
-     Memperbaiki validasi input pada halaman signup dan profil pengguna untuk memastikan data yang lebih akurat dan konsisten.
-   - **Placeholder Konsisten pada Input Kompetensi Dasar**  
-     Memperbaiki placeholder di halaman buat dan edit kelas dengan mengubahnya menjadi textarea, memastikan tampilan yang lebih konsisten dan mudah dipahami pengguna.
-   - **Pengaturan Format Penyimpanan Foto Profil**  
-     Memperbaiki format penyimpanan foto profil untuk konsistensi dan efisiensi penyimpanan data.
-   - **Memperbaiki Input Formulir di Seluruh Halaman**  
-     Memperbaiki input formulir di seluruh halaman agar menjadi lebih stabil dan konsisten.
-   - **Memperbaiki Tebal Garis Tanda Tangan**  
-     Memperbaiki tebal garis tanda tangan agar menjadi lebih konsisten dan stabil.
-   - **Menambahkan Image Smoothing pada Tanda Tangan**  
-     Menambahkan image smoothing dalam tanda tangan agar tampil lebih mulus dan stabil.
-
-8. **Peningkatan Pengalaman Pengguna**
-   - **Petunjuk Login Multi-Browser**  
-     Menambahkan teks petunjuk ketika pengguna mencoba login menggunakan lebih dari satu browser dengan akun yang sama, membantu mencegah kebingungan dan konflik sesi.
-   - **Fokus pada Preview Formulir dan Dokumentasi**  
-     Menambahkan fokus otomatis pada preview formulir penilaian dan dokumentasi saat ditampilkan, meningkatkan navigasi dan penggunaan aplikasi.
-   - **Perbaikan Animasi Scroll dan Status Kelas**  
-     Memperbaiki animasi scroll pada teks ellipsis dan status kelas guru model di sidebar agar tampil lebih konsisten dan responsif.
-   - **Menghapus Efek Fokus pada Input Pencarian Kelas**  
-     Menghilangkan efek fokus ke input pencarian kelas ketika halaman beranda, guru model, dan observer dibuka, memberikan tampilan yang lebih bersih.
-   - **Perbaikan SweetAlert2**  
-     Memperbaiki SweetAlert2 agar tampil konsisten di tengah halaman, meningkatkan kejelasan notifikasi bagi pengguna.
-   - **Mengubah Timer Pesan Berhasil Masuk Akun**  
-     Mengubah timer pesan berhasil masuk akun menjadi 4 detik untuk memberikan waktu yang cukup bagi pengguna memahami notifikasi.
-   - **Menghapus Jeda Pengiriman Pembaruan Jam**  
-     Menghapus jeda pengiriman pembaruan jam agar tampil lebih stabil dan responsif.
+1. **Perbaikan Penyimpanan Catatan di Lembar Catatan Siswa**
+   - Mengatasi masalah yang menyebabkan pengguna tidak dapat menyimpan Catatan pada formulir Lembar Catatan Siswa akibat inkonsistensi nama input. Perbaikan ini memastikan proses penyimpanan formulir berjalan dengan stabil dan efektif.
 
 <details>
   <summary><h3 id="instalasi-menggunakan-localhost">Instalasi menggunakan localhost</h3></summary>

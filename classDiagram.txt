@@ -265,16 +265,16 @@ classDiagram
     Users "1" --> "0..*" ClassObservers : becomes observer
     Classes "1" --> "0..*" Notifications : triggers
     Users "1" --> "0..*" Notifications : sends & receives
-    ClassObservers "1" --> "0..*" ObservedStudents : observes
+    ClassObservers "1" --> "1..*" ObservedStudents : observes
     Classes "1" --> "0..*" TeachingActivityAssessment : has
     ClassObservers "1" --> "1" TeachingActivityAssessment : assesses
     Classes "1" --> "0..*" StudentObservationSheet : has
     ClassObservers "1" --> "1" StudentObservationSheet : observes
-    StudentObservationSheet "1" --> "0..*" StudentObservationDetails : has
+    StudentObservationSheet "1" --> "1..*" StudentObservationDetails : has
     Classes "1" --> "0..*" StudentActivityNotes : has
     ClassObservers "1" --> "1" StudentActivityNotes : notes
     Classes "1" --> "0..*" ClassVoiceRecordings : has
-    ClassObservers "1" --> "1" ClassVoiceRecordings : record
+    ClassObservers "1" --> "0..1" ClassVoiceRecordings : record
     Classes "1" --> "0..*" SpecialNotes : has
     ClassObservers "1" --> "0..*" SpecialNotes : notes
     Classes "1" --> "0..*" ClassDocumentationFiles : documents

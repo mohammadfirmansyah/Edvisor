@@ -763,8 +763,8 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
    - **Alasan:** Seorang pengguna (**Users**) dapat mengirim dan menerima banyak notifikasi (**Notifications**). Kolom `sender_id` dan `receiver_id` dalam tabel **Notifications** masing-masing merujuk ke `user_id` di tabel **Users**, menunjukkan siapa yang mengirim dan menerima notifikasi tersebut.
 
 7. **ClassObservers dan ObservedStudents**
-   - **Hubungan:** ClassObservers "1" --> "0..*" ObservedStudents : observes 
-   - **Alasan:** Setiap entri dalam **ClassObservers** (kombinasi antara kelas dan pengamat) dapat memiliki banyak siswa yang diamati (**ObservedStudents**). Ini menghubungkan pengamat dengan siswa yang mereka amati dalam kelas tertentu, memungkinkan pencatatan pengamatan secara terperinci.
+   - **Hubungan:** ClassObservers "1" --> "1..*" ObservedStudents : observes 
+   - **Alasan:** Setiap entri dalam **ClassObservers** (kombinasi antara kelas dan pengamat) harus memiliki setidaknya satu siswa yang diamati (**ObservedStudents**). Ini menghubungkan pengamat dengan siswa yang mereka amati dalam kelas tertentu, memungkinkan pencatatan pengamatan secara terperinci.
 
 8. **Classes dan TeachingActivityAssessment**
    - **Hubungan:** Classes "1" --> "0..*" TeachingActivityAssessment : has
@@ -783,8 +783,8 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
     - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat mengisi satu lembar pengamatan siswa (**StudentObservationSheet**) untuk kelas yang diamatinya.
 
 12. **StudentObservationSheet dan StudentObservationDetails**
-    - **Hubungan:** StudentObservationSheet "1" --> "0..*" StudentObservationDetails : has
-    - **Alasan:** Setiap lembar pengamatan siswa (**StudentObservationSheet**) dapat memiliki banyak detail pengamatan siswa (**StudentObservationDetails**). Ini memungkinkan pengamatan rinci terhadap berbagai indikator untuk setiap siswa.
+    - **Hubungan:** StudentObservationSheet "1" --> "1..*" StudentObservationDetails : has
+    - **Alasan:** Setiap lembar pengamatan siswa (**StudentObservationSheet**) harus memiliki setidaknya satu detail pengamatan siswa (**StudentObservationDetails**). Ini memungkinkan pengamatan rinci terhadap berbagai indikator untuk setiap siswa.
 
 13. **Classes dan StudentActivityNotes**
     - **Hubungan:** Classes "1" --> "0..*" StudentActivityNotes : has
@@ -799,8 +799,8 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
     - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak rekaman suara (**ClassVoiceRecordings**). Rekaman ini digunakan untuk mendokumentasikan aktivitas atau diskusi selama kelas.
 
 16. **ClassObservers dan ClassVoiceRecordings**
-    - **Hubungan:** ClassObservers "1" --> "1" ClassVoiceRecordings : record
-    - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat membuat satu rekaman suara (**ClassVoiceRecordings**) untuk kelas yang diamatinya.
+    - **Hubungan:** ClassObservers "1" --> "0..1" ClassVoiceRecordings : record
+    - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat membuat hingga satu rekaman suara (**ClassVoiceRecordings**) untuk kelas yang diamatinya. Hal ini memberikan fleksibilitas bagi pengamat untuk mendokumentasikan kelas tanpa harus membuat banyak rekaman.
 
 17. **Classes dan SpecialNotes**
     - **Hubungan:** Classes "1" --> "0..*" SpecialNotes : has
