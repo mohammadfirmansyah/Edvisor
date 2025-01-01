@@ -337,11 +337,11 @@
                     if (isDisconnected) {
                         hideReconnectDialog();
                     }
-                } else if (typeof data === 'object' && data !== null && data.status === 'error' && data.message === 'Terjadi kesalahan pada sistem. Silakan coba lagi.') {
+                } else if (typeof data === 'object' && data !== null && data.status === 'error' && data.message === 'Silakan coba lagi.') {
                     // Menangani kasus sesi tidak valid atau kedaluwarsa
                     console.warn('Sesi tidak valid atau kedaluwarsa.');
                     broadcastMessage({ type: 'session_regenerated' });
-                    return Promise.reject(new Error('Terjadi kesalahan pada sistem. Silakan coba lagi.'));
+                    return Promise.reject(new Error('Silakan coba lagi.'));
                 } else {
                     // Respons bukan JSON atau status tidak sukses, tangani sebagai kegagalan
                     console.error('Heartbeat gagal dikirim: Status tidak sukses.', data);
@@ -369,7 +369,7 @@
                 }
 
                 // Jika error adalah karena sesi invalid atau expired, broadcast regenerasi sesi
-                if (error.response && error.response.data && error.response.data.message === 'Terjadi kesalahan pada sistem. Silakan coba lagi.') {
+                if (error.response && error.response.data && error.response.data.message === 'Silakan coba lagi.') {
                     broadcastMessage({ type: 'session_regenerated' });
                 }
 

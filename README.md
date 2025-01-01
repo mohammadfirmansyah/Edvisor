@@ -3,8 +3,16 @@
 
   ![Logo Edvisor](assets/img/Header.png)
 
-  <!-- <a href="https://github.com/mohammadfirmansyah/Edvisor/releases" target="_blank" style="text-decoration: none !important;"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Pre-release&style=for-the-badge&color=lightgray" alt="Pre-release"></a> -->
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest" target="_blank" style="text-decoration: none !important;"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?style=for-the-badge" alt="Release"></a>
+<p>
+  <!-- Latest Release Badge (mencakup pre-release dan release) -->
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
+
+  <!-- Latest Status Badge (placeholder) -->
+  <img src="https://img.shields.io/badge/LATEST%20STATUS-STABLE-blue?style=for-the-badge" alt="Latest Status">
+
+  <!-- Latest Update Badge (placeholder) -->
+  <img src="https://img.shields.io/badge/Latest%20Update-2025--01--02-blue?style=for-the-badge&color=lightgrey" alt="Latest Update">
+</p>
 </div>
 
 <h2 id="daftar-isi">📋 Daftar Isi</h2>

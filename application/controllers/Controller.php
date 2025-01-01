@@ -125,7 +125,7 @@ class Controller extends CI_Controller
       if ($this->input->is_ajax_request() || ($this->input->method(TRUE) === 'POST' && !$this->input->is_ajax_request())) {
         echo json_encode([
           'status'  => 'error',
-          'message' => 'Terjadi kesalahan pada sistem. Silakan coba lagi.' // Sebelumnya: Session invalid or expired.
+          'message' => 'Silakan coba lagi.' // Sebelumnya: Session invalid or expired.
         ]);
         $this->output->_display();
         exit; // Hentikan eksekusi supaya tidak redirect ke halaman HTML
@@ -344,7 +344,7 @@ class Controller extends CI_Controller
       } else {
         // Jika sesi tidak valid, kembalikan pesan error
         log_message('warning', 'User not logged in.');
-        echo json_encode(['status' => 'error', 'message' => 'Terjadi kesalahan pada sistem. Silakan coba lagi.']);
+        echo json_encode(['status' => 'error', 'message' => 'Silakan coba lagi.']);
         $this->output->_display();
         exit;
       }

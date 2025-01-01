@@ -1,4 +1,4 @@
-name: Update Release and Pre-release Badges
+name: Update Release Badges
 
 on:
   release:
@@ -9,44 +9,134 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
+        # Melakukan checkout repository agar kita dapat mengubah file README.md
         uses: actions/checkout@v2
 
-      - name: Install jq
-        run: sudo apt-get install -y jq
+      - name: Install dependencies (jq dan locales)
+        # 1. Menginstal jq untuk parsing JSON.
+        # 2. Menginstal locales, lalu generate "id_ID.UTF-8" agar date bisa diformat menggunakan bahasa Indonesia.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq locales
+          sudo locale-gen id_ID.UTF-8
 
-      - name: Get Latest Release Tag
+      - name: Get Latest Release Tag & Date
         id: get_release
         run: |
+          # -------------------------------------------------------------
+          # Mendapatkan tag rilis terbaru dari payload event
+          # -------------------------------------------------------------
           latest_release=$(jq -r .release.tag_name < "$GITHUB_EVENT_PATH")
-          echo "::set-output name=release::$latest_release"
+          echo "release=$latest_release" >> $GITHUB_OUTPUT
 
-      - name: Get Latest Pre-release Tag
-        id: get_prerelease
+          # -------------------------------------------------------------
+          # Mendapatkan tanggal rilis terbaru (published_at) dalam format ISO 8601
+          # Contoh: 2025-01-02T07:53:21Z
+          # -------------------------------------------------------------
+          release_date_raw=$(jq -r .release.published_at < "$GITHUB_EVENT_PATH")
+
+          # -------------------------------------------------------------
+          # Memformat tanggal ke "DD MMMM YYYY" (contoh: 02 Januari 2025)
+          # Menggunakan locale "id_ID.UTF-8" supaya nama bulan muncul dalam bahasa Indonesia.
+          # -------------------------------------------------------------
+          export LC_ALL=id_ID.UTF-8
+          export LANG=id_ID.UTF-8
+          export LANGUAGE=id_ID:en
+
+          release_date_formatted=$(date -d "$release_date_raw" +"%d %B %Y")
+
+          # Menyimpan hasil format ke output
+          echo "release_date=$release_date_formatted" >> $GITHUB_OUTPUT
+
+      - name: Determine Latest Status
+        id: get_latest_status
         run: |
-          # Mendapatkan daftar semua pre-releases
-          prereleases=$(curl -s https://api.github.com/repos/mohammadfirmansyah/Edvisor/releases | jq -r '.[] | select(.prerelease) | .tag_name')
-          # Mengambil pre-release terbaru
-          latest_prerelease=$(echo "$prereleases" | head -n 1)
-          echo "::set-output name=prerelease::$latest_prerelease"
+          # -------------------------------------------------------------
+          # Menentukan status (STABLE, ALPHA, BETA, HOTFIX, RC, dsb.)
+          # berdasarkan format versi:
+          #
+          #   MAJOR.MINOR.PATCH(-LABEL.ITERASI)?
+          #
+          # Contoh:
+          # 1.2.1-hotfix.1 -> HOTFIX
+          # 1.2.1-beta.2   -> BETA
+          # 1.3.0          -> STABLE
+          # -------------------------------------------------------------
+          release=${{ steps.get_release.outputs.release }}
+
+          # Regex berikut menangkap:
+          # - Awal: MAJOR.MINOR.PATCH
+          # - Opsional: -LABEL.ITERASI
+          #   di mana LABEL diambil sebagai group #1
+          regex="^[0-9]+\.[0-9]+\.[0-9]+(?:-([^.]+)\.[0-9]+)?$"
+
+          if [[ $release =~ $regex ]]; then
+            label="${BASH_REMATCH[1]}"
+            if [[ -z "$label" ]]; then
+              # Jika group #1 kosong, berarti format tanpa -LABEL.ITERASI -> STABLE
+              latest_status="STABLE"
+            else
+              # Jika ada label, jadikan huruf besar semuanya
+              latest_status=$(echo "$label" | tr '[:lower:]' '[:upper:]')
+            fi
+          else
+            # Fallback: jika format versi berbeda / tidak dikenali, set STABLE
+            latest_status="STABLE"
+          fi
+
+          echo "latest_status=$latest_status" >> $GITHUB_OUTPUT
 
       - name: Update README Badges
         run: |
-          # Update Release Badge
-          release_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$release?style=for-the-badge"
-          sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?style=for-the-badge|$release_badge_url|g" README.md
+          # -------------------------------------------------------------
+          # Mengambil variabel dari step sebelumnya
+          # -------------------------------------------------------------
+          release=${{ steps.get_release.outputs.release }}
+          release_date=${{ steps.get_release.outputs.release_date }}
+          latest_status=${{ steps.get_latest_status.outputs.latest_status }}
 
-          # Update Pre-release Badge
-          if [ "$prerelease" != "null" ]; then
-            prerelease_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$prerelease?include_prereleases&label=Pre-release&style=for-the-badge"
-            sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&style=for-the-badge|$prerelease_badge_url|g" README.md
-          else
-            echo "No pre-release found."
-          fi
+          # -------------------------------------------------------------
+          # Pilihan warna badge Latest Status:
+          # - ALPHA -> red
+          # - BETA  -> orange
+          # - Lainnya -> green
+          # -------------------------------------------------------------
+          color="success"
+          [[ "$latest_status" == "ALPHA" ]] && color="critical"
+          [[ "$latest_status" == "BETA" ]] && color="important"
+
+          # -------------------------------------------------------------
+          # Update "Latest Release" Badge (menyertakan pre-releases)
+          # -------------------------------------------------------------
+          # Pastikan di README.md ada placeholder seperti:
+          # https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge
+          # -------------------------------------------------------------
+          release_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$release?include_prereleases&label=Latest%20Release&style=for-the-badge"
+          sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge|$release_badge_url|g" README.md
+
+          # -------------------------------------------------------------
+          # Update "LATEST STATUS" Badge
+          # -------------------------------------------------------------
+          # Pastikan di README.md ada placeholder seperti:
+          # https://img.shields.io/badge/LATEST%20STATUS-xxx-blue?style=for-the-badge
+          # -------------------------------------------------------------
+          latest_status_badge_url="https://img.shields.io/badge/LATEST%20STATUS-$latest_status-$color?style=for-the-badge"
+          sed -i "s|https://img.shields.io/badge/LATEST%20STATUS-.*-blue?style=for-the-badge|$latest_status_badge_url|g" README.md
+
+          # -------------------------------------------------------------
+          # Update "Latest Update" Badge
+          # -------------------------------------------------------------
+          # Pastikan di README.md ada placeholder seperti:
+          # https://img.shields.io/badge/Latest%20Update-xxx-blue?style=for-the-badge
+          # -------------------------------------------------------------
+          latest_update_badge_url="https://img.shields.io/badge/Latest%20Update-$release_date-blue?style=for-the-badge"
+          sed -i "s|https://img.shields.io/badge/Latest%20Update-.*-blue?style=for-the-badge|$latest_update_badge_url|g" README.md
 
       - name: Commit Changes
+        # Melakukan commit perubahan pada README.md dan push ke branch terkait.
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
-          git commit -m "Update release and pre-release badges to $release and $prerelease" || echo "No changes to commit"
+          git commit -m "Update badges: Release=${{ steps.get_release.outputs.release }}, Date=${{ steps.get_release.outputs.release_date }}, Status=${{ steps.get_latest_status.outputs.latest_status }}" || echo "No changes to commit"
           git push

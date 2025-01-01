@@ -1,11 +1,15 @@
 ## 📢 Release Notes
 
-### v1.2.1-hotfix.3
+### v1.2.1-hotfix.4
 
 **Perbaikan yang Telah Dilakukan:**
 
-1. **Petunjuk Penundaan Login Ulang**
-   - Kini, jika pengguna terputus secara otomatis oleh sistem, aplikasi akan menampilkan pesan yang menyarankan agar pengguna menunggu satu menit sebelum mencoba login kembali. Hal ini bertujuan untuk mencegah kesalahan login berulang sekaligus menjaga stabilitas dan keamanan sistem.
+1. **Penyederhanaan Badge Rilis dan Status**  
+   - Menggabungkan badge *Release* dan *Pre-release* menjadi satu badge *Latest Release* dengan parameter `?include_prereleases`. Langkah ini memudahkan pemantauan versi stabil maupun pra-rilis secara otomatis.  
+   - Menambahkan badge *Latest Status* dan *Latest Update* dalam satu baris, dilengkapi logika penentuan warna: merah untuk ALPHA, oranye untuk BETA, dan hijau untuk STABLE atau label lainnya. Hasilnya, README.md menjadi lebih ringkas dan informatif.
+
+2. **Pemangkasan Pesan Error**  
+   - Memendekkan format pesan JSON saat terjadi kesalahan, sehingga memudahkan pengguna dalam memahami inti permasalahan dan meningkatkan efisiensi pelacakan error.
 
 <details>
   <summary><h3 id="instalasi-menggunakan-localhost">Instalasi menggunakan localhost</h3></summary>
