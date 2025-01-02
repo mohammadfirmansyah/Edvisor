@@ -5,16 +5,6 @@ name: Update Release Badges
 on:
   release:
     types: [published]
-  workflow_dispatch:
-    inputs:
-      tag_name:
-        description: 'Tag name for the release'
-        required: true
-        default: ''
-      published_at:
-        description: 'Published date of the release (YYYY-MM-DDTHH:MM:SSZ)'
-        required: true
-        default: ''
 
 permissions:
   contents: write  # Memberikan izin tulis pada konten repository
@@ -41,13 +31,8 @@ jobs:
       - name: Extract Release Information
         id: extract_release
         run: |
-          if [ "${{ github.event_name }}" == "release" ]; then
-            TAG_NAME="${GITHUB_REF#refs/tags/}"
-            PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
-          else
-            TAG_NAME="${{ github.event.inputs.tag_name }}"
-            PUBLISHED_AT="${{ github.event.inputs.published_at }}"
-          fi
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
 
           echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_OUTPUT
           echo "PUBLISHED_AT=${PUBLISHED_AT}" >> $GITHUB_OUTPUT
@@ -56,11 +41,8 @@ jobs:
       - name: Verify Event Type
         run: |
           echo "Event Name: $GITHUB_EVENT_NAME"
-          if [ "$GITHUB_EVENT_NAME" == "release" ]; then
-            echo "Event Type: Release Published"
-          else
-            echo "Event Type: Manual Trigger"
-          fi
+          echo "Release Tag: ${{ steps.extract_release.outputs.TAG_NAME }}"
+          echo "Release Published At: ${{ steps.extract_release.outputs.PUBLISHED_AT }}"
 
       # 5. Format Release Date to Indonesian
       - name: Format Release Date
