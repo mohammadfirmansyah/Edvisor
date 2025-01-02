@@ -10,6 +10,7 @@ def get_env_variable(var_name):
     if value is None or value.strip() == "":
         print(f"Error: Environment variable {var_name} is not set.")
         sys.exit(1)
+    print(f"{var_name}: {value}")
     return value
 
 def parse_tag(tag):
@@ -19,6 +20,7 @@ def parse_tag(tag):
     - DIGIT1.DIGIT2.DIGIT3 (e.g., 1.2.3)
     - DIGIT1.DIGIT2.DIGIT3-TEXT.ITERATION (e.g., 1.2.3-HOTFIX.4)
     """
+    print(f"Parsing tag: {tag}")
     stable_pattern = r'^[vV]?(\d+\.\d+\.\d+)$'
     extended_pattern = r'^[vV]?(\d+\.\d+\.\d+)-([A-Za-z]+)\.\d+$'
 
@@ -27,6 +29,7 @@ def parse_tag(tag):
         version = stable_match.group(1)
         status = "STABLE"
         color = "success"
+        print(f"Matched STABLE tag format: {version}, {status}, {color}")
         return version, status, color
 
     extended_match = re.match(extended_pattern, tag)
@@ -39,6 +42,7 @@ def parse_tag(tag):
             color = "important"  # Oranye
         else:
             color = "success"    # Hijau
+        print(f"Matched extended tag format: {version}, {status}, {color}")
         return f"{version}-{status}", status, color
 
     # Default to STABLE if no pattern matches
@@ -49,6 +53,7 @@ def format_date(published_at):
     """
     Formats the date to Indonesian format: DD MMMM YYYY
     """
+    print(f"Formatting date: {published_at}")
     try:
         # Parse the ISO 8601 date
         dt = datetime.strptime(published_at, "%Y-%m-%dT%H:%M:%SZ")
@@ -60,7 +65,9 @@ def format_date(published_at):
         day = dt.day
         month = bulan[dt.month - 1]
         year = dt.year
-        return f"{day:02d} {month} {year}"
+        formatted_date = f"{day:02d} {month} {year}"
+        print(f"Formatted date: {formatted_date}")
+        return formatted_date
     except ValueError as e:
         print(f"Error: Invalid date format for PUBLISHED_AT: {published_at}")
         sys.exit(1)
@@ -69,6 +76,7 @@ def update_readme(latest_release, latest_status, latest_update, color):
     """
     Replaces placeholders in README.md with the corresponding badge URLs.
     """
+    print(f"Updating README.md with: Release={latest_release}, Status={latest_status}, Update={latest_update}, Color={color}")
     readme_path = "README.md"
     if not os.path.isfile(readme_path):
         print("Error: README.md not found.")
