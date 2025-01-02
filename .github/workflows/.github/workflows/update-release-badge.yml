@@ -1,13 +1,17 @@
-# .github/workflows/update-release-badge.yml
-
 name: Update Release Badges
 
 on:
+  # Trigger manual pertama kali, tanpa input
+  workflow_dispatch:
+
+  # Trigger otomatis setiap push tag
   push:
     tags:
-      - '*'  # Trigger pada setiap push tag
+      - '*'  # Jalankan setiap kali ada push tag
+  
+  # Trigger otomatis setiap kali ada release baru (published)
   release:
-    types: [published]  # Trigger pada setiap release yang dipublikasikan
+    types: [published]
 
 permissions:
   contents: write  # Memberikan izin tulis pada konten repository
@@ -21,15 +25,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Mengambil seluruh history untuk push
+          fetch-depth: 0
 
-      # 2. Setup Git Config untuk Commit
+      # 2. Setup Git Config
       - name: Setup Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # 3. Install dan Setup Locale Indonesia
+      # 3. Install Indonesian Locale
       - name: Install Indonesian Locale
         run: |
           sudo apt-get update
@@ -37,25 +41,29 @@ jobs:
           sudo locale-gen id_ID.UTF-8
           sudo update-locale LANG=id_ID.UTF-8
 
-      # 4. Extract Informasi Release
+      # 4. Determine Tag Name & Published At
       - name: Extract Release Information
         id: extract
         run: |
-          if [ "${GITHUB_EVENT_NAME}" = "release" ]; then
+          if [ "${{ github.event_name }}" = "release" ]; then
+            # Event 'release'
             TAG_NAME=${GITHUB_REF#refs/tags/}
             PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
           elif [[ "${GITHUB_REF}" =~ refs/tags/(.*) ]]; then
+            # Event 'push' tag
             TAG_NAME=${BASH_REMATCH[1]}
             PUBLISHED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           else
-            echo "No tag or release information found."
-            exit 1
+            echo "Manual trigger without tag or release -> using fallback"
+            # Fallback jika dijalankan manual 'workflow_dispatch' tanpa tag
+            TAG_NAME="1.0.0-manual.1"
+            PUBLISHED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           fi
 
           echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_OUTPUT
           echo "PUBLISHED_AT=${PUBLISHED_AT}" >> $GITHUB_OUTPUT
 
-      # 5. Tentukan Status dan Warna Berdasarkan Tag
+      # 5. Determine Status & Color
       - name: Determine Status and Color
         id: status
         run: |
@@ -71,13 +79,13 @@ jobs:
             STATUS=$(echo "$LABEL" | tr '[:lower:]' '[:upper:]')
             case "$STATUS" in
               ALPHA)
-                COLOR="critical"   # Merah
+                COLOR="critical"
                 ;;
               BETA|RC|HOTFIX)
-                COLOR="important"  # Oranye
+                COLOR="important"
                 ;;
               *)
-                COLOR="success"    # Hijau
+                COLOR="success"
                 ;;
             esac
           fi
@@ -93,33 +101,28 @@ jobs:
           FORMATTED_DATE=$(LC_ALL=id_ID.UTF-8 date -d "$PUBLISHED_AT" +"%d %B %Y")
           echo "FORMATTED_DATE=${FORMATTED_DATE}" >> $GITHUB_OUTPUT
 
-      # 7. Gantikan Placeholder di README.md dengan URL Badge yang Baru
-      - name: Replace Placeholders in README.md
+      # 7. Ganti Placeholder di README.md
+      - name: Replace Placeholders
         run: |
           # Gantikan ___LATEST_RELEASE_BADGE___
-          sed -i "s|___LATEST_RELEASE_BADGE___|https://img.shields.io/badge/Latest%20Release-${{ steps.extract.outputs.TAG_NAME }}-informational?style=for-the-badge|g" README.md
+          sed -i "s|___LATEST_RELEASE_BADGE___|https:\/\/img.shields.io\/badge\/Latest%20Release-${{ steps.extract.outputs.TAG_NAME }}-informational?style=for-the-badge|g" README.md
 
           # Gantikan ___LATEST_STATUS_BADGE___
-          sed -i "s|___LATEST_STATUS_BADGE___|https://img.shields.io/badge/LATEST%20STATUS-${{ steps.status.outputs.STATUS }}-${{ steps.status.outputs.COLOR }}?style=for-the-badge|g" README.md
+          sed -i "s|___LATEST_STATUS_BADGE___|https:\/\/img.shields.io\/badge\/LATEST%20STATUS-${{ steps.status.outputs.STATUS }}-${{ steps.status.outputs.COLOR }}?style=for-the-badge|g" README.md
 
           # Gantikan ___LATEST_UPDATE_BADGE___
-          sed -i "s|___LATEST_UPDATE_BADGE___|https://img.shields.io/badge/Latest%20Update-${{ steps.format_date.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge|g" README.md
+          sed -i "s|___LATEST_UPDATE_BADGE___|https:\/\/img.shields.io\/badge\/Latest%20Update-${{ steps.format_date.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge|g" README.md
 
-      # 8. Debug: Periksa README.md Setelah Penggantian
+      # 8. Periksa README.md
       - name: Debug After Replacement
         run: |
           echo "===== README.md Setelah Penggantian ====="
           cat README.md
 
-      # 9. Commit dan Push Perubahan Jika Ada
+      # 9. Commit & Push
       - name: Commit and Push Changes
         run: |
           git add README.md
-          
-          # Buat pesan commit
           COMMIT_MESSAGE="Update badges: Release=${{ steps.extract.outputs.TAG_NAME }}, Date=${{ steps.format_date.outputs.FORMATTED_DATE }}, Status=${{ steps.status.outputs.STATUS }}"
-          echo "Commit message: $COMMIT_MESSAGE"
-          
-          # Commit dan push jika ada perubahan
           git commit -m "$COMMIT_MESSAGE" || echo "No changes to commit."
           git push
