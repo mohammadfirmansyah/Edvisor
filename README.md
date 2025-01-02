@@ -7,8 +7,7 @@
   <!-- Latest Release (warna informational) -->
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
   <!-- Latest Status (placeholder kosong) -->
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge" alt="Latest Status">
-  </a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge" alt="Latest Status"></a>
   <!-- Latest Update (placeholder kosong, warna lightgrey) -->
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/badge/Latest%20Update--blue?style=for-the-badge&color=lightgrey" alt="Latest Update"></a>
 </p>

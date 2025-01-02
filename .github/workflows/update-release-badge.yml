@@ -7,113 +7,17 @@ on:
 jobs:
   update-badges:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Install dependencies (jq dan locales, Python sudah tersedia di ubuntu-latest)
+      - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y jq locales
+          sudo apt-get install -y python3 jq locales
           sudo locale-gen id_ID.UTF-8
 
-      - name: Get Latest Release & Date
-        id: get_release
+      - name: Run Python Script
+        # Memanggil file python "update_badges.py"
         run: |
-          # 1) Ambil tag release
-          latest_release=$(jq -r .release.tag_name < "$GITHUB_EVENT_PATH")
-          echo "release=$latest_release" >> $GITHUB_OUTPUT
-
-          # 2) Ambil tanggal (published_at), format dd MMMM yyyy (Bahasa Indonesia)
-          release_date_raw=$(jq -r .release.published_at < "$GITHUB_EVENT_PATH")
-          export LC_ALL=id_ID.UTF-8
-          export LANG=id_ID.UTF-8
-          export LANGUAGE=id_ID:en
-          release_date_formatted=$(date -d "$release_date_raw" +"%d %B %Y")
-          echo "release_date=$release_date_formatted" >> $GITHUB_OUTPUT
-
-      - name: Determine Latest Status
-        id: get_latest_status
-        run: |
-          release=${{ steps.get_release.outputs.release }}
-          regex="^[0-9]+\.[0-9]+\.[0-9]+(?:-([^.]+)\.[0-9]+)?$"
-
-          if [[ $release =~ $regex ]]; then
-            label="${BASH_REMATCH[1]}"
-            if [[ -z "$label" ]]; then
-              latest_status="STABLE"
-            else
-              latest_status=$(echo "$label" | tr '[:lower:]' '[:upper:]')
-            fi
-          else
-            latest_status="STABLE"
-          fi
-
-          echo "latest_status=$latest_status" >> $GITHUB_OUTPUT
-
-      - name: Replace Placeholders with Python
-        # Kita gunakan Python inline script daripada sed
-        run: |
-          echo "Mengganti placeholder di README.md dengan Python..."
-
-          # 1) Tentukan variabel environment untuk digunakan di script python
-          echo "RELEASE=${{ steps.get_release.outputs.release }}" >> $GITHUB_ENV
-          echo "RELEASE_DATE=${{ steps.get_release.outputs.release_date }}" >> $GITHUB_ENV
-          echo "LATEST_STATUS=${{ steps.get_latest_status.outputs.latest_status }}" >> $GITHUB_ENV
-
-          # 2) Tentukan warna (color) berdasarkan status
-          color="success"
-          if [[ ${{ steps.get_latest_status.outputs.latest_status }} == "ALPHA" ]]; then
-            color="critical"
-          elif [[ ${{ steps.get_latest_status.outputs.latest_status }} == "BETA" ]]; then
-            color="important"
-          fi
-
-          echo "COLOR=$color" >> $GITHUB_ENV
-
-      - name: Run Python Replacement
-        # Jalankan Python inline, membaca file README.md, lalu mengganti placeholder
-        run: |
-          python - <<EOF
-          import os
-
-          # Ambil data environment
-          release = os.environ.get("RELEASE", "")
-          release_date = os.environ.get("RELEASE_DATE", "")
-          latest_status = os.environ.get("LATEST_STATUS", "")
-          color = os.environ.get("COLOR", "success")
-
-          # Baca isi README.md
-          with open("README.md", "r", encoding="utf-8") as f:
-              content = f.read()
-
-          # 1) Replace Latest Release
-          old_release = "https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational"
-          new_release = f"https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/{release}?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational"
-          content = content.replace(old_release, new_release)
-
-          # 2) Replace Latest Status (placeholder kosong)
-          old_status = "https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge"
-          new_status = f"https://img.shields.io/badge/LATEST%20STATUS-{latest_status}-{color}?style=for-the-badge"
-          content = content.replace(old_status, new_status)
-
-          # 3) Replace Latest Update (placeholder kosong)
-          old_update = "https://img.shields.io/badge/Latest%20Update--blue?style=for-the-badge&color=lightgrey"
-          new_update = f"https://img.shields.io/badge/Latest%20Update-{release_date}-blue?style=for-the-badge&color=lightgrey"
-          content = content.replace(old_update, new_update)
-
-          # Tulis kembali README.md
-          with open("README.md", "w", encoding="utf-8") as f:
-              f.write(content)
-
-          print("Placeholder berhasil di-replace!")
-          EOF
-
-      - name: Commit Changes
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git commit -m "Update badges: Release=${{ steps.get_release.outputs.release }}, Date=${{ steps.get_release.outputs.release_date }}, Status=${{ steps.get_latest_status.outputs.latest_status }}" || echo "No changes to commit"
-          git push
+          python3 update_badges.py
