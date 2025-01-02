@@ -20,7 +20,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0  # Membutuhkan history lengkap untuk push
 
-      - name: Install dependencies (Python3)
+      - name: Install dependencies (Python3, jq, locales)
         run: |
           sudo apt-get update
           sudo apt-get install -y python3 python3-pip jq locales
@@ -43,4 +43,4 @@ jobs:
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
         run: |
-          ./.github/scripts/update_badges.py
+          python3 .github/scripts/update_badges.py
