@@ -43,7 +43,21 @@ jobs:
           echo "Status: ${{ steps.run-update.outputs.STATUS }}"
           echo "Color: ${{ steps.run-update.outputs.COLOR }}"
 
-      # 5. Commit and Push Changes (Manual)
+      # 5. Replace Placeholders in README.md
+      - name: Replace Placeholders in README.md
+        uses: richardrigutins/replace-in-files@v2.1.9
+        with:
+          files: README.md
+          from: |
+            ___LATEST_RELEASE_BADGE___
+            ___LATEST_STATUS_BADGE___
+            ___LATEST_UPDATE_BADGE___
+          to: |
+            https://img.shields.io/badge/Latest%20Release-${{ steps.run-update.outputs.LATEST_RELEASE }}-informational?style=for-the-badge
+            https://img.shields.io/badge/LATEST%20STATUS-${{ steps.run-update.outputs.STATUS }}-${{ steps.run-update.outputs.COLOR }}?style=for-the-badge
+            https://img.shields.io/badge/Latest%20Update-${{ steps.run-update.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge
+
+      # 6. Commit and Push Changes
       - name: Commit and Push Changes
         run: |
           git config --local user.name "github-actions[bot]"
