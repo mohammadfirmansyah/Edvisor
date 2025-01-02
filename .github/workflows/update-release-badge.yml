@@ -12,13 +12,8 @@ on:
   release:
     types: [published]
   
-  # Trigger manual dengan input untuk memilih branch
+  # Trigger manual tanpa input
   workflow_dispatch:
-    inputs:
-      target_branch:
-        description: 'Branch yang akan diperbarui README.md-nya'
-        required: true
-        default: 'main'
 
 permissions:
   contents: write  # Memberikan izin tulis pada konten repository
@@ -53,9 +48,10 @@ jobs:
         id: target_branch
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "TARGET_BRANCH=${{ github.event.inputs.target_branch }}" >> $GITHUB_OUTPUT
+            # Jika dijalankan manual, gunakan branch default atau spesifik
+            echo "TARGET_BRANCH=main" >> $GITHUB_OUTPUT
           else
-            # Tentukan branch default (misalnya main atau master)
+            # Untuk otomatis, gunakan branch default (misalnya main)
             echo "TARGET_BRANCH=main" >> $GITHUB_OUTPUT
           fi
 
