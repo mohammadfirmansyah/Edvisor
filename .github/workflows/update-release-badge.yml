@@ -20,138 +20,29 @@ jobs:
         with:
           fetch-depth: 0  # Mengambil seluruh history untuk push
 
-      # 2. Setup Environment
-      - name: Setup Environment
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq locales
-          sudo locale-gen id_ID.UTF-8
-
-      # 3. Extract Release Information
-      - name: Extract Release Information
-        id: extract_release
-        run: |
-          TAG_NAME="${GITHUB_REF#refs/tags/}"
-          PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
-
-          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_OUTPUT
-          echo "PUBLISHED_AT=${PUBLISHED_AT}" >> $GITHUB_OUTPUT
-
-      # 4. Debugging: Verify Event Type
-      - name: Verify Event Type
-        run: |
-          echo "Event Name: $GITHUB_EVENT_NAME"
-          echo "Release Tag: ${{ steps.extract_release.outputs.TAG_NAME }}"
-          echo "Release Published At: ${{ steps.extract_release.outputs.PUBLISHED_AT }}"
-
-      # 5. Format Release Date to Indonesian
-      - name: Format Release Date
-        id: format_date
-        run: |
-          PUBLISHED_AT="${{ steps.extract_release.outputs.PUBLISHED_AT }}"
-          echo "PUBLISHED_AT before formatting: $PUBLISHED_AT"
-
-          if [ "$PUBLISHED_AT" = "null" ] || [ -z "$PUBLISHED_AT" ]; then
-            echo "PUBLISHED_AT tidak tersedia. Workflow dihentikan."
-            exit 1
-          fi
-
-          FORMATTED_DATE=$(LC_ALL=id_ID.UTF-8 date -d "$PUBLISHED_AT" +"%d %B %Y")
-          echo "FORMATTED_DATE=${FORMATTED_DATE}" >> $GITHUB_OUTPUT
-
-      # 6. Determine Status and Color
-      - name: Determine Status and Color
-        id: determine_status
-        run: |
-          TAG_NAME="${{ steps.extract_release.outputs.TAG_NAME }}"
-          echo "TAG_NAME before determining status: $TAG_NAME"
-
-          STATUS="STABLE"
-          COLOR="success"
-
-          # Regex untuk menentukan status dan warna badge
-          if [[ "$TAG_NAME" =~ ^[vV]?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            STATUS="STABLE"
-            COLOR="success"
-            echo "Matched STABLE tag format."
-          elif [[ "$TAG_NAME" =~ ^[vV]?[0-9]+\.[0-9]+\.[0-9]+-([A-Za-z]+)\.[0-9]+$ ]]; then
-            LABEL=${BASH_REMATCH[1]}
-            STATUS=$(echo "$LABEL" | tr '[:lower:]' '[:upper:]')
-            case "$STATUS" in
-              ALPHA)
-                COLOR="critical"   # Merah
-                ;;
-              BETA|RC|HOTFIX)
-                COLOR="important"  # Oranye
-                ;;
-              *)
-                COLOR="success"    # Hijau
-                ;;
-            esac
-            echo "Matched extended tag format. LABEL: $LABEL, STATUS: $STATUS, COLOR: $COLOR"
-          else
-            echo "Tag does not match any expected pattern. STATUS remains as STABLE"
-          fi
-
-          echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
-          echo "COLOR=${COLOR}" >> $GITHUB_OUTPUT
-
-      # 7. Debugging: Display Release Data
-      - name: Display Release Data
-        run: |
-          echo "Release Tag: ${{ steps.extract_release.outputs.TAG_NAME }}"
-          echo "Release Published At: ${{ steps.extract_release.outputs.PUBLISHED_AT }}"
-          echo "Formatted Date: ${{ steps.format_date.outputs.FORMATTED_DATE }}"
-          echo "Determined Status: ${{ steps.determine_status.outputs.STATUS }}"
-          echo "Determined Color: ${{ steps.determine_status.outputs.COLOR }}"
-
-      # 8. Verify README.md Exists
-      - name: Verify README.md Exists
-        run: |
-          if [ -f README.md ]; then
-            echo "README.md ditemukan."
-          else
-            echo "README.md tidak ditemukan!"
-            exit 1
-          fi
-
-      # 9. Replace Placeholders in README.md menggunakan Action
-      - name: Replace Latest Status Badge
-        uses: richardrigutins/replace-in-files@v2.1.9
+      # 2. Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          files: 'README.md'
-          search-text: '___LATEST_STATUS_BADGE___'
-          replacement-text: "https://img.shields.io/badge/LATEST%20STATUS-${{ steps.determine_status.outputs.STATUS }}-${{ steps.determine_status.outputs.COLOR }}?style=for-the-badge"
-          encoding: 'utf8'
-          exclude: ''
+          python-version: '3.x'  # Gunakan versi Python yang sesuai
 
-      - name: Replace Latest Update Badge
-        uses: richardrigutins/replace-in-files@v2.1.9
-        with:
-          files: 'README.md'
-          search-text: '___LATEST_UPDATE_BADGE___'
-          replacement-text: "https://img.shields.io/badge/Latest%20Update-${{ steps.format_date.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge"
-          encoding: 'utf8'
-          exclude: ''
+      # 3. Install Dependencies (Jika Ada)
+      # Jika Anda menggunakan library tambahan, tambahkan langkah ini
+      # - name: Install Dependencies
+      #   run: |
+      #     pip install -r requirements.txt
 
-      # 10. Debugging: Periksa README.md Setelah Penggantian
-      - name: Debug After Replacement
+      # 4. Run Python Script to Update Badges
+      - name: Run Update Badges Script
         run: |
-          echo "===== README.md Setelah Penggantian ====="
-          cat README.md
+          python .github/scripts/update-badges.py
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+          PUBLISHED_AT: ${{ github.event.release.published_at }}
 
-      # 11. Commit and Push Changes
+      # 5. Commit and Push Changes
       - name: Commit and Push Changes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add README.md
-
-          # Buat pesan commit
-          COMMIT_MESSAGE="Update badges: Release=${{ steps.extract_release.outputs.TAG_NAME }}, Date=${{ steps.format_date.outputs.FORMATTED_DATE }}, Status=${{ steps.determine_status.outputs.STATUS }}"
-          echo "Commit message: $COMMIT_MESSAGE"
-
-          # Commit dan push jika ada perubahan
-          git commit -m "$COMMIT_MESSAGE" || echo "No changes to commit."
-          git push
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update badges: Release=${{ github.ref_name }}, Date=${{ github.event.release.published_at }}, Status=${{ steps.run-update.outputs.STATUS }}"
+          file_pattern: README.md
