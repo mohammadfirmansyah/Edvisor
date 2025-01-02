@@ -31,10 +31,11 @@ jobs:
       - name: Extract Release Information
         id: extract_release
         run: |
+          # Ambil nama tag dari refs/tags/vX.X.X
           TAG_NAME="${GITHUB_REF#refs/tags/}"
           echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_OUTPUT
 
-          # Ekstrak tanggal publikasi dari event JSON
+          # Ambil published_at dari JSON event
           PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
           echo "PUBLISHED_AT=${PUBLISHED_AT}" >> $GITHUB_OUTPUT
 
@@ -43,7 +44,7 @@ jobs:
         id: format_date
         run: |
           PUBLISHED_AT=${{ steps.extract_release.outputs.PUBLISHED_AT }}
-          FORMATTED_DATE=$(date -d "$PUBLISHED_AT" +"%d %B %Y" --locale=id_ID.UTF-8)
+          FORMATTED_DATE=$(LC_ALL=id_ID.UTF-8 date -d "$PUBLISHED_AT" +"%d %B %Y")
           echo "FORMATTED_DATE=${FORMATTED_DATE}" >> $GITHUB_OUTPUT
 
       # 5. Determine Status and Color
@@ -52,11 +53,14 @@ jobs:
         run: |
           TAG_NAME=${{ steps.extract_release.outputs.TAG_NAME }}
 
-          # Default values
           STATUS="STABLE"
           COLOR="success"
 
-          # Regex untuk mengekstrak label dari tag rilis
+          # Regex:
+          # - X.Y.Z => stable
+          # - X.Y.Z-alpha.N => alpha
+          # - X.Y.Z-beta.N => beta
+          # - X.Y.Z-hotfix.N => hotfix
           if [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             STATUS="STABLE"
             COLOR="success"
@@ -65,9 +69,9 @@ jobs:
             STATUS=$(echo "$LABEL" | tr '[:lower:]' '[:upper:]')
             case "$STATUS" in
               ALPHA)
-                COLOR="critical"  # Merah
+                COLOR="critical"   # Merah
                 ;;
-              BETA)
+              BETA|RC|HOTFIX)
                 COLOR="important"  # Oranye
                 ;;
               *)
@@ -79,7 +83,7 @@ jobs:
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "COLOR=${COLOR}" >> $GITHUB_OUTPUT
 
-      # 6a. Debug Before Replacement
+      # 6a. Debug Before Replacement (Opsional)
       - name: Debug Before Replacement
         run: |
           echo "===== README.md Sebelum Penggantian ====="
@@ -92,23 +96,23 @@ jobs:
           COLOR=${{ steps.determine_status.outputs.COLOR }}
           FORMATTED_DATE=${{ steps.format_date.outputs.FORMATTED_DATE }}
 
-          # Encode URL Badge
-          ENCODED_STATUS=$(printf '%s' "$STATUS" | jq -sRr @uri)
-          ENCODED_FORMATTED_DATE=$(printf '%s' "$FORMATTED_DATE" | jq -sRr @uri)
+          # Encode spasi dan karakter khusus
+          STATUS_ENC=$(printf '%s' "$STATUS" | jq -sRr @uri)
+          DATE_ENC=$(printf '%s' "$FORMATTED_DATE" | jq -sRr @uri)
 
           # Buat URL badge
-          LATEST_STATUS_BADGE_URL="https://img.shields.io/badge/LATEST%20STATUS-${ENCODED_STATUS}-${COLOR}?style=for-the-badge"
-          LATEST_UPDATE_BADGE_URL="https://img.shields.io/badge/Latest%20Update-${ENCODED_FORMATTED_DATE}-lightgrey?style=for-the-badge"
+          LATEST_STATUS_BADGE_URL="https://img.shields.io/badge/LATEST%20STATUS-${STATUS_ENC}-${COLOR}?style=for-the-badge"
+          LATEST_UPDATE_BADGE_URL="https://img.shields.io/badge/Latest%20Update-${DATE_ENC}-lightgrey?style=for-the-badge"
 
           # Debugging: Tampilkan URL yang akan dimasukkan
           echo "Latest Status Badge URL: $LATEST_STATUS_BADGE_URL"
           echo "Latest Update Badge URL: $LATEST_UPDATE_BADGE_URL"
-          
-          # Ganti placeholder di template dan simpan ke README.md
-          sed "s|___LATEST_STATUS_BADGE___|${LATEST_STATUS_BADGE_URL}|g" README.md.template > README.md
+
+          # Gunakan sed untuk mengganti placeholder langsung di README.md
+          sed -i "s|___LATEST_STATUS_BADGE___|${LATEST_STATUS_BADGE_URL}|g" README.md
           sed -i "s|___LATEST_UPDATE_BADGE___|${LATEST_UPDATE_BADGE_URL}|g" README.md
 
-      # 6c. Debug After Replacement
+      # 6c. Debug After Replacement (Opsional)
       - name: Debug After Replacement
         run: |
           echo "===== README.md Setelah Penggantian ====="
