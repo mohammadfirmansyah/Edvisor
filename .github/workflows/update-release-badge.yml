@@ -5,6 +5,16 @@ name: Update Release Badges
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for the release'
+        required: false
+        default: ''
+      published_at:
+        description: 'Published date of the release (YYYY-MM-DDTHH:MM:SSZ)'
+        required: false
+        default: ''
 
 permissions:
   contents: write  # Memberikan izin tulis pada konten repository
@@ -31,15 +41,26 @@ jobs:
       - name: Extract Release Information
         id: extract_release
         run: |
-          TAG_NAME="${GITHUB_REF#refs/tags/}"
-          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_OUTPUT
+          if [ "${{ github.event_name }}" == "release" ]; then
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+            PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
+          else
+            TAG_NAME="${{ github.event.inputs.tag_name }}"
+            PUBLISHED_AT="${{ github.event.inputs.published_at }}"
+          fi
 
-          PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_OUTPUT
           echo "PUBLISHED_AT=${PUBLISHED_AT}" >> $GITHUB_OUTPUT
 
-      # 4. Debug: Cetak Payload Event
-      - name: Print Event Payload
-        run: cat "$GITHUB_EVENT_PATH"
+      # 4. Debugging: Verify Event Type
+      - name: Verify Event Type
+        run: |
+          echo "Event Name: $GITHUB_EVENT_NAME"
+          if [ "$GITHUB_EVENT_NAME" == "release" ]; then
+            echo "Event Type: Release Published"
+          else
+            echo "Event Type: Manual Trigger"
+          fi
 
       # 5. Format Release Date to Indonesian
       - name: Format Release Date
@@ -85,12 +106,12 @@ jobs:
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "COLOR=${COLOR}" >> $GITHUB_OUTPUT
 
-      # 7. Debugging: Periksa Variabel
-      - name: Check Variables
+      # 7. Debugging: Display Release Data
+      - name: Display Release Data
         run: |
-          echo "STATUS=${{ steps.determine_status.outputs.STATUS }}"
-          echo "COLOR=${{ steps.determine_status.outputs.COLOR }}"
-          echo "FORMATTED_DATE=${{ steps.format_date.outputs.FORMATTED_DATE }}"
+          echo "Release Tag: ${{ steps.extract_release.outputs.TAG_NAME }}"
+          echo "Release Published At: ${{ steps.extract_release.outputs.PUBLISHED_AT }}"
+          echo "Formatted Date: ${{ steps.format_date.outputs.FORMATTED_DATE }}"
 
       # 8. Verify README.md Exists
       - name: Verify README.md Exists
