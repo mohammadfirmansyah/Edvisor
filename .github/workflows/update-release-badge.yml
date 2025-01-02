@@ -67,10 +67,13 @@ jobs:
         id: format_date
         run: |
           PUBLISHED_AT="${{ steps.extract_release.outputs.PUBLISHED_AT }}"
+          echo "PUBLISHED_AT before formatting: $PUBLISHED_AT"
+
           if [ "$PUBLISHED_AT" = "null" ] || [ -z "$PUBLISHED_AT" ]; then
             echo "PUBLISHED_AT tidak tersedia. Workflow dihentikan."
             exit 1
           fi
+
           FORMATTED_DATE=$(LC_ALL=id_ID.UTF-8 date -d "$PUBLISHED_AT" +"%d %B %Y")
           echo "FORMATTED_DATE=${FORMATTED_DATE}" >> $GITHUB_OUTPUT
 
@@ -79,6 +82,7 @@ jobs:
         id: determine_status
         run: |
           TAG_NAME="${{ steps.extract_release.outputs.TAG_NAME }}"
+          echo "TAG_NAME before determining status: $TAG_NAME"
 
           STATUS="STABLE"
           COLOR="success"
@@ -125,20 +129,22 @@ jobs:
 
       # 9. Replace Placeholders in README.md menggunakan Action
       - name: Replace Latest Status Badge
-        uses: peter-evans/replace-text@v1
+        uses: richardrigutins/replace-in-files@v2.1.9
         with:
-          files: README.md
-          find: '___LATEST_STATUS_BADGE___'
-          replace: "https://img.shields.io/badge/LATEST%20STATUS-${{ steps.determine_status.outputs.STATUS }}-${{ steps.determine_status.outputs.COLOR }}?style=for-the-badge"
+          files: 'README.md'
+          search-text: '___LATEST_STATUS_BADGE___'
+          replacement-text: "https://img.shields.io/badge/LATEST%20STATUS-${{ steps.determine_status.outputs.STATUS }}-${{ steps.determine_status.outputs.COLOR }}?style=for-the-badge"
           encoding: 'utf8'
+          exclude: ''
 
       - name: Replace Latest Update Badge
-        uses: peter-evans/replace-text@v1
+        uses: richardrigutins/replace-in-files@v2.1.9
         with:
-          files: README.md
-          find: '___LATEST_UPDATE_BADGE___'
-          replace: "https://img.shields.io/badge/Latest%20Update-${{ steps.format_date.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge"
+          files: 'README.md'
+          search-text: '___LATEST_UPDATE_BADGE___'
+          replacement-text: "https://img.shields.io/badge/Latest%20Update-${{ steps.format_date.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge"
           encoding: 'utf8'
+          exclude: ''
 
       # 10. Debugging: Periksa README.md Setelah Penggantian
       - name: Debug After Replacement
@@ -156,6 +162,7 @@ jobs:
 
           # Buat pesan commit
           COMMIT_MESSAGE="Update badges: Release=${{ steps.extract_release.outputs.TAG_NAME }}, Date=${{ steps.format_date.outputs.FORMATTED_DATE }}, Status=${{ steps.determine_status.outputs.STATUS }}"
+          echo "Commit message: $COMMIT_MESSAGE"
 
           # Commit dan push jika ada perubahan
           git commit -m "$COMMIT_MESSAGE" || echo "No changes to commit."
