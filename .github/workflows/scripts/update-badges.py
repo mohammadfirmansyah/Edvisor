@@ -7,7 +7,7 @@ from datetime import datetime
 
 def get_env_variable(var_name):
     value = os.getenv(var_name)
-    if value is None:
+    if value is None or value.strip() == "":
         print(f"Error: Environment variable {var_name} is not set.")
         sys.exit(1)
     return value
@@ -65,7 +65,7 @@ def format_date(published_at):
         print(f"Error: Invalid date format for PUBLISHED_AT: {published_at}")
         sys.exit(1)
 
-def update_readme(latest_release, latest_status, latest_update):
+def update_readme(latest_release, latest_status, latest_update, color):
     """
     Replaces placeholders in README.md with the corresponding badge URLs.
     """
@@ -79,7 +79,7 @@ def update_readme(latest_release, latest_status, latest_update):
 
     # Define badge URLs
     latest_release_badge = f"https://img.shields.io/badge/Latest%20Release-{latest_release}-informational?style=for-the-badge"
-    latest_status_badge = f"https://img.shields.io/badge/LATEST%20STATUS-{latest_status}-{latest_color}?style=for-the-badge"
+    latest_status_badge = f"https://img.shields.io/badge/LATEST%20STATUS-{latest_status}-{color}?style=for-the-badge"
     latest_update_badge = f"https://img.shields.io/badge/Latest%20Update-{latest_update}-lightgrey?style=for-the-badge"
 
     # Replace placeholders
@@ -102,9 +102,14 @@ def main():
     formatted_date = format_date(published_at)
 
     # Update README.md
-    global latest_color
-    latest_color = color  # Untuk digunakan dalam fungsi update_readme
-    update_readme(version, status, formatted_date)
+    update_readme(version, status, formatted_date, color)
+
+    # Set outputs untuk digunakan dalam workflow
+    with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+        f.write(f"STATUS={status}\n")
+        f.write(f"COLOR={color}\n")
+        f.write(f"FORMATTED_DATE={formatted_date}\n")
+        f.write(f"LATEST_RELEASE={version}\n")
 
     print("README.md berhasil diperbarui.")
 
