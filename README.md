@@ -8,6 +8,7 @@
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="___LATEST_STATUS_BADGE___" alt="Latest Status"></a>
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="___LATEST_UPDATE_BADGE___" alt="Latest Update"></a>
 </p>
+</div>
 
 <h2 id="daftar-isi">📋 Daftar Isi</h2>
 
