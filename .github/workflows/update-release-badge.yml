@@ -104,9 +104,18 @@ jobs:
           echo "Latest Status Badge URL: $LATEST_STATUS_BADGE_URL"
           echo "Latest Update Badge URL: $LATEST_UPDATE_BADGE_URL"
 
-          # Gunakan perl untuk mengganti placeholder
-          perl -i -pe 's|{{LATEST_STATUS_BADGE}}|$ENV{LATEST_STATUS_BADGE_URL}|g' README.md
-          perl -i -pe 's|{{LATEST_UPDATE_BADGE}}|$ENV{LATEST_UPDATE_BADGE_URL}|g' README.md
+          # Buat temporary file untuk LATEST_STATUS_BADGE
+          echo "$LATEST_STATUS_BADGE_URL" > latest_status_badge_url.txt
+
+          # Buat temporary file untuk LATEST_UPDATE_BADGE
+          echo "$LATEST_UPDATE_BADGE_URL" > latest_update_badge_url.txt
+
+          # Ganti placeholder dengan isi dari temporary file
+          sed -i "s|{{LATEST_STATUS_BADGE}}|$(cat latest_status_badge_url.txt)|g" README.md
+          sed -i "s|{{LATEST_UPDATE_BADGE}}|$(cat latest_update_badge_url.txt)|g" README.md
+
+          # Hapus temporary files
+          rm latest_status_badge_url.txt latest_update_badge_url.txt
 
       # 6c. Debug After Replacement
       - name: Debug After Replacement
