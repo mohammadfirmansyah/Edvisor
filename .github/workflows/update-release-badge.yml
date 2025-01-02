@@ -3,8 +3,11 @@
 name: Update Release Badges
 
 on:
+  push:
+    tags:
+      - '*'  # Trigger pada setiap push tag
   release:
-    types: [published]
+    types: [published]  # Trigger pada setiap release yang dipublikasikan
 
 permissions:
   contents: write  # Memberikan izin tulis pada konten repository
@@ -26,7 +29,13 @@ jobs:
         with:
           python-version: '3.x'  # Gunakan versi Python yang sesuai
 
-      # 3. Run Python Script to Update Badges
+      # 3. Install Dependencies (Jika Diperlukan)
+      # Tambahkan langkah ini jika skrip Python Anda membutuhkan dependensi tambahan
+      # - name: Install Dependencies
+      #   run: |
+      #     pip install -r requirements.txt
+
+      # 4. Run Python Script to Extract Information and Update README.md
       - name: Run Update Badges Script
         id: run-update
         run: |
@@ -35,33 +44,60 @@ jobs:
           TAG_NAME: ${{ github.ref_name }}
           PUBLISHED_AT: ${{ github.event.release.published_at }}
 
-      # 4. Debug Release Information
-      - name: Debug Release Information
+      # 5. Debugging: Display Outputs from Python Script
+      - name: Display Outputs
         run: |
-          echo "Release Tag: ${{ steps.run-update.outputs.LATEST_RELEASE }}"
-          echo "Published At: ${{ steps.run-update.outputs.FORMATTED_DATE }}"
+          echo "Latest Release: ${{ steps.run-update.outputs.LATEST_RELEASE }}"
+          echo "Formatted Date: ${{ steps.run-update.outputs.FORMATTED_DATE }}"
           echo "Status: ${{ steps.run-update.outputs.STATUS }}"
           echo "Color: ${{ steps.run-update.outputs.COLOR }}"
 
-      # 5. Replace Placeholders in README.md
-      - name: Replace Placeholders in README.md
+      # 6. Replace Placeholders in README.md menggunakan Action
+      - name: Replace Latest Release Badge
         uses: richardrigutins/replace-in-files@v2.1.9
         with:
-          files: README.md
-          from: |
-            ___LATEST_RELEASE_BADGE___
-            ___LATEST_STATUS_BADGE___
-            ___LATEST_UPDATE_BADGE___
-          to: |
-            https://img.shields.io/badge/Latest%20Release-${{ steps.run-update.outputs.LATEST_RELEASE }}-informational?style=for-the-badge
-            https://img.shields.io/badge/LATEST%20STATUS-${{ steps.run-update.outputs.STATUS }}-${{ steps.run-update.outputs.COLOR }}?style=for-the-badge
-            https://img.shields.io/badge/Latest%20Update-${{ steps.run-update.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge
+          files: 'README.md'
+          search-text: '___LATEST_RELEASE_BADGE___'
+          replacement-text: "https://img.shields.io/badge/Latest%20Release-${{ steps.run-update.outputs.LATEST_RELEASE }}-informational?style=for-the-badge"
+          encoding: 'utf8'
+          exclude: ''
 
-      # 6. Commit and Push Changes
+      - name: Replace Latest Status Badge
+        uses: richardrigutins/replace-in-files@v2.1.9
+        with:
+          files: 'README.md'
+          search-text: '___LATEST_STATUS_BADGE___'
+          replacement-text: "https://img.shields.io/badge/LATEST%20STATUS-${{ steps.run-update.outputs.STATUS }}-${{ steps.run-update.outputs.COLOR }}?style=for-the-badge"
+          encoding: 'utf8'
+          exclude: ''
+
+      - name: Replace Latest Update Badge
+        uses: richardrigutins/replace-in-files@v2.1.9
+        with:
+          files: 'README.md'
+          search-text: '___LATEST_UPDATE_BADGE___'
+          replacement-text: "https://img.shields.io/badge/Latest%20Update-${{ steps.run-update.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge"
+          encoding: 'utf8'
+          exclude: ''
+
+      # 7. Debugging: Periksa README.md Setelah Penggantian
+      - name: Debug After Replacement
+        run: |
+          echo "===== README.md Setelah Penggantian ====="
+          cat README.md
+
+      # 8. Commit and Push Changes
       - name: Commit and Push Changes
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          
           git add README.md
-          git commit -m "Update badges: Release=${{ steps.run-update.outputs.LATEST_RELEASE }}, Date=${{ steps.run-update.outputs.FORMATTED_DATE }}, Status=${{ steps.run-update.outputs.STATUS }}" || echo "No changes to commit"
+          
+          # Buat pesan commit
+          COMMIT_MESSAGE="Update badges: Release=${{ steps.run-update.outputs.LATEST_RELEASE }}, Date=${{ steps.run-update.outputs.FORMATTED_DATE }}, Status=${{ steps.run-update.outputs.STATUS }}"
+          echo "Commit message: $COMMIT_MESSAGE"
+          
+          # Commit dan push jika ada perubahan
+          git commit -m "$COMMIT_MESSAGE" || echo "No changes to commit."
           git push

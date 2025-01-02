@@ -72,32 +72,6 @@ def format_date(published_at):
         print(f"Error: Invalid date format for PUBLISHED_AT: {published_at}")
         sys.exit(1)
 
-def update_readme(latest_release, latest_status, latest_update, color):
-    """
-    Replaces placeholders in README.md with the corresponding badge URLs.
-    """
-    print(f"Updating README.md with: Release={latest_release}, Status={latest_status}, Update={latest_update}, Color={color}")
-    readme_path = "README.md"
-    if not os.path.isfile(readme_path):
-        print("Error: README.md not found.")
-        sys.exit(1)
-
-    with open(readme_path, "r", encoding="utf-8") as file:
-        content = file.read()
-
-    # Define badge URLs
-    latest_release_badge = f"https://img.shields.io/badge/Latest%20Release-{latest_release}-informational?style=for-the-badge"
-    latest_status_badge = f"https://img.shields.io/badge/LATEST%20STATUS-{latest_status}-{color}?style=for-the-badge"
-    latest_update_badge = f"https://img.shields.io/badge/Latest%20Update-{latest_update}-lightgrey?style=for-the-badge"
-
-    # Replace placeholders
-    content = content.replace("___LATEST_RELEASE_BADGE___", latest_release_badge)
-    content = content.replace("___LATEST_STATUS_BADGE___", latest_status_badge)
-    content = content.replace("___LATEST_UPDATE_BADGE___", latest_update_badge)
-
-    with open(readme_path, "w", encoding="utf-8") as file:
-        file.write(content)
-
 def main():
     # Ambil variabel environment dari GitHub Actions
     tag = get_env_variable("TAG_NAME")
@@ -109,9 +83,6 @@ def main():
     # Format tanggal
     formatted_date = format_date(published_at)
 
-    # Update README.md
-    update_readme(version, status, formatted_date, color)
-
     # Set outputs untuk digunakan dalam workflow
     with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
         f.write(f"STATUS={status}\n")
@@ -119,7 +90,7 @@ def main():
         f.write(f"FORMATTED_DATE={formatted_date}\n")
         f.write(f"LATEST_RELEASE={version}\n")
 
-    print("README.md berhasil diperbarui.")
+    print("Script berhasil dijalankan dan outputs diatur.")
 
 if __name__ == "__main__":
     main()
