@@ -4,11 +4,10 @@
   ![Logo Edvisor](assets/img/Header.png)
 
 <p>
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="__LATEST_STATUS_BADGE__" alt="Latest Status"></a>
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="__LATEST_UPDATE_BADGE__" alt="Latest Update"></a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="___LATEST_STATUS_BADGE___" alt="Latest Status"></a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="___LATEST_UPDATE_BADGE___" alt="Latest Update"></a>
 </p>
-</div>
 
 <h2 id="daftar-isi">📋 Daftar Isi</h2>
 

@@ -103,19 +103,10 @@ jobs:
           # Debugging: Tampilkan URL yang akan dimasukkan
           echo "Latest Status Badge URL: $LATEST_STATUS_BADGE_URL"
           echo "Latest Update Badge URL: $LATEST_UPDATE_BADGE_URL"
-
-          # Buat temporary file untuk LATEST_STATUS_BADGE
-          echo "$LATEST_STATUS_BADGE_URL" > latest_status_badge_url.txt
-
-          # Buat temporary file untuk LATEST_UPDATE_BADGE
-          echo "$LATEST_UPDATE_BADGE_URL" > latest_update_badge_url.txt
-
-          # Ganti placeholder dengan isi dari temporary file
-          sed -i "s|__LATEST_STATUS_BADGE__|$(cat latest_status_badge_url.txt)|g" README.md
-          sed -i "s|__LATEST_UPDATE_BADGE__|$(cat latest_update_badge_url.txt)|g" README.md
-
-          # Hapus temporary files
-          rm latest_status_badge_url.txt latest_update_badge_url.txt
+          
+          # Ganti placeholder di template dan simpan ke README.md
+          sed "s|___LATEST_STATUS_BADGE___|${LATEST_STATUS_BADGE_URL}|g" README.md.template > README.md
+          sed -i "s|___LATEST_UPDATE_BADGE___|${LATEST_UPDATE_BADGE_URL}|g" README.md
 
       # 6c. Debug After Replacement
       - name: Debug After Replacement
