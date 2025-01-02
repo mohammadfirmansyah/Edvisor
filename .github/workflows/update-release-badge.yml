@@ -118,15 +118,18 @@ jobs:
 
       # 10. Gantikan Placeholder di README.md dengan URL Badge yang Baru
       - name: Replace Placeholders in README.md
+        env:
+          STATUS: ${{ steps.status.outputs.STATUS }}
+          COLOR: ${{ steps.status.outputs.COLOR }}
+          FORMATTED_DATE: ${{ steps.format_date.outputs.FORMATTED_DATE }}
         run: |
-          # Latest Release Badge
-          sed -i "s|___LATEST_RELEASE_BADGE___|https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Latest%20Release&query=tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fmohammadfirmansyah%2FEdvisor%2Freleases%2Flatest&color=informational|g" README.md
+          LATEST_RELEASE_BADGE_URL="https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Latest%20Release&query=tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fmohammadfirmansyah%2FEdvisor%2Freleases%2Flatest&color=informational"
+          LATEST_STATUS_BADGE_URL="https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Latest%20Status&query=tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fmohammadfirmansyah%2FEdvisor%2Freleases%2Flatest&color=${COLOR}&valueSuffix=-${STATUS}"
+          LATEST_UPDATE_BADGE_URL="https://img.shields.io/badge/Latest%20Update-${FORMATTED_DATE}-lightgrey?style=for-the-badge"
 
-          # Latest Status Badge
-          sed -i "s|___LATEST_STATUS_BADGE___|https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Latest%20Status&query=tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fmohammadfirmansyah%2FEdvisor%2Freleases%2Flatest&color=${{ steps.status.outputs.COLOR }}&valueSuffix=-${{ steps.status.outputs.STATUS }}|g" README.md
-
-          # Latest Update Badge
-          sed -i "s|___LATEST_UPDATE_BADGE___|https://img.shields.io/badge/Latest%20Update-${{ steps.format_date.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge|g" README.md
+          sed -i "s|___LATEST_RELEASE_BADGE___|$LATEST_RELEASE_BADGE_URL|g" README.md
+          sed -i "s|___LATEST_STATUS_BADGE___|$LATEST_STATUS_BADGE_URL|g" README.md
+          sed -i "s|___LATEST_UPDATE_BADGE___|$LATEST_UPDATE_BADGE_URL|g" README.md
 
       # 11. Debug: Periksa README.md Setelah Penggantian
       - name: Debug After Replacement
