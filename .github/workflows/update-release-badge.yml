@@ -1,16 +1,51 @@
-# .github/workflows/test-release-trigger.yml
+# .github/workflows/update-release-badge.yml
 
-name: Test Release Trigger
+name: Update Release Badges
 
 on:
   release:
     types: [published]
 
+permissions:
+  contents: write  # Memberikan izin tulis pada konten repository
+
 jobs:
-  test-trigger:
+  update-badges:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Print Release Information
+      # 1. Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Mengambil seluruh history untuk push
+
+      # 2. Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'  # Gunakan versi Python yang sesuai
+
+      # 3. Run Python Script to Update Badges
+      - name: Run Update Badges Script
+        id: run-update
         run: |
-          echo "Release tag: ${{ github.ref_name }}"
-          echo "Published at: ${{ github.event.release.published_at }}"
+          python .github/scripts/update-badges.py
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+          PUBLISHED_AT: ${{ github.event.release.published_at }}
+
+      # 4. Debug Release Information
+      - name: Debug Release Information
+        run: |
+          echo "Release Tag: ${{ steps.run-update.outputs.LATEST_RELEASE }}"
+          echo "Published At: ${{ steps.run-update.outputs.FORMATTED_DATE }}"
+          echo "Status: ${{ steps.run-update.outputs.STATUS }}"
+          echo "Color: ${{ steps.run-update.outputs.COLOR }}"
+
+      # 5. Commit and Push Changes
+      - name: Commit and Push Changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update badges: Release=${{ steps.run-update.outputs.LATEST_RELEASE }}, Date=${{ steps.run-update.outputs.FORMATTED_DATE }}, Status=${{ steps.run-update.outputs.STATUS }}"
+          file_pattern: README.md
