@@ -6,10 +6,10 @@
 <p>
   <!-- Latest Release (warna informational) -->
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
-  <!-- Latest Status (menggunakan badge dinamis) -->
-  [![Latest Release](https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational)](https://github.com/mohammadfirmansyah/Edvisor/releases/latest)
-  <!-- Latest Update (menggunakan badge dinamis) -->
-  [![Latest Update](https://img.shields.io/github/release-date/mohammadfirmansyah/Edvisor?label=Latest%20Update&style=for-the-badge&color=lightgrey)](https://github.com/mohammadfirmansyah/Edvisor/releases/latest)
+  <!-- Latest Status (placeholder kosong) -->
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="{{LATEST_STATUS_BADGE}}" alt="Latest Status"></a>
+  <!-- Latest Update (placeholder kosong, warna lightgrey) -->
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="{{LATEST_UPDATE_BADGE}}" alt="Latest Update"></a>
 </p>
 </div>
 

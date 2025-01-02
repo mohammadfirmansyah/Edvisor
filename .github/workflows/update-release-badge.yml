@@ -20,8 +20,8 @@ jobs:
         with:
           fetch-depth: 0  # Mengambil seluruh history untuk push
 
-      # 2. Install Dependencies
-      - name: Install dependencies
+      # 2. Setup Environment
+      - name: Setup Environment
         run: |
           sudo apt-get update
           sudo apt-get install -y jq locales
@@ -51,7 +51,7 @@ jobs:
         id: determine_status
         run: |
           TAG_NAME=${{ steps.extract_release.outputs.TAG_NAME }}
-          
+
           # Default values
           STATUS="STABLE"
           COLOR="success"
@@ -85,7 +85,13 @@ jobs:
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "COLOR=${COLOR}" >> $GITHUB_OUTPUT
 
-      # 6. Replace Placeholders in README.md
+      # 6a. Debug Before Replacement
+      - name: Debug Before Replacement
+        run: |
+          echo "===== README.md Sebelum Penggantian ====="
+          cat README.md
+
+      # 6b. Replace Placeholders in README.md
       - name: Replace Placeholders in README.md
         run: |
           STATUS=${{ steps.determine_status.outputs.STATUS }}
@@ -103,6 +109,12 @@ jobs:
           # Gunakan sed untuk mengganti placeholder
           sed -i "s|{{LATEST_STATUS_BADGE}}|${LATEST_STATUS_BADGE_URL}|g" README.md
           sed -i "s|{{LATEST_UPDATE_BADGE}}|${LATEST_UPDATE_BADGE_URL}|g" README.md
+
+      # 6c. Debug After Replacement
+      - name: Debug After Replacement
+        run: |
+          echo "===== README.md Setelah Penggantian ====="
+          cat README.md
 
       # 7. Commit and Push Changes
       - name: Commit and Push Changes
