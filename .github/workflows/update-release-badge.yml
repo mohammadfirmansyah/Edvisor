@@ -5,7 +5,6 @@ name: Update Release Badges
 on:
   release:
     types: [published]
-  workflow_dispatch:  # Menambahkan trigger manual untuk testing
 
 permissions:
   contents: write  # Memberikan izin tulis pada konten repository
@@ -38,15 +37,23 @@ jobs:
           PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
           echo "PUBLISHED_AT=${PUBLISHED_AT}" >> $GITHUB_OUTPUT
 
-      # 4. Format Release Date to Indonesian
+      # 4. Debug: Cetak Payload Event
+      - name: Print Event Payload
+        run: cat "$GITHUB_EVENT_PATH"
+
+      # 5. Format Release Date to Indonesian
       - name: Format Release Date
         id: format_date
         run: |
           PUBLISHED_AT=${{ steps.extract_release.outputs.PUBLISHED_AT }}
+          if [ "$PUBLISHED_AT" = "null" ]; then
+            echo "PUBLISHED_AT tidak tersedia. Workflow dihentikan."
+            exit 1
+          fi
           FORMATTED_DATE=$(LC_ALL=id_ID.UTF-8 date -d "$PUBLISHED_AT" +"%d %B %Y")
           echo "FORMATTED_DATE=${FORMATTED_DATE}" >> $GITHUB_OUTPUT
 
-      # 5. Determine Status and Color
+      # 6. Determine Status and Color
       - name: Determine Status and Color
         id: determine_status
         run: |
@@ -78,14 +85,14 @@ jobs:
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "COLOR=${COLOR}" >> $GITHUB_OUTPUT
 
-      # 6. Debugging: Periksa Variabel
+      # 7. Debugging: Periksa Variabel
       - name: Check Variables
         run: |
           echo "STATUS=${{ steps.determine_status.outputs.STATUS }}"
           echo "COLOR=${{ steps.determine_status.outputs.COLOR }}"
           echo "FORMATTED_DATE=${{ steps.format_date.outputs.FORMATTED_DATE }}"
 
-      # 7. Verify README.md Exists
+      # 8. Verify README.md Exists
       - name: Verify README.md Exists
         run: |
           if [ -f README.md ]; then
@@ -95,7 +102,7 @@ jobs:
             exit 1
           fi
 
-      # 8. Replace Placeholders in README.md
+      # 9. Replace Placeholders in README.md
       - name: Replace Placeholders in README.md
         run: |
           STATUS=${{ steps.determine_status.outputs.STATUS }}
@@ -118,13 +125,13 @@ jobs:
           sed -i "s|___LATEST_STATUS_BADGE___|${LATEST_STATUS_BADGE_URL}|g" README.md
           sed -i "s|___LATEST_UPDATE_BADGE___|${LATEST_UPDATE_BADGE_URL}|g" README.md
 
-      # 9. Debugging: Periksa README.md Setelah Penggantian
+      # 10. Debugging: Periksa README.md Setelah Penggantian
       - name: Debug After Replacement
         run: |
           echo "===== README.md Setelah Penggantian ====="
           cat README.md
 
-      # 10. Commit and Push Changes
+      # 11. Commit and Push Changes
       - name: Commit and Push Changes
         run: |
           git config user.name "github-actions[bot]"
