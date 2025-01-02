@@ -46,7 +46,7 @@ jobs:
         id: format_date
         run: |
           PUBLISHED_AT=${{ steps.extract_release.outputs.PUBLISHED_AT }}
-          if [ "$PUBLISHED_AT" = "null" ]; then
+          if [ "$PUBLISHED_AT" = "null" ] || [ -z "$PUBLISHED_AT" ]; then
             echo "PUBLISHED_AT tidak tersedia. Workflow dihentikan."
             exit 1
           fi
