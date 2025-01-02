@@ -43,9 +43,11 @@ jobs:
           echo "Status: ${{ steps.run-update.outputs.STATUS }}"
           echo "Color: ${{ steps.run-update.outputs.COLOR }}"
 
-      # 5. Commit and Push Changes
+      # 5. Commit and Push Changes (Manual)
       - name: Commit and Push Changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Update badges: Release=${{ steps.run-update.outputs.LATEST_RELEASE }}, Date=${{ steps.run-update.outputs.FORMATTED_DATE }}, Status=${{ steps.run-update.outputs.STATUS }}"
-          file_pattern: README.md
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update badges: Release=${{ steps.run-update.outputs.LATEST_RELEASE }}, Date=${{ steps.run-update.outputs.FORMATTED_DATE }}, Status=${{ steps.run-update.outputs.STATUS }}" || echo "No changes to commit"
+          git push
