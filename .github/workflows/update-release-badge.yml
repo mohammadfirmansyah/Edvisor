@@ -39,7 +39,7 @@ jobs:
       - name: Install Indonesian Locale
         run: |
           sudo apt-get update
-          sudo apt-get install -y locales
+          sudo apt-get install -y locales jq
           sudo locale-gen id_ID.UTF-8
           sudo update-locale LANG=id_ID.UTF-8
 
@@ -60,29 +60,26 @@ jobs:
           ref: ${{ steps.target_branch.outputs.TARGET_BRANCH }}
           fetch-depth: 0
 
-      # 6. Extract Informasi Release
+      # 6. Fetch Latest Release Data from GitHub API
+      - name: Fetch Latest Release Data
+        id: fetch_release
+        run: |
+          LATEST_RELEASE_DATA=$(curl -s https://api.github.com/repos/mohammadfirmansyah/Edvisor/releases/latest)
+          echo "LATEST_RELEASE_DATA<<EOF" >> $GITHUB_ENV
+          echo "$LATEST_RELEASE_DATA" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # 7. Extract Informasi Release
       - name: Extract Release Information
         id: extract
         run: |
-          if [ "${{ github.event_name }}" = "release" ]; then
-            TAG_NAME=${GITHUB_REF#refs/tags/}
-            PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
-          elif [[ "${GITHUB_REF}" =~ refs/tags/(.*) ]]; then
-            TAG_NAME=${BASH_REMATCH[1]}
-            # Dapatkan tanggal pembuatan tag
-            PUBLISHED_AT=$(git log -n 1 --format=%aI ${TAG_NAME})
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            TAG_NAME="manual-run"
-            PUBLISHED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          else
-            echo "No tag or release information found."
-            exit 1
-          fi
+          TAG_NAME=$(echo "$LATEST_RELEASE_DATA" | jq -r '.tag_name')
+          PUBLISHED_AT=$(echo "$LATEST_RELEASE_DATA" | jq -r '.published_at')
 
           echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_OUTPUT
           echo "PUBLISHED_AT=${PUBLISHED_AT}" >> $GITHUB_OUTPUT
 
-      # 7. Tentukan Status dan Warna Berdasarkan Tag
+      # 8. Tentukan Status dan Warna Berdasarkan Tag
       - name: Determine Status and Color
         id: status
         run: |
@@ -90,10 +87,7 @@ jobs:
           STATUS="UNKNOWN"
           COLOR="lightgrey"
 
-          if [[ "$TAG_NAME" == "manual-run" ]]; then
-            STATUS="MANUAL"
-            COLOR="yellow"
-          elif [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             STATUS="STABLE"
             COLOR="success"
           elif [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+-([A-Za-z]+)\.[0-9]+$ ]]; then
@@ -115,32 +109,36 @@ jobs:
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
           echo "COLOR=${COLOR}" >> $GITHUB_OUTPUT
 
-      # 8. Format Tanggal ke Format Indonesia
-      - name: Format Release Date
+      # 9. Format Tanggal ke Format Indonesia (Untuk Latest Update)
+      - name: Format Current Date
         id: format_date
         run: |
-          PUBLISHED_AT="${{ steps.extract.outputs.PUBLISHED_AT }}"
-          FORMATTED_DATE=$(LC_ALL=id_ID.UTF-8 date -d "$PUBLISHED_AT" +"%d %B %Y")
-          echo "FORMATTED_DATE=${FORMATTED_DATE}" >> $GITHUB_OUTPUT
+          CURRENT_DATE=$(LC_ALL=id_ID.UTF-8 date +"%d %B %Y")
+          echo "FORMATTED_DATE=${CURRENT_DATE}" >> $GITHUB_OUTPUT
 
-      # 9. Gantikan Placeholder di README.md dengan URL Badge yang Baru
+      # 10. Gantikan Placeholder di README.md dengan URL Badge yang Baru
       - name: Replace Placeholders in README.md
         run: |
-          sed -i "s|___LATEST_RELEASE_BADGE___|https://img.shields.io/badge/Latest%20Release-${{ steps.extract.outputs.TAG_NAME }}-informational?style=for-the-badge|g" README.md
-          sed -i "s|___LATEST_STATUS_BADGE___|https://img.shields.io/badge/LATEST%20STATUS-${{ steps.status.outputs.STATUS }}-${{ steps.status.outputs.COLOR }}?style=for-the-badge|g" README.md
+          # Latest Release Badge
+          sed -i "s|___LATEST_RELEASE_BADGE___|https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Latest%20Release&query=tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fmohammadfirmansyah%2FEdvisor%2Freleases%2Flatest&color=informational|g" README.md
+
+          # Latest Status Badge
+          sed -i "s|___LATEST_STATUS_BADGE___|https://img.shields.io/badge/dynamic/json?style=for-the-badge&label=Latest%20Status&query=tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fmohammadfirmansyah%2FEdvisor%2Freleases%2Flatest&color=${{ steps.status.outputs.COLOR }}&valueSuffix=-${{ steps.status.outputs.STATUS }}|g" README.md
+
+          # Latest Update Badge
           sed -i "s|___LATEST_UPDATE_BADGE___|https://img.shields.io/badge/Latest%20Update-${{ steps.format_date.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge|g" README.md
 
-      # 10. Debug: Periksa README.md Setelah Penggantian
+      # 11. Debug: Periksa README.md Setelah Penggantian
       - name: Debug After Replacement
         run: |
           echo "===== README.md Setelah Penggantian ====="
           cat README.md
 
-      # 11. Commit dan Push Perubahan Jika Ada
+      # 12. Commit dan Push Perubahan Jika Ada
       - name: Commit and Push Changes
         run: |
           git add README.md
-          COMMIT_MESSAGE="Update badges: Release=${{ steps.extract.outputs.TAG_NAME }}, Date=${{ steps.format_date.outputs.FORMATTED_DATE }}, Status=${{ steps.status.outputs.STATUS }}"
+          COMMIT_MESSAGE="Update badges: Release=${{ steps.extract.outputs.TAG_NAME }} (API), Date=${{ steps.format_date.outputs.FORMATTED_DATE }}, Status=${{ steps.status.outputs.STATUS }}"
           echo "Commit message: $COMMIT_MESSAGE"
           git commit -m "$COMMIT_MESSAGE" || echo "No changes to commit."
           git push
