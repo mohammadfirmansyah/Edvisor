@@ -56,11 +56,7 @@ jobs:
           STATUS="STABLE"
           COLOR="success"
 
-          # Regex:
-          # - X.Y.Z => stable
-          # - X.Y.Z-alpha.N => alpha
-          # - X.Y.Z-beta.N => beta
-          # - X.Y.Z-hotfix.N => hotfix
+          # Regex untuk menentukan status dan warna badge
           if [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             STATUS="STABLE"
             COLOR="success"
@@ -96,7 +92,7 @@ jobs:
           COLOR=${{ steps.determine_status.outputs.COLOR }}
           FORMATTED_DATE=${{ steps.format_date.outputs.FORMATTED_DATE }}
 
-          # Encode spasi dan karakter khusus
+          # URL encode STATUS dan FORMATTED_DATE
           STATUS_ENC=$(printf '%s' "$STATUS" | jq -sRr @uri)
           DATE_ENC=$(printf '%s' "$FORMATTED_DATE" | jq -sRr @uri)
 
@@ -108,7 +104,7 @@ jobs:
           echo "Latest Status Badge URL: $LATEST_STATUS_BADGE_URL"
           echo "Latest Update Badge URL: $LATEST_UPDATE_BADGE_URL"
 
-          # Gunakan sed untuk mengganti placeholder langsung di README.md
+          # Ganti placeholder di README.md langsung
           sed -i "s|___LATEST_STATUS_BADGE___|${LATEST_STATUS_BADGE_URL}|g" README.md
           sed -i "s|___LATEST_UPDATE_BADGE___|${LATEST_UPDATE_BADGE_URL}|g" README.md
 
@@ -130,5 +126,146 @@ jobs:
           COMMIT_MESSAGE="Update badges: Release=${{ steps.extract_release.outputs.TAG_NAME }}, Date=${{ steps.format_date.outputs.FORMATTED_DATE }}, Status=${{ steps.determine_status.outputs.STATUS }}"
 
           # Commit dan push jika ada perubahan
+          git commit -m "$COMMIT_MESSAGE" || echo "No changes to commit."
+          git push
+    ```
+
+#### **2. Penjelasan Perubahan**
+
+1. **Menghapus Referensi `README.md.template`:**
+   - Sebelumnya, workflow mencoba membaca dari `README.md.template`, yang tidak ada dalam repository Anda. Kini, workflow langsung mengedit `README.md`.
+
+2. **Mengganti Placeholder Langsung di `README.md`:**
+   - Menggunakan `sed -i` untuk mengganti `___LATEST_STATUS_BADGE___` dan `___LATEST_UPDATE_BADGE___` langsung di `README.md`.
+
+3. **Debugging:**
+   - Langkah `Debug Before Replacement` dan `Debug After Replacement` bersifat opsional tetapi sangat membantu untuk memastikan bahwa placeholder telah terganti dengan benar.
+
+4. **URL Encoding:**
+   - Menggunakan `jq -sRr @uri` untuk meng-encode `STATUS` dan `FORMATTED_DATE` agar aman digunakan dalam URL.
+
+#### **3. Menggunakan Action 'peter-evans/replace-text' Sebagai Alternatif**
+
+Jika Anda lebih suka menggunakan action yang sudah ada untuk mengganti teks dalam file tanpa menggunakan `sed`, Anda dapat menggunakan [peter-evans/replace-text](https://github.com/peter-evans/replace-text). Berikut adalah contoh workflow yang diperbarui menggunakan action tersebut:
+
+```yaml
+# .github/workflows/update-release-badge.yml
+
+name: Update Release Badges
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write  # Memberikan izin tulis pada konten repository
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # 2. Setup Environment
+      - name: Setup Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq locales
+          sudo locale-gen id_ID.UTF-8
+
+      # 3. Extract Release Information
+      - name: Extract Release Information
+        id: extract_release
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_OUTPUT
+
+          PUBLISHED_AT=$(jq -r .release.published_at "$GITHUB_EVENT_PATH")
+          echo "PUBLISHED_AT=${PUBLISHED_AT}" >> $GITHUB_OUTPUT
+
+      # 4. Format Release Date to Indonesian
+      - name: Format Release Date
+        id: format_date
+        run: |
+          PUBLISHED_AT=${{ steps.extract_release.outputs.PUBLISHED_AT }}
+          FORMATTED_DATE=$(LC_ALL=id_ID.UTF-8 date -d "$PUBLISHED_AT" +"%d %B %Y")
+          echo "FORMATTED_DATE=${FORMATTED_DATE}" >> $GITHUB_OUTPUT
+
+      # 5. Determine Status and Color
+      - name: Determine Status and Color
+        id: determine_status
+        run: |
+          TAG_NAME=${{ steps.extract_release.outputs.TAG_NAME }}
+
+          STATUS="STABLE"
+          COLOR="success"
+
+          if [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            STATUS="STABLE"
+            COLOR="success"
+          elif [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+-([A-Za-z]+)\.[0-9]+$ ]]; then
+            LABEL=${BASH_REMATCH[1]}
+            STATUS=$(echo "$LABEL" | tr '[:lower:]' '[:upper:]')
+            case "$STATUS" in
+              ALPHA)
+                COLOR="critical"
+                ;;
+              BETA|RC|HOTFIX)
+                COLOR="important"
+                ;;
+              *)
+                COLOR="success"
+                ;;
+            esac
+          fi
+
+          echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
+          echo "COLOR=${COLOR}" >> $GITHUB_OUTPUT
+
+      # 6a. Debug Before Replacement (Opsional)
+      - name: Debug Before Replacement
+        run: |
+          echo "===== README.md Sebelum Penggantian ====="
+          cat README.md
+
+      # 6b. Replace Latest Status Badge
+      - name: Replace Latest Status Badge
+        uses: peter-evans/replace-text@v1
+        with:
+          files: README.md
+          find: '___LATEST_STATUS_BADGE___'
+          replace: "https://img.shields.io/badge/LATEST%20STATUS-${{ steps.determine_status.outputs.STATUS }}-${{ steps.determine_status.outputs.COLOR }}?style=for-the-badge"
+          encoding: 'utf8'
+
+      # 6c. Replace Latest Update Badge
+      - name: Replace Latest Update Badge
+        uses: peter-evans/replace-text@v1
+        with:
+          files: README.md
+          find: '___LATEST_UPDATE_BADGE___'
+          replace: "https://img.shields.io/badge/Latest%20Update-${{ steps.format_date.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge"
+          encoding: 'utf8'
+
+      # 6d. Debug After Replacement (Opsional)
+      - name: Debug After Replacement
+        run: |
+          echo "===== README.md Setelah Penggantian ====="
+          cat README.md
+
+      # 7. Commit and Push Changes
+      - name: Commit and Push Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+
+          COMMIT_MESSAGE="Update badges: Release=${{ steps.extract_release.outputs.TAG_NAME }}, Date=${{ steps.format_date.outputs.FORMATTED_DATE }}, Status=${{ steps.determine_status.outputs.STATUS }}"
+
           git commit -m "$COMMIT_MESSAGE" || echo "No changes to commit."
           git push
