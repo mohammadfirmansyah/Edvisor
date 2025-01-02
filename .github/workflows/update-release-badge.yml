@@ -12,20 +12,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Install dependencies (jq dan locales)
+      - name: Install dependencies (jq dan locales, Python sudah tersedia di ubuntu-latest)
         run: |
           sudo apt-get update
           sudo apt-get install -y jq locales
           sudo locale-gen id_ID.UTF-8
 
-      - name: Get Latest Release Tag & Date
+      - name: Get Latest Release & Date
         id: get_release
         run: |
-          # Mendapatkan tag release terbaru
+          # 1) Ambil tag release
           latest_release=$(jq -r .release.tag_name < "$GITHUB_EVENT_PATH")
           echo "release=$latest_release" >> $GITHUB_OUTPUT
 
-          # Mendapatkan published_at lalu memformat jadi "DD MMMM YYYY"
+          # 2) Ambil tanggal (published_at), format dd MMMM yyyy (Bahasa Indonesia)
           release_date_raw=$(jq -r .release.published_at < "$GITHUB_EVENT_PATH")
           export LC_ALL=id_ID.UTF-8
           export LANG=id_ID.UTF-8
@@ -36,7 +36,6 @@ jobs:
       - name: Determine Latest Status
         id: get_latest_status
         run: |
-          # Regex mengekstrak label (ALPHA, BETA, dsb.) dari tag
           release=${{ steps.get_release.outputs.release }}
           regex="^[0-9]+\.[0-9]+\.[0-9]+(?:-([^.]+)\.[0-9]+)?$"
 
@@ -53,44 +52,63 @@ jobs:
 
           echo "latest_status=$latest_status" >> $GITHUB_OUTPUT
 
-      - name: Debug Before
-        # Melihat isi README.md sebelum kita lakukan sed
+      - name: Replace Placeholders with Python
+        # Kita gunakan Python inline script daripada sed
         run: |
-          echo "==== README.md Sebelum Sed ===="
-          cat README.md
+          echo "Mengganti placeholder di README.md dengan Python..."
 
-      - name: Update README Badges
+          # 1) Tentukan variabel environment untuk digunakan di script python
+          echo "RELEASE=${{ steps.get_release.outputs.release }}" >> $GITHUB_ENV
+          echo "RELEASE_DATE=${{ steps.get_release.outputs.release_date }}" >> $GITHUB_ENV
+          echo "LATEST_STATUS=${{ steps.get_latest_status.outputs.latest_status }}" >> $GITHUB_ENV
+
+          # 2) Tentukan warna (color) berdasarkan status
+          color="success"
+          if [[ ${{ steps.get_latest_status.outputs.latest_status }} == "ALPHA" ]]; then
+            color="critical"
+          elif [[ ${{ steps.get_latest_status.outputs.latest_status }} == "BETA" ]]; then
+            color="important"
+          fi
+
+          echo "COLOR=$color" >> $GITHUB_ENV
+
+      - name: Run Python Replacement
+        # Jalankan Python inline, membaca file README.md, lalu mengganti placeholder
         run: |
-          # Ambil data dari step sebelumnya
-          release=${{ steps.get_release.outputs.release }}
-          release_date=${{ steps.get_release.outputs.release_date }}
-          latest_status=${{ steps.get_latest_status.outputs.latest_status }}
+          python - <<EOF
+          import os
 
-          # Warna Status
-          color="success"    # hijau
-          [[ "$latest_status" == "ALPHA" ]] && color="critical"   # merah
-          [[ "$latest_status" == "BETA" ]] && color="important"   # oranye
+          # Ambil data environment
+          release = os.environ.get("RELEASE", "")
+          release_date = os.environ.get("RELEASE_DATE", "")
+          latest_status = os.environ.get("LATEST_STATUS", "")
+          color = os.environ.get("COLOR", "success")
 
-          # 1. Latest Release
-          # Mencari:   https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational
-          release_badge_url="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/$release?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational"
-          sed -i "s|https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational|$release_badge_url|g" README.md
+          # Baca isi README.md
+          with open("README.md", "r", encoding="utf-8") as f:
+              content = f.read()
 
-          # 2. Latest Status
-          # Mencari:   https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge
-          latest_status_badge_url="https://img.shields.io/badge/LATEST%20STATUS-$latest_status-$color?style=for-the-badge"
-          sed -i "s|https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge|$latest_status_badge_url|g" README.md
+          # 1) Replace Latest Release
+          old_release = "https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational"
+          new_release = f"https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor/{release}?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational"
+          content = content.replace(old_release, new_release)
 
-          # 3. Latest Update
-          # Mencari:   https://img.shields.io/badge/Latest%20Update--blue?style=for-the-badge&color=lightgrey
-          latest_update_badge_url="https://img.shields.io/badge/Latest%20Update-$release_date-blue?style=for-the-badge&color=lightgrey"
-          sed -i "s|https://img.shields.io/badge/Latest%20Update--blue?style=for-the-badge&color=lightgrey|$latest_update_badge_url|g" README.md
+          # 2) Replace Latest Status (placeholder kosong)
+          old_status = "https://img.shields.io/badge/LATEST%20STATUS--blue?style=for-the-badge"
+          new_status = f"https://img.shields.io/badge/LATEST%20STATUS-{latest_status}-{color}?style=for-the-badge"
+          content = content.replace(old_status, new_status)
 
-      - name: Debug After
-        # Melihat isi README.md setelah sed
-        run: |
-          echo "==== README.md Setelah Sed ===="
-          cat README.md
+          # 3) Replace Latest Update (placeholder kosong)
+          old_update = "https://img.shields.io/badge/Latest%20Update--blue?style=for-the-badge&color=lightgrey"
+          new_update = f"https://img.shields.io/badge/Latest%20Update-{release_date}-blue?style=for-the-badge&color=lightgrey"
+          content = content.replace(old_update, new_update)
+
+          # Tulis kembali README.md
+          with open("README.md", "w", encoding="utf-8") as f:
+              f.write(content)
+
+          print("Placeholder berhasil di-replace!")
+          EOF
 
       - name: Commit Changes
         run: |
