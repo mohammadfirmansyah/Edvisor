@@ -4,12 +4,9 @@
   ![Logo Edvisor](assets/img/Header.png)
 
 <p>
-  <!-- Latest Release (warna informational) -->
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
-  <!-- Latest Status (placeholder kosong) -->
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="{{LATEST_STATUS_BADGE}}" alt="Latest Status"></a>
-  <!-- Latest Update (placeholder kosong, warna lightgrey) -->
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="{{LATEST_UPDATE_BADGE}}" alt="Latest Update"></a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="__LATEST_STATUS_BADGE__" alt="Latest Status"></a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="__LATEST_UPDATE_BADGE__" alt="Latest Update"></a>
 </p>
 </div>
 

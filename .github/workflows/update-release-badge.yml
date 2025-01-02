@@ -111,8 +111,8 @@ jobs:
           echo "$LATEST_UPDATE_BADGE_URL" > latest_update_badge_url.txt
 
           # Ganti placeholder dengan isi dari temporary file
-          sed -i "s|{{LATEST_STATUS_BADGE}}|$(cat latest_status_badge_url.txt)|g" README.md
-          sed -i "s|{{LATEST_UPDATE_BADGE}}|$(cat latest_update_badge_url.txt)|g" README.md
+          sed -i "s|__LATEST_STATUS_BADGE__|$(cat latest_status_badge_url.txt)|g" README.md
+          sed -i "s|__LATEST_UPDATE_BADGE__|$(cat latest_update_badge_url.txt)|g" README.md
 
           # Hapus temporary files
           rm latest_status_badge_url.txt latest_update_badge_url.txt
