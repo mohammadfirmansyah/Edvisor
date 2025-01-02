@@ -5,8 +5,8 @@
 
 <p>
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="___LATEST_STATUS_BADGE___" alt="Latest Status"></a>
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="___LATEST_UPDATE_BADGE___" alt="Latest Update"></a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/badge/LATEST%20STATUS-STABLE-success?style=for-the-badge" alt="Latest Status"></a>
+  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/badge/Latest%20Update-02 Januari 2025-lightgrey?style=for-the-badge" alt="Latest Update"></a>
 </p>
 </div>
 
