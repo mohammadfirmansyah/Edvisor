@@ -70,12 +70,6 @@ jobs:
               BETA)
                 COLOR="important"  # Oranye
                 ;;
-              RC)
-                COLOR="important"  # Oranye
-                ;;
-              HOTFIX)
-                COLOR="important"  # Oranye
-                ;;
               *)
                 COLOR="success"    # Hijau
                 ;;
@@ -98,17 +92,25 @@ jobs:
           COLOR=${{ steps.determine_status.outputs.COLOR }}
           FORMATTED_DATE=${{ steps.format_date.outputs.FORMATTED_DATE }}
 
+          # Encode URL Badge
+          ENCODED_STATUS=$(printf '%s' "$STATUS" | jq -sRr @uri)
+          ENCODED_FORMATTED_DATE=$(printf '%s' "$FORMATTED_DATE" | jq -sRr @uri)
+
           # Buat URL badge
-          LATEST_STATUS_BADGE_URL="https://img.shields.io/badge/LATEST%20STATUS-${STATUS}-${COLOR}?style=for-the-badge"
-          LATEST_UPDATE_BADGE_URL="https://img.shields.io/badge/Latest%20Update-${FORMATTED_DATE}-blue?style=for-the-badge&color=lightgrey"
+          LATEST_STATUS_BADGE_URL="https://img.shields.io/badge/LATEST%20STATUS-${ENCODED_STATUS}-${COLOR}?style=for-the-badge"
+          LATEST_UPDATE_BADGE_URL="https://img.shields.io/badge/Latest%20Update-${ENCODED_FORMATTED_DATE}-blue?style=for-the-badge&color=lightgrey"
 
           # Debugging: Tampilkan URL yang akan dimasukkan
           echo "Latest Status Badge URL: $LATEST_STATUS_BADGE_URL"
           echo "Latest Update Badge URL: $LATEST_UPDATE_BADGE_URL"
+          
+          # Encode URL Badge untuk sed
+          LATEST_STATUS_BADGE_URL_SED=$(echo "$LATEST_STATUS_BADGE_URL" | sed 's/\//\\\//g')
+          LATEST_UPDATE_BADGE_URL_SED=$(echo "$LATEST_UPDATE_BADGE_URL" | sed 's/\//\\\//g')
 
           # Gunakan sed untuk mengganti placeholder
-          sed -i "s|{{LATEST_STATUS_BADGE}}|${LATEST_STATUS_BADGE_URL}|g" README.md
-          sed -i "s|{{LATEST_UPDATE_BADGE}}|${LATEST_UPDATE_BADGE_URL}|g" README.md
+          sed -i "s|{{LATEST_STATUS_BADGE}}|${LATEST_STATUS_BADGE_URL_SED}|g" README.md
+          sed -i "s|{{LATEST_UPDATE_BADGE}}|${LATEST_UPDATE_BADGE_URL_SED}|g" README.md
 
       # 6c. Debug After Replacement
       - name: Debug After Replacement
