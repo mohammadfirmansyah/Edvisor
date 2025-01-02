@@ -39,8 +39,18 @@ jobs:
         run: |
           chmod +x .github/scripts/update_badges.py
 
+      - name: Debug Before Replacement
+        run: |
+          echo "===== README.md Sebelum Penggantian ====="
+          cat README.md
+
       - name: Run Update Badges Script
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
         run: |
           python3 .github/scripts/update_badges.py
+
+      - name: Debug After Replacement
+        run: |
+          echo "===== README.md Sesudah Penggantian ====="
+          cat README.md
