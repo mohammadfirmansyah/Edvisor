@@ -1,29 +1,6 @@
-name: Update Release Badges
+#!/usr/bin/env python3
+# update_badges.py
 
-on:
-  release:
-    types: [published]
-
-jobs:
-  update-badges:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Install dependencies (Python, jq, locales)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3 python3-pip jq locales
-          sudo locale-gen id_ID.UTF-8
-
-      - name: Run Update Badges Script
-        env:
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
-        run: |
-          # Buat skrip Python
-          cat << 'EOF' > update_badges.py
 import os
 import json
 import subprocess
@@ -133,9 +110,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-EOF
-
-      - name: Execute Python Script
-        run: |
-          chmod +x update_badges.py
-          ./update_badges.py
