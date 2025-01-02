@@ -9,11 +9,11 @@ on:
     inputs:
       tag_name:
         description: 'Tag name for the release'
-        required: false
+        required: true
         default: ''
       published_at:
         description: 'Published date of the release (YYYY-MM-DDTHH:MM:SSZ)'
-        required: false
+        required: true
         default: ''
 
 permissions:
@@ -66,7 +66,7 @@ jobs:
       - name: Format Release Date
         id: format_date
         run: |
-          PUBLISHED_AT=${{ steps.extract_release.outputs.PUBLISHED_AT }}
+          PUBLISHED_AT="${{ steps.extract_release.outputs.PUBLISHED_AT }}"
           if [ "$PUBLISHED_AT" = "null" ] || [ -z "$PUBLISHED_AT" ]; then
             echo "PUBLISHED_AT tidak tersedia. Workflow dihentikan."
             exit 1
@@ -78,7 +78,7 @@ jobs:
       - name: Determine Status and Color
         id: determine_status
         run: |
-          TAG_NAME=${{ steps.extract_release.outputs.TAG_NAME }}
+          TAG_NAME="${{ steps.extract_release.outputs.TAG_NAME }}"
 
           STATUS="STABLE"
           COLOR="success"
@@ -123,28 +123,22 @@ jobs:
             exit 1
           fi
 
-      # 9. Replace Placeholders in README.md
-      - name: Replace Placeholders in README.md
-        run: |
-          STATUS=${{ steps.determine_status.outputs.STATUS }}
-          COLOR=${{ steps.determine_status.outputs.COLOR }}
-          FORMATTED_DATE=${{ steps.format_date.outputs.FORMATTED_DATE }}
+      # 9. Replace Placeholders in README.md menggunakan Action
+      - name: Replace Latest Status Badge
+        uses: peter-evans/replace-text@v1
+        with:
+          files: README.md
+          find: '___LATEST_STATUS_BADGE___'
+          replace: "https://img.shields.io/badge/LATEST%20STATUS-${{ steps.determine_status.outputs.STATUS }}-${{ steps.determine_status.outputs.COLOR }}?style=for-the-badge"
+          encoding: 'utf8'
 
-          # URL encode STATUS dan FORMATTED_DATE
-          STATUS_ENC=$(printf '%s' "$STATUS" | jq -sRr @uri)
-          DATE_ENC=$(printf '%s' "$FORMATTED_DATE" | jq -sRr @uri)
-
-          # Buat URL badge
-          LATEST_STATUS_BADGE_URL="https://img.shields.io/badge/LATEST%20STATUS-${STATUS_ENC}-${COLOR}?style=for-the-badge"
-          LATEST_UPDATE_BADGE_URL="https://img.shields.io/badge/Latest%20Update-${DATE_ENC}-lightgrey?style=for-the-badge"
-
-          # Debugging: Tampilkan URL yang akan dimasukkan
-          echo "Latest Status Badge URL: $LATEST_STATUS_BADGE_URL"
-          echo "Latest Update Badge URL: $LATEST_UPDATE_BADGE_URL"
-
-          # Ganti placeholder di README.md langsung
-          sed -i "s|___LATEST_STATUS_BADGE___|${LATEST_STATUS_BADGE_URL}|g" README.md
-          sed -i "s|___LATEST_UPDATE_BADGE___|${LATEST_UPDATE_BADGE_URL}|g" README.md
+      - name: Replace Latest Update Badge
+        uses: peter-evans/replace-text@v1
+        with:
+          files: README.md
+          find: '___LATEST_UPDATE_BADGE___'
+          replace: "https://img.shields.io/badge/Latest%20Update-${{ steps.format_date.outputs.FORMATTED_DATE }}-lightgrey?style=for-the-badge"
+          encoding: 'utf8'
 
       # 10. Debugging: Periksa README.md Setelah Penggantian
       - name: Debug After Replacement
