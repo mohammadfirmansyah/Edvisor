@@ -91,6 +91,7 @@ jobs:
           if [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             STATUS="STABLE"
             COLOR="success"
+            echo "Matched STABLE tag format."
           elif [[ "$TAG_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+-([A-Za-z]+)\.[0-9]+$ ]]; then
             LABEL=${BASH_REMATCH[1]}
             STATUS=$(echo "$LABEL" | tr '[:lower:]' '[:upper:]')
@@ -105,6 +106,9 @@ jobs:
                 COLOR="success"    # Hijau
                 ;;
             esac
+            echo "Matched extended tag format. LABEL: $LABEL, STATUS: $STATUS, COLOR: $COLOR"
+          else
+            echo "Tag does not match any expected pattern. STATUS remains as STABLE"
           fi
 
           echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
@@ -116,6 +120,8 @@ jobs:
           echo "Release Tag: ${{ steps.extract_release.outputs.TAG_NAME }}"
           echo "Release Published At: ${{ steps.extract_release.outputs.PUBLISHED_AT }}"
           echo "Formatted Date: ${{ steps.format_date.outputs.FORMATTED_DATE }}"
+          echo "Determined Status: ${{ steps.determine_status.outputs.STATUS }}"
+          echo "Determined Color: ${{ steps.determine_status.outputs.COLOR }}"
 
       # 8. Verify README.md Exists
       - name: Verify README.md Exists
