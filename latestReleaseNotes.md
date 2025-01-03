@@ -5,11 +5,10 @@
 **Perbaikan yang Telah Dilakukan:**
 
 1. **Penyederhanaan Badge Rilis dan Status**  
-   - Menggabungkan badge *Release* dan *Pre-release* menjadi satu badge *Latest Release* dengan parameter `?include_prereleases`. Langkah ini memudahkan pemantauan versi stabil maupun pra-rilis secara otomatis.  
-   - Menambahkan badge *Latest Status* dan *Latest Update* dalam satu baris, dilengkapi logika penentuan warna: merah untuk ALPHA, oranye untuk BETA, dan hijau untuk STABLE atau label lainnya. Hasilnya, README.md menjadi lebih ringkas dan informatif.
+   - Menggabungkan badge *Release* dan *Pre-release* menjadi satu badge *Latest Release* dengan parameter `?include_prereleases`. Langkah ini memudahkan pemantauan versi stabil maupun pra-rilis secara otomatis.
 
-2. **Pemangkasan Pesan Error**  
-   - Memendekkan format pesan JSON saat terjadi kesalahan, sehingga memudahkan pengguna dalam memahami inti permasalahan dan meningkatkan efisiensi pelacakan error.
+2. **Pemendekan Pesan Kesalahan**  
+   - Memendekkan format pesan JSON saat terjadi kesalahan, sehingga memudahkan pengguna dalam memahami inti permasalahan dan meningkatkan efisiensi pelacakan kesalahan.
 
 <details>
   <summary><h3 id="instalasi-menggunakan-localhost">Instalasi menggunakan localhost</h3></summary>

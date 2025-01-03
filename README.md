@@ -3,11 +3,13 @@
 
   ![Logo Edvisor](assets/img/Header.png)
 
-<p>
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
+<<<<<<< Updated upstream
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/badge/dynamic/json?style=for-the-badge___LATEST_STATUS_BADGE___label=Latest%20Status___LATEST_STATUS_BADGE___query=tag_name___LATEST_STATUS_BADGE___url=https%3A%2F%2Fapi.github.com%2Frepos%2Fmohammadfirmansyah%2FEdvisor%2Freleases%2Flatest___LATEST_STATUS_BADGE___color=lightgrey___LATEST_STATUS_BADGE___valueSuffix=-UNKNOWN" alt="Latest Status"></a>
   <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/badge/Latest%20Update-02 Januari 2025-lightgrey?style=for-the-badge" alt="Latest Update"></a>
 </p>
+=======
+>>>>>>> Stashed changes
 </div>
 
 <h2 id="daftar-isi">📋 Daftar Isi</h2>
