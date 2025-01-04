@@ -771,7 +771,7 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
 
 9. **ClassObservers dan TeachingActivityAssessment**  
    - **Relasi:** `ClassObservers "1" --> "0..1" TeachingActivityAssessment : assesses`  
-   - **Alasan:** Seorang observer (ClassObservers) dalam sebuah kelas **dapat** mengisi satu penilaian kegiatan mengajar (TeachingActivityAssessment). Jika observer belum mengisi penilaian, maka data penilaiannya tidak ada (0). Jika sudah, maka hanya ada satu penilaian (1).
+   - **Alasan:** Seorang observer (ClassObservers) **dapat** mengisi satu penilaian kegiatan mengajar (TeachingActivityAssessment). Jika observer belum mengisi penilaian, maka data penilaiannya tidak ada. Jika sudah, maka hanya ada satu penilaian.
 
 10. **Classes dan StudentObservationSheet**  
     - **Relasi:** `Classes "1" --> "0..*" StudentObservationSheet : has`  
@@ -779,7 +779,7 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
 
 11. **ClassObservers dan StudentObservationSheet**  
     - **Relasi:** `ClassObservers "1" --> "0..1" StudentObservationSheet : observes`  
-    - **Alasan:** Seorang observer (ClassObservers) dapat mengisi **satu** lembar pengamatan siswa (StudentObservationSheet) terkait kelas yang diamatinya, atau belum mengisinya sama sekali (0).
+    - **Alasan:** Seorang observer (ClassObservers) dapat mengisi **satu** lembar pengamatan siswa (StudentObservationSheet) terkait kelas yang diamatinya, atau tidak sama sekali.
 
 12. **StudentObservationSheet dan StudentObservationDetails**  
     - **Relasi:** `StudentObservationSheet "1" --> "1..*" StudentObservationDetails : has`  
@@ -791,7 +791,7 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
 
 14. **ClassObservers dan StudentActivityNotes**  
     - **Relasi:** `ClassObservers "1" --> "0..1" StudentActivityNotes : notes`  
-    - **Alasan:** Setiap observer (ClassObservers) dalam sebuah kelas dapat membuat satu catatan aktivitas siswa (StudentActivityNotes) untuk kelas tersebut, atau tidak membuat sama sekali (0).
+    - **Alasan:** Setiap observer (ClassObservers) dalam sebuah kelas dapat mengisi satu catatan aktivitas siswa (StudentActivityNotes) untuk kelas tersebut, atau tidak sama sekali.
 
 15. **Classes dan ClassVoiceRecordings**  
     - **Relasi:** `Classes "1" --> "0..*" ClassVoiceRecordings : has`  
@@ -799,7 +799,7 @@ Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbag
 
 16. **ClassObservers dan ClassVoiceRecordings**  
     - **Relasi:** `ClassObservers "1" --> "0..1" ClassVoiceRecordings : record`  
-    - **Alasan:** Seorang observer (ClassObservers) dapat mengunggah **satu** rekaman suara (ClassVoiceRecordings) untuk kelas yang diamatinya, atau tidak sama sekali (0). Ini memberi fleksibilitas bagi pengamat untuk menentukan apakah perlu atau tidak merekam kegiatan di kelas.
+    - **Alasan:** Seorang observer (ClassObservers) dapat mengunggah **satu** rekaman suara (ClassVoiceRecordings) untuk kelas yang diamatinya, atau tidak sama sekali. Ini memberi fleksibilitas bagi pengamat untuk menentukan apakah perlu atau tidak merekam kegiatan di kelas.
 
 17. **Classes dan SpecialNotes**  
     - **Relasi:** `Classes "1" --> "0..*" SpecialNotes : has`  
