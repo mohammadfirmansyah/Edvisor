@@ -737,85 +737,85 @@ Dengan alur ini, Edvisor memastikan bahwa kedua peran utama dapat berinteraksi s
 
 Class Diagram pada Edvisor menggambarkan struktur data dan hubungan antar berbagai entitas dalam sistem. Berikut adalah penjelasan detail mengenai hubungan antar kelas:
 
-1. **Users dan ci_sessions**
-   - **Hubungan:** Users "1" --> "0..*" ci_sessions : has
-   - **Alasan:** Setiap pengguna (**Users**) dapat memiliki banyak sesi (**ci_sessions**). Ini memungkinkan sistem untuk melacak dan mengelola sesi pengguna secara individual, seperti login dan aktivitas pengguna.
+1. **Users dan ci_sessions**  
+   - **Relasi:** `Users "1" --> "0..*" ci_sessions : has`  
+   - **Alasan:** Setiap pengguna (Users) dapat memiliki banyak sesi (ci_sessions). Hal ini memungkinkan sistem melacak dan mengelola sesi setiap pengguna secara individual, seperti saat login atau melanjutkan aktivitas tertentu.
 
-2. **Users dan Classes**
-   - **Hubungan:** Users "1" --> "0..*" Classes : creates
-   - **Alasan:** Seorang pengguna (**Users**) yang berperan sebagai Guru Model dapat membuat banyak kelas (**Classes**). Kolom `creator_user_id` dalam tabel **Classes** merujuk ke `user_id` di tabel **Users**, menunjukkan siapa yang membuat kelas tersebut.
+2. **Users dan Classes**  
+   - **Relasi:** `Users "1" --> "0..*" Classes : creates`  
+   - **Alasan:** Seorang pengguna (Users) berperan sebagai Guru Model dapat membuat banyak kelas (Classes). Kolom `creator_user_id` di tabel **Classes** merujuk ke `user_id` pada tabel **Users** untuk menandai pengguna mana yang membuat kelas.
 
-3. **Classes dan ClassObservers**
-   - **Hubungan:** Classes "1" --> "0..*" ClassObservers : has
-   - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak pengamat (**ClassObservers**). Ini memungkinkan kelas tersebut untuk diikuti atau diamati oleh berbagai pengguna yang berperan sebagai pengamat.
+3. **Classes dan ClassObservers**  
+   - **Relasi:** `Classes "1" --> "0..*" ClassObservers : has`  
+   - **Alasan:** Satu kelas (Classes) dapat memiliki banyak pengamat (ClassObservers). Ini memungkinkan lebih dari satu pengguna berperan sebagai observer pada kelas tersebut.
 
-4. **Users dan ClassObservers**
-   - **Hubungan:** Users "1" --> "0..*" ClassObservers : becomes observer
-   - **Alasan:** Seorang pengguna (**Users**) dapat menjadi pengamat (**ClassObservers**) untuk banyak kelas (**Classes**). Ini memungkinkan satu pengguna untuk mengamati berbagai kelas yang berbeda.
+4. **Users dan ClassObservers**  
+   - **Relasi:** `Users "1" --> "0..*" ClassObservers : becomes observer`  
+   - **Alasan:** Seorang pengguna (Users) bisa menjadi observer (ClassObservers) di banyak kelas (Classes). Dengan demikian, satu pengguna dapat terdaftar sebagai pengamat di berbagai kelas.
 
-5. **Classes dan Notifications**
-   - **Hubungan:** Classes "1" --> "0..*" Notifications : triggers 
-   - **Alasan:** Setiap kelas (**Classes**) dapat memicu banyak notifikasi (**Notifications**). Notifikasi ini berkaitan dengan berbagai aktivitas atau perubahan dalam kelas, seperti penambahan pengamat baru atau pembaruan materi pengajaran.
+5. **Classes dan Notifications**  
+   - **Relasi:** `Classes "1" --> "0..*" Notifications : triggers`  
+   - **Alasan:** Satu kelas (Classes) dapat memicu banyak notifikasi (Notifications). Misalnya, saat ada penambahan pengamat baru, perubahan jadwal, atau pembaruan materi, notifikasi dapat dikirimkan.
 
-6. **Users dan Notifications**
-   - **Hubungan:** Users "1" --> "0..*" Notifications : sends & receives
-   - **Alasan:** Seorang pengguna (**Users**) dapat mengirim dan menerima banyak notifikasi (**Notifications**). Kolom `sender_id` dan `receiver_id` dalam tabel **Notifications** masing-masing merujuk ke `user_id` di tabel **Users**, menunjukkan siapa yang mengirim dan menerima notifikasi tersebut.
+6. **Users dan Notifications**  
+   - **Relasi:** `Users "1" --> "0..*" Notifications : sends & receives`  
+   - **Alasan:** Seorang pengguna (Users) dapat mengirim dan menerima banyak notifikasi (Notifications). Tabel **Notifications** memiliki `sender_id` dan `receiver_id` yang keduanya merujuk ke `user_id` di tabel **Users**.
 
-7. **ClassObservers dan ObservedStudents**
-   - **Hubungan:** ClassObservers "1" --> "1..*" ObservedStudents : observes 
-   - **Alasan:** Setiap entri dalam **ClassObservers** (kombinasi antara kelas dan pengamat) harus memiliki setidaknya satu siswa yang diamati (**ObservedStudents**). Ini menghubungkan pengamat dengan siswa yang mereka amati dalam kelas tertentu, memungkinkan pencatatan pengamatan secara terperinci.
+7. **ClassObservers dan ObservedStudents**  
+   - **Relasi:** `ClassObservers "1" --> "1..*" ObservedStudents : observes`  
+   - **Alasan:** Setiap entri di **ClassObservers** (yang mengaitkan satu kelas dengan satu observer) **wajib** memiliki setidaknya satu siswa (ObservedStudents) yang diamati. Relasi ini mendefinisikan siswa mana saja yang diamati oleh pengamat tertentu dalam sebuah kelas.
 
-8. **Classes dan TeachingActivityAssessment**
-   - **Hubungan:** Classes "1" --> "0..*" TeachingActivityAssessment : has
-   - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak penilaian kegiatan mengajar (**TeachingActivityAssessment**). Ini memungkinkan pengamatan dan penilaian berbagai aspek pengajaran dalam satu kelas.
+8. **Classes dan TeachingActivityAssessment**  
+   - **Relasi:** `Classes "1" --> "0..*" TeachingActivityAssessment : has`  
+   - **Alasan:** Satu kelas (Classes) dapat memiliki banyak penilaian kegiatan mengajar (TeachingActivityAssessment). Hal ini memungkinkan setiap observer melakukan penilaian berbeda, atau penilaian di waktu yang berbeda, dalam satu kelas yang sama.
 
-9. **ClassObservers dan TeachingActivityAssessment**
-   - **Hubungan:** ClassObservers "1" --> "1" TeachingActivityAssessment : assesses
-   - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat melakukan satu penilaian kegiatan mengajar (**TeachingActivityAssessment**) untuk kelas yang diamatinya.
+9. **ClassObservers dan TeachingActivityAssessment**  
+   - **Relasi:** `ClassObservers "1" --> "0..1" TeachingActivityAssessment : assesses`  
+   - **Alasan:** Seorang observer (ClassObservers) dalam sebuah kelas **dapat** mengisi satu penilaian kegiatan mengajar (TeachingActivityAssessment). Jika observer belum mengisi penilaian, maka data penilaiannya tidak ada (0). Jika sudah, maka hanya ada satu penilaian (1).
 
-10. **Classes dan StudentObservationSheet**
-    - **Hubungan:** Classes "1" --> "0..*" StudentObservationSheet : has
-    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak lembar pengamatan siswa (**StudentObservationSheet**). Ini memungkinkan dokumentasi pengamatan siswa oleh pengamat secara sistematis.
+10. **Classes dan StudentObservationSheet**  
+    - **Relasi:** `Classes "1" --> "0..*" StudentObservationSheet : has`  
+    - **Alasan:** Satu kelas (Classes) dapat memiliki beberapa lembar pengamatan siswa (StudentObservationSheet) yang dibuat oleh berbagai observer. Tabel ini berisi ringkasan catatan pengamatan siswa di dalam sebuah kelas.
 
-11. **ClassObservers dan StudentObservationSheet**
-    - **Hubungan:** ClassObservers "1" --> "1" StudentObservationSheet : observes
-    - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat mengisi satu lembar pengamatan siswa (**StudentObservationSheet**) untuk kelas yang diamatinya.
+11. **ClassObservers dan StudentObservationSheet**  
+    - **Relasi:** `ClassObservers "1" --> "0..1" StudentObservationSheet : observes`  
+    - **Alasan:** Seorang observer (ClassObservers) dapat mengisi **satu** lembar pengamatan siswa (StudentObservationSheet) terkait kelas yang diamatinya, atau belum mengisinya sama sekali (0).
 
-12. **StudentObservationSheet dan StudentObservationDetails**
-    - **Hubungan:** StudentObservationSheet "1" --> "1..*" StudentObservationDetails : has
-    - **Alasan:** Setiap lembar pengamatan siswa (**StudentObservationSheet**) harus memiliki setidaknya satu detail pengamatan siswa (**StudentObservationDetails**). Ini memungkinkan pengamatan rinci terhadap berbagai indikator untuk setiap siswa.
+12. **StudentObservationSheet dan StudentObservationDetails**  
+    - **Relasi:** `StudentObservationSheet "1" --> "1..*" StudentObservationDetails : has`  
+    - **Alasan:** Satu lembar pengamatan siswa (StudentObservationSheet) **wajib** memiliki satu atau lebih detail pengamatan (StudentObservationDetails). Detail ini mencatat observasi indikator tertentu terhadap siswa tertentu.
 
-13. **Classes dan StudentActivityNotes**
-    - **Hubungan:** Classes "1" --> "0..*" StudentActivityNotes : has
-    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak catatan aktivitas siswa (**StudentActivityNotes**). Catatan ini mencakup berbagai aktivitas atau observasi yang dilakukan selama kelas berlangsung.
+13. **Classes dan StudentActivityNotes**  
+    - **Relasi:** `Classes "1" --> "0..*" StudentActivityNotes : has`  
+    - **Alasan:** Satu kelas (Classes) dapat memiliki banyak catatan aktivitas siswa (StudentActivityNotes) dari berbagai observer atau di waktu yang berbeda.
 
-14. **ClassObservers dan StudentActivityNotes**
-    - **Hubungan:** ClassObservers "1" --> "1" StudentActivityNotes : notes
-    - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat membuat satu catatan aktivitas siswa (**StudentActivityNotes**) untuk kelas yang diamatinya.
+14. **ClassObservers dan StudentActivityNotes**  
+    - **Relasi:** `ClassObservers "1" --> "0..1" StudentActivityNotes : notes`  
+    - **Alasan:** Setiap observer (ClassObservers) dalam sebuah kelas dapat membuat satu catatan aktivitas siswa (StudentActivityNotes) untuk kelas tersebut, atau tidak membuat sama sekali (0).
 
-15. **Classes dan ClassVoiceRecordings**
-    - **Hubungan:** Classes "1" --> "0..*" ClassVoiceRecordings : has
-    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak rekaman suara (**ClassVoiceRecordings**). Rekaman ini digunakan untuk mendokumentasikan aktivitas atau diskusi selama kelas.
+15. **Classes dan ClassVoiceRecordings**  
+    - **Relasi:** `Classes "1" --> "0..*" ClassVoiceRecordings : has`  
+    - **Alasan:** Satu kelas (Classes) dapat memiliki banyak rekaman suara (ClassVoiceRecordings). Rekaman ini biasanya digunakan untuk mendokumentasikan proses pembelajaran atau diskusi di kelas.
 
-16. **ClassObservers dan ClassVoiceRecordings**
-    - **Hubungan:** ClassObservers "1" --> "0..1" ClassVoiceRecordings : record
-    - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat membuat hingga satu rekaman suara (**ClassVoiceRecordings**) untuk kelas yang diamatinya. Hal ini memberikan fleksibilitas bagi pengamat untuk mendokumentasikan kelas tanpa harus membuat banyak rekaman.
+16. **ClassObservers dan ClassVoiceRecordings**  
+    - **Relasi:** `ClassObservers "1" --> "0..1" ClassVoiceRecordings : record`  
+    - **Alasan:** Seorang observer (ClassObservers) dapat mengunggah **satu** rekaman suara (ClassVoiceRecordings) untuk kelas yang diamatinya, atau tidak sama sekali (0). Ini memberi fleksibilitas bagi pengamat untuk menentukan apakah perlu atau tidak merekam kegiatan di kelas.
 
-17. **Classes dan SpecialNotes**
-    - **Hubungan:** Classes "1" --> "0..*" SpecialNotes : has
-    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak catatan khusus (**SpecialNotes**). Catatan ini mencakup hal-hal spesifik atau kejadian unik yang terjadi selama kelas berlangsung.
+17. **Classes dan SpecialNotes**  
+    - **Relasi:** `Classes "1" --> "0..*" SpecialNotes : has`  
+    - **Alasan:** Setiap kelas (Classes) dapat memiliki banyak catatan khusus (SpecialNotes), misalnya berisi hal-hal unik atau kejadian penting selama berlangsungnya kelas.
 
-18. **ClassObservers dan SpecialNotes**
-    - **Hubungan:** ClassObservers "1" --> "0..*" SpecialNotes : notes
-    - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat membuat banyak catatan khusus (**SpecialNotes**) untuk kelas yang diamatinya. Ini memungkinkan pengamat untuk mencatat hal-hal spesifik yang mereka amati dalam kelas.
+18. **ClassObservers dan SpecialNotes**  
+    - **Relasi:** `ClassObservers "1" --> "0..*" SpecialNotes : notes`  
+    - **Alasan:** Seorang observer (ClassObservers) dapat membuat banyak catatan khusus (SpecialNotes) untuk kelas yang dia amati. Dengan begitu, tiap observer dapat mencatat berbagai kondisi atau momen penting dalam kelas.
 
-19. **Classes dan ClassDocumentationFiles**
-    - **Hubungan:** Classes "1" --> "0..*" ClassDocumentationFiles : documents
-    - **Alasan:** Setiap kelas (**Classes**) dapat memiliki banyak file dokumentasi (**ClassDocumentationFiles**). File-file ini berisi materi pengajaran, dokumentasi kegiatan, atau materi lainnya yang relevan dengan kelas.
+19. **Classes dan ClassDocumentationFiles**  
+    - **Relasi:** `Classes "1" --> "0..*" ClassDocumentationFiles : documents`  
+    - **Alasan:** Satu kelas (Classes) dapat memiliki banyak file dokumentasi (ClassDocumentationFiles). File-file ini meliputi berbagai dokumen pendukung seperti materi pengajaran, foto, video, atau bukti pelaksanaan kelas.
 
-20. **ClassObservers dan ClassDocumentationFiles**
-    - **Hubungan:** ClassObservers "1" --> "0..*" ClassDocumentationFiles : documents
-    - **Alasan:** Setiap pengamat dalam **ClassObservers** dapat mengunggah banyak file dokumentasi (**ClassDocumentationFiles**) untuk kelas yang diamatinya. Ini memungkinkan dokumentasi aktivitas pengamat dalam kelas secara terorganisir.
+20. **ClassObservers dan ClassDocumentationFiles**  
+    - **Relasi:** `ClassObservers "1" --> "0..*" ClassDocumentationFiles : documents`  
+    - **Alasan:** Setiap observer (ClassObservers) dapat mengunggah banyak file dokumentasi (ClassDocumentationFiles) yang berkaitan dengan pengamatannya. Ini membantu menata bukti-bukti pendukung terkait proses pembelajaran dari sudut pandang observer.
 
 Dengan pemahaman struktur dan hubungan antar kelas ini, pengembang dapat lebih mudah dalam melakukan pengembangan dan pemeliharaan aplikasi Edvisor.
 

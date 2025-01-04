@@ -267,12 +267,12 @@ classDiagram
     Users "1" --> "0..*" Notifications : sends & receives
     ClassObservers "1" --> "1..*" ObservedStudents : observes
     Classes "1" --> "0..*" TeachingActivityAssessment : has
-    ClassObservers "1" --> "1" TeachingActivityAssessment : assesses
+    ClassObservers "1" --> "0..1" TeachingActivityAssessment : assesses
     Classes "1" --> "0..*" StudentObservationSheet : has
-    ClassObservers "1" --> "1" StudentObservationSheet : observes
+    ClassObservers "1" --> "0..1" StudentObservationSheet : observes
     StudentObservationSheet "1" --> "1..*" StudentObservationDetails : has
     Classes "1" --> "0..*" StudentActivityNotes : has
-    ClassObservers "1" --> "1" StudentActivityNotes : notes
+    ClassObservers "1" --> "0..1" StudentActivityNotes : notes
     Classes "1" --> "0..*" ClassVoiceRecordings : has
     ClassObservers "1" --> "0..1" ClassVoiceRecordings : record
     Classes "1" --> "0..*" SpecialNotes : has
