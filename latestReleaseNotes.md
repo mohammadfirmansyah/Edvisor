@@ -1,14 +1,17 @@
 ## 📢 Release Notes
 
-### v1.2.1-hotfix.4
+### v1.3.0
 
-**Perbaikan yang Telah Dilakukan:**
+**Perbaikan dan Pembaruan yang Telah Dilakukan:**
 
-1. **Penyederhanaan Badge Rilis dan Status**  
-   - Menggabungkan badge *Release* dan *Pre-release* menjadi satu badge *Latest Release* dengan parameter `?include_prereleases`. Langkah ini memudahkan pemantauan versi stabil maupun pra-rilis secara otomatis.
+1. **Pembaruan Langkah Instalasi Aplikasi pada Localhost**  
+   - Menambahkan tutorial langkah demi langkah untuk mengubah konfigurasi PHP pada XAMPP. Sekarang, pengguna perlu mengubah `;extension=zip` menjadi `extension=zip` di file `xampp/php/php.ini`. Pembaruan ini memastikan bahwa ekstensi ZIP diaktifkan, memungkinkan aplikasi berjalan dengan lancar dan mendukung pengelolaan file ZIP.
 
-2. **Pemendekan Pesan Kesalahan**  
-   - Memendekkan format pesan JSON saat terjadi kesalahan, sehingga memudahkan pengguna dalam memahami inti permasalahan dan meningkatkan efisiensi pelacakan kesalahan.
+2. **Penambahan File Sertifikat Aplikasi dalam Repositori**  
+   - Menambahkan file sertifikat aplikasi (`certificate.pdf`) ke dalam repositori. Sertifikat ini diperlukan untuk memastikan komunikasi yang aman antara aplikasi dan server, serta untuk meningkatkan kepercayaan pengguna terhadap keamanan data yang ditangani oleh Edvisor.
+
+3. **Penambahan Label Total Commits, Last Commit, dan Release Date di README.md**  
+   - Menambahkan badge yang menampilkan total commits, commit terakhir, dan tanggal rilis di file `README.md`. Pembaruan ini memberikan transparansi mengenai aktivitas pengembangan proyek, membantu kontributor dan pengguna untuk memantau perkembangan terbaru secara real-time.
 
 <details>
   <summary><h3 id="instalasi-menggunakan-localhost">Instalasi menggunakan localhost</h3></summary>
@@ -19,20 +22,27 @@
      - Unduh dan instal XAMPP versi PHP 8.2.12 dari <a href="https://www.apachefriends.org/index.html" target="_blank">situs resmi XAMPP</a>.
      - Ikuti petunjuk instalasi untuk sistem operasi Anda.
 
-  2. **Aktifkan Apache dan MySQL**  
-     - Buka **XAMPP Control Panel** setelah instalasi selesai.
+  2. **Aktifkan Ekstensi ZIP di PHP**  
+     - Buka file `php.ini` yang terletak di direktori `xampp/php/`.
+     - Cari baris yang berisi `;extension=zip`.
+     - Hapus titik koma (;) di awal baris sehingga menjadi `extension=zip`.
+     - Simpan perubahan dan tutup file `php.ini`.
+     - **Catatan:** Perubahan ini diperlukan agar aplikasi dapat menangani file ZIP dengan benar.
+
+  3. **Aktifkan Apache dan MySQL**  
+     - Buka **XAMPP Control Panel**.
      - Pada panel kontrol, klik tombol **Start** di sebelah **Apache** dan **MySQL** untuk memulai layanan tersebut.
      - Pastikan status kedua layanan berubah menjadi **Running**.
 
-  3. **Ekstrak File Edvisor**  
+  4. **Ekstrak File Edvisor**  
      - Ekstrak file `Edvisor.7z` dan tempatkan dalam direktori `xampp/htdocs/`.
 
-  4. **Impor Database**  
+  5. **Impor Database**  
      - Buka file `database.sql` dan salin seluruh query.
      - Buka browser dan navigasikan ke [`http://localhost/phpmyadmin/`](http://localhost/phpmyadmin/index.php?route=/server/sql).
      - Klik tab **SQL**, tempelkan query yang telah disalin, dan jalankan dengan menekan tombol **Go**.
 
-  5. **Jalankan Aplikasi**  
+  6. **Jalankan Aplikasi**  
      - Buka browser dan akses [`http://localhost/edvisor/`](http://localhost/edvisor/) untuk menguji aplikasi.
 </details>
 

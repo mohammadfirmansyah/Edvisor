@@ -3,7 +3,10 @@
 
   ![Logo Edvisor](assets/img/Header.png)
 
-  <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
+ <a href="https://github.com/mohammadfirmansyah/Edvisor/commits/main"><img src="https://img.shields.io/github/commit-activity/t/mohammadfirmansyah/Edvisor/main?style=for-the-badge&label=Total%20Commits&color=success" alt="Total Commits"></a>
+ <a href="https://github.com/mohammadfirmansyah/Edvisor/commits/main"><img src="https://img.shields.io/github/last-commit/mohammadfirmansyah/Edvisor/main?style=for-the-badge&color=success&display_timestamp=committer" alt="Last Commit"></a>
+ <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/v/release/mohammadfirmansyah/Edvisor?include_prereleases&label=Latest%20Release&style=for-the-badge&color=informational" alt="Latest Release"></a>
+ <a href="https://github.com/mohammadfirmansyah/Edvisor/releases/latest"><img src="https://img.shields.io/github/release-date/mohammadfirmansyah/Edvisor?display_date=created_at&style=for-the-badge&label=Release%20Date&color=success" alt="Release Date"></a>
 </div>
 
 <h2 id="daftar-isi">📋 Daftar Isi</h2>
@@ -255,20 +258,27 @@ Berikut adalah langkah-langkah untuk menginstalasi Edvisor di localhost:
    - Unduh dan instal XAMPP versi PHP 8.2.12 dari <a href="https://www.apachefriends.org/index.html" target="_blank">situs resmi XAMPP</a>.
    - Ikuti petunjuk instalasi untuk sistem operasi Anda.
 
-2. **Aktifkan Apache dan MySQL**  
-   - Buka **XAMPP Control Panel** setelah instalasi selesai.
+2. **Aktifkan Ekstensi ZIP di PHP**  
+   - Buka file `php.ini` yang terletak di direktori `xampp/php/`.
+   - Cari baris yang berisi `;extension=zip`.
+   - Hapus titik koma (;) di awal baris sehingga menjadi `extension=zip`.
+   - Simpan perubahan dan tutup file `php.ini`.
+   - **Catatan:** Perubahan ini diperlukan agar aplikasi dapat menangani file ZIP dengan benar.
+
+3. **Aktifkan Apache dan MySQL**  
+   - Buka **XAMPP Control Panel**.
    - Pada panel kontrol, klik tombol **Start** di sebelah **Apache** dan **MySQL** untuk memulai layanan tersebut.
    - Pastikan status kedua layanan berubah menjadi **Running**.
 
-3. **Ekstrak File Edvisor**  
+4. **Ekstrak File Edvisor**  
    - Ekstrak file `Edvisor.7z` dan tempatkan dalam direktori `xampp/htdocs/`.
 
-4. **Impor Database**  
+5. **Impor Database**  
    - Buka file `database.sql` dan salin seluruh query.
    - Buka browser dan navigasikan ke [`http://localhost/phpmyadmin/`](http://localhost/phpmyadmin/index.php?route=/server/sql).
    - Klik tab **SQL**, tempelkan query yang telah disalin, dan jalankan dengan menekan tombol **Go**.
 
-5. **Jalankan Aplikasi**  
+6. **Jalankan Aplikasi**  
    - Buka browser dan akses [`http://localhost/edvisor/`](http://localhost/edvisor/) untuk menguji aplikasi.
 
 ### Instalasi menggunakan localTunnel
